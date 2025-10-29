@@ -1,0 +1,23 @@
+# Unity generated files and folders
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uilds/
+/Assets/AssetStoreTools/
+/SceneDependencyCache
+
+# Visual Studio / Rider generated files
+.vs/
+*.csproj
+*.sln
+*.suo
+*.user
+*.unityproj
+*.booproj
+
+# macOS specific files
+.DS_Store
+
+# Other potentially ignored files
+*.log
+*.pid

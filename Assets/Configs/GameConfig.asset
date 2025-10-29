@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 714b9284abbe4d7dbb4ef79ad89d2fcb, type: 3}
+  m_Name: GameConfig
+  m_EditorClassIdentifier: 
+  WaveSettingsList:
+  - enemiesCount: 10
+  - enemiesCount: 20
+  - enemiesCount: 30
+  - enemiesCount: 40
+  - enemiesCount: 50
+  - enemiesCount: 60
+  - enemiesCount: 70
+  - enemiesCount: 80
+  - enemiesCount: 90
+  - enemiesCount: 100
+  WeaponSettings:
+  - fireRate: 300
+    bulletType: 0
+  - fireRate: 60
+    bulletType: 1
+  UnitsLayer: 6
+  EnemySpawnDistance: 10
