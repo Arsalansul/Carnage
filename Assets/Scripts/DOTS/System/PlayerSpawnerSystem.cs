@@ -19,8 +19,17 @@ public partial struct PlayerSpawnerSystem : ISystem
 
             var playerEntity = state.EntityManager.Instantiate(entitiesReferences.playerPrefab);
             playerSpawner.ValueRW.shouldSpawn = false;
-            SystemAPI.SetComponent(playerEntity,
-                LocalTransform.FromPosition(cameraFollowLocalTransform.ValueRO.Position - cameraFollow.ValueRO.offset));
+
+            if (SystemAPI.HasComponent<ShootAttack>(playerEntity))
+            {
+                var inputData = SystemAPI.GetSingleton<InputData>();
+                var config = SystemAPI.GetSingleton<GameConfigComponent>();
+                ref var weaponsReference = ref config.Weapons;
+                ref var weaponsArray = ref weaponsReference.Value;
+                var shootAttack = SystemAPI.GetComponentRW<ShootAttack>(playerEntity);
+                shootAttack.ValueRW.timerMax = weaponsArray.Array[inputData.WeaponIndex].TimeMax;
+            }
+            SystemAPI.SetComponent(playerEntity, LocalTransform.FromPosition(cameraFollowLocalTransform.ValueRO.Position - cameraFollow.ValueRO.offset));
         }
     }
 }
