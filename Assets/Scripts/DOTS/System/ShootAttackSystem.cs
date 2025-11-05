@@ -20,8 +20,7 @@ internal partial struct ShootAttackSystem : ISystem
 
             if (shootAttack.ValueRO.timer > 0f) continue;
 
-            if (!inputData.MouseLeft) return;
-            ;
+            if (!inputData.MouseLeft) continue;
 
             shootAttack.ValueRW.timer = shootAttack.ValueRO.timerMax;
 

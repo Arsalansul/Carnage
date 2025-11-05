@@ -91,6 +91,11 @@ namespace System
                     .CreateCommandBuffer(state.WorldUnmanaged);
                 foreach (var (unit, entity) in SystemAPI.Query<RefRO<Unit>>().WithEntityAccess())
                     entityCommandBuffer.DestroyEntity(entity);
+
+                var inputData = SystemAPI.GetSingletonRW<InputData>();
+                inputData.ValueRW.MouseLeft = false;
+                inputData.ValueRW.MouseRight = false;
+                inputData.ValueRW.WeaponIndex = 0;
             }
 
             if (gameState.OnWaveChanged)
