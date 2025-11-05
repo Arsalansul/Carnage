@@ -10,7 +10,7 @@ public partial struct PlayAudioClipOnSpawnSystem : ISystem
             var audioSource = PoolManager.Instance.GetAudioSource();
             audioSource.clip = audioClipData.AudioClip;
             audioSource.Play();
-            PoolManager.Instance.ReturnAudioSourceToPool(audioSource, 1);
+            PoolManager.Instance.ReturnAudioSourceToPool(audioSource, audioClipData.AudioClip.Value.length);
             playAudioClip.ValueRW = false;
         }
     }
