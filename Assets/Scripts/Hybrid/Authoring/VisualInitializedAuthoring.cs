@@ -9,7 +9,7 @@ public class VisualInitializedAuthoring : MonoBehaviour
         {
             var entity = GetEntity(TransformUsageFlags.Dynamic);
             AddComponent(entity, new VisualInitialized());
-            SetComponentEnabled<VisualInitialized>(false);
+            SetComponentEnabled<VisualInitialized>(entity, false);
         }
     }
 }

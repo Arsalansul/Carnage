@@ -4,7 +4,6 @@ using UnityEngine;
 public class SphereDamageAuthoring : MonoBehaviour
 {
     public float explosionRadius;
-    public float triggerRadius;
     public int damage;
 
     private class Baker : Baker<SphereDamageAuthoring>
@@ -15,17 +14,15 @@ public class SphereDamageAuthoring : MonoBehaviour
             AddComponent(entity, new SphereDamage
             {
                 ExplosionRadius = authoring.explosionRadius,
-                TriggerRadius = authoring.triggerRadius,
                 Damage = authoring.damage
             });
+            SetComponentEnabled<SphereDamage>(entity, false);
         }
     }
 }
 
-public struct SphereDamage : IComponentData
+public struct SphereDamage : IComponentData, IEnableableComponent
 {
     public int Damage;
     public float ExplosionRadius;
-    public float TriggerRadius;
-    public bool onHit;
 }

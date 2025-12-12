@@ -7,7 +7,6 @@ internal partial struct ShootAttackSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        var entitiesReferences = SystemAPI.GetSingleton<EntitiesReferences>();
         var inputData = SystemAPI.GetSingleton<InputData>();
         var config = SystemAPI.GetSingleton<GameConfigComponent>();
         ref var weaponsReference = ref config.Weapons;
@@ -26,16 +25,25 @@ internal partial struct ShootAttackSystem : ISystem
 
             var bulletIndex = weaponsArray.Array[inputData.WeaponIndex].BulletIndex;
 
-            var bulletEntity = state.EntityManager.Instantiate(
-                bulletIndex == 0 ? entitiesReferences.bulletPrefabEntity_0 : entitiesReferences.bulletPrefabEntity_1);
+            var bulletEntity = state.EntityManager.Instantiate(GetBulletEntity(bulletIndex));
             var spawnWorldPosition = localTransform.ValueRO.TransformPoint(shootAttack.ValueRO.bulletSpawnPosition);
             SystemAPI.SetComponent(bulletEntity, LocalTransform.FromPosition(spawnWorldPosition));
 
             var bulletComponent = SystemAPI.GetComponentRW<Bullet>(bulletEntity);
             bulletComponent.ValueRW.direction = inputData.MousePos - spawnWorldPosition;
+            
+            var damageOnTrigger = SystemAPI.GetComponentRW<DamageOnTrigger>(bulletEntity);
+            damageOnTrigger.ValueRW.triggered = false;
+            damageOnTrigger.ValueRW.damageTargetFaction = Faction.Enemy;
 
             shootAttack.ValueRW.onShoot.isTrigger = true;
             shootAttack.ValueRW.onShoot.shootFromPosition = spawnWorldPosition;
         }
+    }
+
+    private Entity GetBulletEntity(int bulletIndex)
+    {
+        var entitiesReferences = SystemAPI.GetSingleton<EntitiesReferences>();
+        return bulletIndex == 0 ? entitiesReferences.bulletPrefabEntity_0 : entitiesReferences.bulletPrefabEntity_1;
     }
 }

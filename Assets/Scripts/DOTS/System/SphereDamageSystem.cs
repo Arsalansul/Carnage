@@ -2,11 +2,11 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Physics;
-using Unity.Physics.Systems;
 using Unity.Transforms;
+using UnityEngine;
 
-[UpdateInGroup(typeof(PhysicsSystemGroup))]
-[UpdateAfter(typeof(PhysicsSimulationGroup))]
+[UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
+[UpdateAfter(typeof(DamageOnTriggerSystem))]
 public partial struct SphereDamageSystem : ISystem
 {
     [BurstCompile]
@@ -14,7 +14,6 @@ public partial struct SphereDamageSystem : ISystem
     {
         var physicsWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
         var ecbSingleton = SystemAPI.GetSingleton<EndFixedStepSimulationEntityCommandBufferSystem.Singleton>();
-        var simulationSingleton = SystemAPI.GetSingleton<SimulationSingleton>();
         var ecb = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged);
         var gameConfig = SystemAPI.GetSingleton<GameConfigComponent>();
 
@@ -24,9 +23,9 @@ public partial struct SphereDamageSystem : ISystem
             Healths = SystemAPI.GetComponentLookup<Health>(true),
             gameConfig = gameConfig,
             physicsWorld = physicsWorld,
-            ECB = ecb.AsParallelWriter()
+            ecb = ecb.AsParallelWriter()
         };
-
+        
         job.ScheduleParallel();
     }
 }
@@ -39,12 +38,11 @@ public partial struct SphereDamageJob : IJobEntity
     [ReadOnly] public GameConfigComponent gameConfig;
     [ReadOnly] public PhysicsWorldSingleton physicsWorld;
 
-    public EntityCommandBuffer.ParallelWriter ECB;
+    public EntityCommandBuffer.ParallelWriter ecb;
 
     public void Execute(ref SphereDamage sphereDamage, in LocalTransform localTransform, in Entity entity,
         [ChunkIndexInQuery] int chunkIndex)
     {
-        var triggerHits = new NativeList<DistanceHit>(Allocator.Temp);
         var explosionHits = new NativeList<DistanceHit>(Allocator.Temp);
         var collisionFilter = new CollisionFilter
         {
@@ -52,12 +50,6 @@ public partial struct SphereDamageJob : IJobEntity
             CollidesWith = 1u << gameConfig.UnitsLayer,
             GroupIndex = 0
         };
-        physicsWorld.OverlapSphere(localTransform.Position,
-            sphereDamage.TriggerRadius,
-            ref triggerHits,
-            collisionFilter);
-
-        if (triggerHits.IsEmpty) return;
 
         physicsWorld.OverlapSphere(localTransform.Position,
             sphereDamage.ExplosionRadius,
@@ -65,17 +57,17 @@ public partial struct SphereDamageJob : IJobEntity
             collisionFilter);
 
         foreach (var hit in explosionHits)
+        {
             if (Enemies.TryGetComponent(hit.Entity, out var enemy) &&
                 Healths.TryGetComponent(hit.Entity, out var targetHealth))
             {
                 targetHealth.amount -= sphereDamage.Damage;
                 targetHealth.onHealthChanged = true;
-                ECB.SetComponent(chunkIndex, hit.Entity, targetHealth);
-
-                sphereDamage.onHit = true;
+                ecb.SetComponent(chunkIndex, hit.Entity, targetHealth);
             }
+        }
 
         explosionHits.Dispose();
-        triggerHits.Dispose();
+        ecb.DestroyEntity(chunkIndex, entity);
     }
 }

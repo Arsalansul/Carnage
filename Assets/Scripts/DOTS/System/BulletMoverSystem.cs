@@ -1,7 +1,9 @@
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Jobs;
 using Unity.Mathematics;
+using Unity.Physics;
 using Unity.Transforms;
 
 public partial struct BulletMoverSystem : ISystem
@@ -28,17 +30,10 @@ public partial struct BulletMoveJob : IJobEntity
 
     public void Execute(
         ref LocalTransform localTransform, 
-        ref Bullet bullet, 
-        in SphereDamage sphereDamage, 
+        ref Bullet bullet,  
         in Entity entity, 
         [ChunkIndexInQuery] int chunkIndex)
     {
-        if (sphereDamage.onHit)
-        {
-            entityCommandBuffer.DestroyEntity(chunkIndex, entity);
-            return;
-        }
-
         var moveDirection = bullet.direction;
         moveDirection = math.normalize(moveDirection);
 
