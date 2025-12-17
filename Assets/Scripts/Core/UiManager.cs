@@ -4,32 +4,21 @@ using UnityEngine.UI;
 
 public class UiManager : MonoBehaviour
 {
-    public delegate void SetTextDelegate(string text);
 
     [SerializeField] private Transform gameOverPanel;
     [SerializeField] private Button restartButton;
     [SerializeField] private Text scoreText;
     [SerializeField] private Text waveText;
     [SerializeField] private Text enemiesLeftText;
-    
-    public SetTextDelegate OnScoreChangedDelegate;
-    public SetTextDelegate OnWaveChangedDelegate;
-    public SetTextDelegate OnEnemiesLeftChangedDelegate;
 
     private void OnEnable()
     {
         restartButton.onClick.AddListener(OnRestartButtonClick);
-        OnScoreChangedDelegate += OnScoreChanged;
-        OnWaveChangedDelegate += OnWaveChanged;
-        OnEnemiesLeftChangedDelegate += OnEnemiesLeftChanged;
     }
 
     private void OnDisable()
     {
         restartButton.onClick.RemoveAllListeners();
-        OnScoreChangedDelegate -= OnScoreChanged;
-        OnWaveChangedDelegate -= OnWaveChanged;
-        OnEnemiesLeftChangedDelegate -= OnEnemiesLeftChanged;
     }
 
     public event Action OnRestartButton;
@@ -49,18 +38,18 @@ public class UiManager : MonoBehaviour
         OnRestartButton?.Invoke();
     }
 
-    private void OnScoreChanged(string text)
+    public void SetScore(int score)
     {
-        scoreText.text = text;
+        scoreText.text = $"Score: {score}";
     }
 
-    private void OnWaveChanged(string text)
+    public void SetWave(int wave)
     {
-        waveText.text = text;
+        waveText.text = $"Wave {wave + 1}";
     }
 
-    private void OnEnemiesLeftChanged(string text)
+    public void SetEnemiesLeftCount(int count)
     {
-        enemiesLeftText.text = text;
+        enemiesLeftText.text = $"Left: {count}";
     }
 }

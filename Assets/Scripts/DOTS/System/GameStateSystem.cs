@@ -26,6 +26,7 @@ namespace System
             }
 
             var gameState = SystemAPI.GetSingleton<GameState>();
+            var eventsHandlerEntity = SystemAPI.GetSingletonEntity<EventsHandler>();
 
             gameState.OnWaveChanged = false;
 
@@ -44,6 +45,9 @@ namespace System
                 {
                     gameState.Score += enemy.ValueRO.Points;
                     gameState.EnemiesLeftCount --;
+
+                    OnScoreChanged(gameState.Score, SystemAPI.GetComponentRW<OnScoreChanged>(eventsHandlerEntity), eventsHandlerEntity, ref state);
+                    OnEnemiesLeftCountChanged(gameState.EnemiesLeftCount, SystemAPI.GetComponentRW<OnEnemiesLeftCountChanged>(eventsHandlerEntity), eventsHandlerEntity, ref state);
                 }
             }
 
@@ -66,6 +70,7 @@ namespace System
                     gameState.SpawnedEnemiesCount = 0;
                     gameState.Wave++;
                     gameState.OnWaveChanged = true;
+                    OnWaveChanged(gameState.Wave, SystemAPI.GetComponentRW<OnWaveChanged>(eventsHandlerEntity), eventsHandlerEntity, ref state);
                 }
                 else
                 {
@@ -83,6 +88,9 @@ namespace System
                 gameState.Score = 0;
                 gameState.Wave = 0;
                 gameState.OnWaveChanged = true;
+                
+                OnScoreChanged(gameState.Score, SystemAPI.GetComponentRW<OnScoreChanged>(eventsHandlerEntity), eventsHandlerEntity, ref state);
+                OnWaveChanged(gameState.Wave, SystemAPI.GetComponentRW<OnWaveChanged>(eventsHandlerEntity), eventsHandlerEntity, ref state);
             }
 
             if (gameState.Restart)
@@ -107,9 +115,31 @@ namespace System
                 }
                 
                 gameState.EnemiesLeftCount = wavesArray.Array[gameState.Wave].EnemiesCount;
+                OnEnemiesLeftCountChanged(gameState.EnemiesLeftCount, SystemAPI.GetComponentRW<OnEnemiesLeftCountChanged>(eventsHandlerEntity), eventsHandlerEntity, ref state);
             }
 
             SystemAPI.SetSingleton(gameState);
+        }
+
+        [BurstCompile]
+        private void OnScoreChanged(int score, RefRW<OnScoreChanged> onScoreChanged, Entity entity, ref SystemState state)
+        {
+            onScoreChanged.ValueRW.score = score;
+            state.EntityManager.SetComponentEnabled<OnScoreChanged>(entity, true);
+        }
+        
+        [BurstCompile]
+        private void OnWaveChanged(int wave, RefRW<OnWaveChanged> onWaveChanged, Entity entity, ref SystemState state)
+        {
+            onWaveChanged.ValueRW.wave = wave;
+            state.EntityManager.SetComponentEnabled<OnWaveChanged>(entity, true);
+        }
+        
+        [BurstCompile]
+        private void OnEnemiesLeftCountChanged(int count, RefRW<OnEnemiesLeftCountChanged> onEnemiesLeftCountChanged, Entity entity, ref SystemState state)
+        {
+            onEnemiesLeftCountChanged.ValueRW.enemiesLeftCount = count;
+            state.EntityManager.SetComponentEnabled<OnEnemiesLeftCountChanged>(entity, true);
         }
     }
 }
