@@ -1,3 +1,4 @@
+using DOTS.Authoring;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -16,24 +17,16 @@ internal partial struct RandomWalkingSystem : ISystem
 [BurstCompile]
 public partial struct RandomWalkingJob : IJobEntity
 {
-    public void Execute(in LocalTransform localTransform, ref RandomWalking randomWalking, ref UnitMover unitMover)
+    public void Execute(in LocalTransform localTransform, ref RandomWalking randomWalking, ref NavAgentComponent navAgent, EnabledRefRW<RandomWalking> enabledRandomWalking)
     {
-        if (math.distancesq(localTransform.Position, randomWalking.targetPosition) <=
-            UnitMoverSystem.ReachedTargetPositionDistanceSQ)
-        {
-            var random = randomWalking.random;
-            var randomDirection = new float3(random.NextFloat(-1f, 1f), 0, random.NextFloat(-1f, 1f));
-            randomDirection = math.normalize(randomDirection);
-            randomWalking.targetPosition =
-                randomWalking.originPosition +
-                randomDirection * random.NextFloat(randomWalking.distanceMin, randomWalking.distanceMax);
+        var random = randomWalking.random;
+        var randomDirection = new float3(random.NextFloat(-1f, 1f), 0, random.NextFloat(-1f, 1f));
+        randomDirection = math.normalize(randomDirection);
+        randomWalking.targetPosition =
+            randomWalking.originPosition +
+            randomDirection * random.NextFloat(randomWalking.distanceMin, randomWalking.distanceMax);
 
-            randomWalking.random = random;
-        }
-        else
-        {
-            unitMover.targetPosition = randomWalking.targetPosition;
-            unitMover.lookPosition = randomWalking.targetPosition;
-        }
+        randomWalking.random = random;
+        enabledRandomWalking.ValueRW = false;
     }
 }

@@ -26,18 +26,23 @@ public partial struct UnitMoverJob : IJobEntity
 {
     [ReadOnly] public float deltaTime;
 
-    public void Execute(ref LocalTransform localTransform, in UnitMover unitMover, ref PhysicsVelocity physicsVelocity)
+    public void Execute(ref LocalTransform localTransform, ref UnitMover unitMover, ref PhysicsVelocity physicsVelocity)
     {
         var moveDirection = unitMover.targetPosition - localTransform.Position;
         var lookDirection = unitMover.lookPosition - localTransform.Position;
         lookDirection.y = 0;
 
         if (math.lengthsq(lookDirection) > UnitMoverSystem.ReachedTargetPositionDistanceSQ)
-            localTransform.Rotation = math.slerp(localTransform.Rotation,
+        {
+            localTransform.Rotation = math.slerp(
+                localTransform.Rotation,
                 quaternion.LookRotation(lookDirection, math.up()),
                 deltaTime * unitMover.rotationSpeed);
+        }
 
-        if (math.lengthsq(moveDirection) <= UnitMoverSystem.ReachedTargetPositionDistanceSQ)
+        unitMover.reachedTarget = math.lengthsq(moveDirection) <= UnitMoverSystem.ReachedTargetPositionDistanceSQ;
+        
+        if (unitMover.reachedTarget)
         {
             physicsVelocity.Linear = float3.zero;
             physicsVelocity.Angular = float3.zero;

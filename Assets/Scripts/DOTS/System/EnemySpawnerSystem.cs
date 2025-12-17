@@ -10,7 +10,7 @@ internal partial struct EnemySpawnerSystem : ISystem
     private Random random;
     private float3 currentCenterPosition;
 
-    [BurstCompile]
+    // [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
         random = new Random((uint)DateTime.Now.Ticks);

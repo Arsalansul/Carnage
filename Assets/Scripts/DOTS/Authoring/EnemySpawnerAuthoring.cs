@@ -14,6 +14,7 @@ public class EnemySpawnerAuthoring : MonoBehaviour
             {
                 timerMax = authoring.timerMax
             });
+            SetComponentEnabled<EnemySpawner>(entity, false);
         }
     }
 }

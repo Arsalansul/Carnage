@@ -28,20 +28,23 @@ internal partial struct FindTargetSystem : ISystem
             findTarget.ValueRW.timer = findTarget.ValueRO.timerMax;
 
             distanceHitList.Clear();
-            if (collisionWorld.OverlapSphere(localTransform.ValueRO.Position, findTarget.ValueRO.range,
-                    ref distanceHitList, collisionFilter))
-                foreach (var distanceHit in distanceHitList)
-                {
-                    if (!SystemAPI.Exists(distanceHit.Entity) ||
-                        !SystemAPI.HasComponent<Unit>(distanceHit.Entity)) continue;
+            
+            target.ValueRW.targetEntity = Entity.Null;
 
-                    var targetUnit = SystemAPI.GetComponent<Unit>(distanceHit.Entity);
-                    if (targetUnit.faction == findTarget.ValueRO.targetFaction)
-                    {
-                        target.ValueRW.targetEntity = distanceHit.Entity;
-                        break;
-                    }
+            if (!collisionWorld.OverlapSphere(localTransform.ValueRO.Position, findTarget.ValueRO.range, ref distanceHitList, collisionFilter)) continue;
+            
+            foreach (var distanceHit in distanceHitList)
+            {
+                if (!SystemAPI.Exists(distanceHit.Entity) ||
+                    !SystemAPI.HasComponent<Unit>(distanceHit.Entity)) continue;
+
+                var targetUnit = SystemAPI.GetComponent<Unit>(distanceHit.Entity);
+                if (targetUnit.faction == findTarget.ValueRO.targetFaction)
+                {
+                    target.ValueRW.targetEntity = distanceHit.Entity;
+                    break;
                 }
+            }
         }
     }
 }

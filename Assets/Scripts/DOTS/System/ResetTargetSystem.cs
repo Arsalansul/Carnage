@@ -9,8 +9,12 @@ internal partial struct ResetTargetSystem : ISystem
     public void OnUpdate(ref SystemState state)
     {
         foreach (var target in SystemAPI.Query<RefRW<Target>>())
+        {
             if (!SystemAPI.Exists(target.ValueRO.targetEntity) ||
                 !SystemAPI.HasComponent<LocalTransform>(target.ValueRO.targetEntity))
+            {
                 target.ValueRW.targetEntity = Entity.Null;
+            }
+        }
     }
 }

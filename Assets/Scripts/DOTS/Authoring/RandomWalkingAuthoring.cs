@@ -18,11 +18,12 @@ public class RandomWalkingAuthoring : MonoBehaviour
                 distanceMin = authoring.distanceMin,
                 distanceMax = authoring.distanceMax
             });
+            SetComponentEnabled<RandomWalking>(entity, true);
         }
     }
 }
 
-public struct RandomWalking : IComponentData
+public struct RandomWalking : IComponentData, IEnableableComponent
 {
     public float3 targetPosition;
     public float3 originPosition;

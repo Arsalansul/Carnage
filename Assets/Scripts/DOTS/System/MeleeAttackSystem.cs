@@ -16,9 +16,14 @@ internal partial struct MeleeAttackSystem : ISystem
         var collisionWorld = physicsWorldSingleton.CollisionWorld;
         var raycastHitList = new NativeList<RaycastHit>(Allocator.Temp);
 
-        foreach (var (localTransform, meleeAttack, target, unitMover)
-                 in SystemAPI.Query<RefRO<LocalTransform>, RefRW<MeleeAttack>, RefRO<Target>, RefRW<UnitMover>>())
+        foreach (var (localTransform, meleeAttack, target)
+                 in SystemAPI.Query<RefRO<LocalTransform>, RefRW<MeleeAttack>, RefRO<Target>>())
         {
+            if (meleeAttack.ValueRO.timer > 0)
+            {
+                meleeAttack.ValueRW.timer -= SystemAPI.Time.DeltaTime;
+            }
+            
             if (target.ValueRO.targetEntity == Entity.Null) continue;
 
             var targetLocalTransform = SystemAPI.GetComponent<LocalTransform>(target.ValueRO.targetEntity);
@@ -49,18 +54,8 @@ internal partial struct MeleeAttackSystem : ISystem
                         }
             }
 
-            if (!isCloseEnoughToAttack && !isTouchingTarget)
+            if (isCloseEnoughToAttack || isTouchingTarget)
             {
-                unitMover.ValueRW.targetPosition = targetLocalTransform.Position;
-                unitMover.ValueRW.lookPosition = targetLocalTransform.Position;
-            }
-            else
-            {
-                unitMover.ValueRW.targetPosition = localTransform.ValueRO.Position;
-                unitMover.ValueRW.lookPosition = targetLocalTransform.Position;
-
-                meleeAttack.ValueRW.timer -= SystemAPI.Time.DeltaTime;
-
                 if (meleeAttack.ValueRO.timer > 0f) continue;
 
                 meleeAttack.ValueRW.timer = meleeAttack.ValueRO.timerMax;
