@@ -1,32 +1,11 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[Serializable]
-public class UnitPoolConfig
-{
-    public UnitView prefab;
-    public int initialSize = 10;
-}
-
-[Serializable]
-public class AudioSourcePoolConfig
-{
-    public AudioSource audioSource;
-    public int initialSize = 10;
-}
-    
-[Serializable]
-public class BulletConfig
-{
-    public GameObject prefab;
-    public int initialSize = 10;
-}
-
 public class PoolManager : MonoBehaviour
 {
     public static PoolManager Instance;
+    
     [SerializeField] private List<UnitPoolConfig> unitPoolConfigs;
     [SerializeField] private List<BulletConfig> bulletsConfigs;
     [SerializeField] private AudioSourcePoolConfig audioSourceConfig;
@@ -35,21 +14,9 @@ public class PoolManager : MonoBehaviour
     private Dictionary<string, ObjectPool<Transform>> bulletsPools;
     private ObjectPool<AudioSource> audioSources;
 
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            InitializePools();
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
     public void InitializePools()
     {
+        Instance = this; // TODO rework hybrid objectPoolSystem
         unitPools = new Dictionary<string, ObjectPool<UnitView>>();
 
         foreach (var config in unitPoolConfigs)

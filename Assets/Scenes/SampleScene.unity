@@ -290,6 +290,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiManager: {fileID: 1485504759}
   gameManager: {fileID: 2102608915}
+  poolManager: {fileID: 2065281645}
 --- !u!4 &180939647
 Transform:
   m_ObjectHideFlags: 0
@@ -1501,9 +1502,9 @@ MonoBehaviour:
     initialSize: 100
   bulletsConfigs:
   - prefab: {fileID: 6723769671836293756, guid: 41a836b9bad839644b041515d566327b, type: 3}
-    initialSize: 20
+    initialSize: 50
   - prefab: {fileID: 6723769671836293756, guid: e8476680e98ba08419988b1ba61ed6c8, type: 3}
-    initialSize: 20
+    initialSize: 50
   audioSourceConfig:
     audioSource: {fileID: 2679629191477484416, guid: a2df1636fdc944c4ebde04bc26b17a88, type: 3}
     initialSize: 50

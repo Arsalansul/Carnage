@@ -1,4 +1,3 @@
-using MonoBehaviourBridges;
 using Zenject;
 
 public class ProjectMonoInstaller : MonoInstaller

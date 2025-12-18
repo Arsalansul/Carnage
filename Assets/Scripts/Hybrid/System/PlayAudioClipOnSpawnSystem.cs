@@ -1,6 +1,7 @@
 using Unity.Burst;
 using Unity.Entities;
 
+[UpdateAfter(typeof(ShootAttackSystem))]
 public partial struct PlayAudioClipOnSpawnSystem : ISystem
 {
     public void OnUpdate(ref SystemState state)
