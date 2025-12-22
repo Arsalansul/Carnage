@@ -112,6 +112,28 @@ public class HybridHandler
         position = cameraFollowLocalTransform.Position;
         return true;
     }
+
+    public bool IsPlayClipOnDamage(out AudioClip clip)
+    {
+        clip = default;
+        
+        if (!TryGetComponentAndEntityWithAll<PlayAudioClipOnDamageData>(out var component, out var entity, out var entityManager)) return false;
+        entityManager.SetComponentEnabled<PlayAudioClipOnDamageData>(entity, false);
+        clip = component.AudioClip;
+            
+        return true;
+    }
+
+    public bool IsPlayClipOnSpawn(out AudioClip clip)
+    {
+        clip = default;
+        
+        if (!TryGetComponentAndEntityWithAll<PlayAudioClipOnSpawnData>(out var component, out var entity, out var entityManager)) return false;
+        entityManager.SetComponentEnabled<PlayAudioClipOnSpawnData>(entity, false);
+        clip = component.AudioClip;
+            
+        return true;
+    }
     
     private void GetComponentAndEntityWithAll<T>(out T component, out Entity entity, out EntityManager entityManager) where T : unmanaged, IComponentData
     {

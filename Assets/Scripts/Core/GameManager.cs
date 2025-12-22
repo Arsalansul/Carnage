@@ -1,3 +1,4 @@
+using Core;
 using UnityEngine;
 using Zenject;
 
@@ -20,20 +21,9 @@ public class GameManager : MonoBehaviour
             return;
         }
         
-        if (hybridHandler.IsScoreChanged(out var score))
-        {
-            uiManager.SetScore(score);
-        }
-        
-        if (hybridHandler.IsWaveChanged(out var wave))
-        {
-            uiManager.SetWave(wave);
-        }
-        
-        if (hybridHandler.IsEnemiesLeftChanged(out var enemiesLeftCount))
-        {
-            uiManager.SetEnemiesLeftCount(enemiesLeftCount);
-        }
+        if (hybridHandler.IsScoreChanged(out var score)) uiManager.SetScore(score);
+        if (hybridHandler.IsWaveChanged(out var wave)) uiManager.SetWave(wave);
+        if (hybridHandler.IsEnemiesLeftChanged(out var enemiesLeftCount)) uiManager.SetEnemiesLeftCount(enemiesLeftCount);
     }
 
     private void OnEnable()
