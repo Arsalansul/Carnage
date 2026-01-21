@@ -8,6 +8,5 @@ public class ProjectMonoInstaller : MonoInstaller
         gameInput.Enable();
 
         Container.Bind<NewInputActions>().FromInstance(gameInput).AsSingle();
-        Container.Bind<HybridHandler>().AsSingle();
     }
 }

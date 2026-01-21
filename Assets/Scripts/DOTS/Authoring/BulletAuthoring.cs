@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class BulletAuthoring : MonoBehaviour
 {
-    public float speed;
-    public float maxDistance;
-
     public class Baker : Baker<BulletAuthoring>
     {
         public override void Bake(BulletAuthoring authoring)
@@ -14,8 +11,6 @@ public class BulletAuthoring : MonoBehaviour
             var entity = GetEntity(TransformUsageFlags.Dynamic);
             AddComponent(entity, new Bullet
             {
-                speed = authoring.speed,
-                maxDistance = authoring.maxDistance
             });
         }
     }

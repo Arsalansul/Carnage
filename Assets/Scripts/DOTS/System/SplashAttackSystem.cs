@@ -1,3 +1,4 @@
+using DOTS;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -34,7 +35,7 @@ namespace System
                     var collisionFilter = new CollisionFilter
                     {
                         BelongsTo = ~0u,
-                        CollidesWith = 1u << gameConfig.UnitsLayer,
+                        CollidesWith = 1u << gameConfig.unitsSettings.Layer,
                         GroupIndex = 0
                     };
                     physicsWorld.OverlapSphere(localTransform.ValueRO.Position,

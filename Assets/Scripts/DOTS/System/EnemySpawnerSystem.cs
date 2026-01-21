@@ -1,4 +1,5 @@
 using System;
+using DOTS;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -22,8 +23,8 @@ internal partial struct EnemySpawnerSystem : ISystem
         var gameStateEntity = SystemAPI.GetSingletonEntity<GameState>();
         var gameState = SystemAPI.GetComponent<GameState>(gameStateEntity);
         var config = SystemAPI.GetSingleton<GameConfigComponent>();
-        ref var wavesReference = ref config.Waves;
-        ref var wavesArray = ref wavesReference.Value;
+        ref var waveReference = ref config.Wave;
+        ref var enemiesArray = ref waveReference.Value;
 
         foreach (var (player, localTransform) in SystemAPI.Query<RefRO<Player>, RefRO<LocalTransform>>())
         {
@@ -36,27 +37,29 @@ internal partial struct EnemySpawnerSystem : ISystem
             foreach (var (enemySpawner, enemySpawnerEnable) in
                      SystemAPI.Query<RefRW<EnemySpawner>, EnabledRefRW<EnemySpawner>>().WithPresent<EnemySpawner>())
             {
-                enemySpawner.ValueRW.spawnedCount = 0;
                 enemySpawnerEnable.ValueRW = true;
             }
         }
 
-        foreach (var (localTransform, enemySpawner) in
-                 SystemAPI.Query<RefRO<LocalTransform>, RefRW<EnemySpawner>>())
+        foreach (var (enemySpawner, enemySpawnerEnable) in
+                 SystemAPI.Query<RefRW<EnemySpawner>,EnabledRefRW<EnemySpawner>>())
         {
             enemySpawner.ValueRW.timer -= SystemAPI.Time.DeltaTime;
 
             if (enemySpawner.ValueRW.timer > 0f) continue;
 
             enemySpawner.ValueRW.timer = enemySpawner.ValueRO.timerMax;
-            enemySpawner.ValueRW.spawnedCount++;
 
-            var entitiesReferences = SystemAPI.GetSingleton<EntitiesReferences>();
+            var enemyPrefab = GetNextEnemyEntity(ref enemiesArray);
+            if (enemyPrefab == Entity.Null)
+            {
+                enemySpawnerEnable.ValueRW = false;
+                continue;
+            }
 
-            var enemyEntity = state.EntityManager.Instantiate(random.NextBool()
-                ? entitiesReferences.enemyPrefab_0
-                : entitiesReferences.enemyPrefab_1);
-            var spawnPosition = RandomPosition(currentCenterPosition, config.EnemySpawnDistance);
+            var enemyEntity = state.EntityManager.Instantiate(enemyPrefab);
+            
+            var spawnPosition = RandomPosition(currentCenterPosition, config.unitsSettings.EnemySpawnDistance);
             SystemAPI.SetComponent(enemyEntity, LocalTransform.FromPosition(spawnPosition));
 
             var randomWalking = SystemAPI.GetComponent<RandomWalking>(enemyEntity);
@@ -74,9 +77,41 @@ internal partial struct EnemySpawnerSystem : ISystem
         }
     }
 
+    [BurstCompile]
     private float3 RandomPosition(float3 centerPosition, float distance)
     {
         var direction = new float3(random.NextFloat(), 0, random.NextFloat());
         return centerPosition + math.normalize(direction) * distance;
+    }
+
+    [BurstCompile]
+    private Entity GetNextEnemyEntity(ref WaveBlob waveBlob)
+    {
+        var entitiesReferences = SystemAPI.GetSingleton<EntitiesReferences>();
+
+        var index = random.NextInt(0, waveBlob.Array.Length - 1);
+
+        for (int i = 0; i < waveBlob.Array.Length; i++)
+        {
+            if (waveBlob.Array[index].count > 0)
+                break;
+            index = (index + 1) % waveBlob.Array.Length;
+        }
+
+        if (waveBlob.Array[index].count <= 0)
+        {
+            return Entity.Null;
+        }
+
+        waveBlob.Array[index].count--;
+        
+        switch (waveBlob.Array[index].type)
+        {
+            case EnemyType.Arachnid:
+            default:
+                return entitiesReferences.enemy_Arachnid;
+            case EnemyType.Cockroach:
+                return entitiesReferences.enemy_Cockroach;
+        }
     }
 }

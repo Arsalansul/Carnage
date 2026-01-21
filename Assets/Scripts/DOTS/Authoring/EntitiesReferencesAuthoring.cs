@@ -1,14 +1,14 @@
+using System;
 using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
 
 public class EntitiesReferencesAuthoring : MonoBehaviour
 {
-    public List<GameObject> enemyPrefabs;
+    public List<EnemiesMap> enemyPrefabs;
     public GameObject playerPrefab;
-    public List<GameObject> bulletPrefabs;
+    public List<BulletsMap> bulletsMaps;
     public GameObject shootLightPrefab;
-    public int UnitsLayer;
 
     public class Baker : Baker<EntitiesReferencesAuthoring>
     {
@@ -17,13 +17,12 @@ public class EntitiesReferencesAuthoring : MonoBehaviour
             var entity = GetEntity(TransformUsageFlags.Dynamic);
             AddComponent(entity, new EntitiesReferences
             {
-                enemyPrefab_0 = GetEntity(authoring.enemyPrefabs[0], TransformUsageFlags.Dynamic),
-                enemyPrefab_1 = GetEntity(authoring.enemyPrefabs[1], TransformUsageFlags.Dynamic),
+                enemy_Arachnid = GetEntity(authoring.enemyPrefabs.Find(b => b.type == EnemyType.Arachnid).prefab, TransformUsageFlags.Dynamic),
+                enemy_Cockroach = GetEntity(authoring.enemyPrefabs.Find(b => b.type == EnemyType.Cockroach).prefab, TransformUsageFlags.Dynamic),
                 playerPrefab = GetEntity(authoring.playerPrefab, TransformUsageFlags.Dynamic),
-                bulletPrefabEntity_0 = GetEntity(authoring.bulletPrefabs[0], TransformUsageFlags.Dynamic),
-                bulletPrefabEntity_1 = GetEntity(authoring.bulletPrefabs[1], TransformUsageFlags.Dynamic),
-                shootLightPrefabEntity = GetEntity(authoring.shootLightPrefab, TransformUsageFlags.Dynamic),
-                UnitsLayer = authoring.UnitsLayer
+                smallBulletPrefab = GetEntity(authoring.bulletsMaps.Find(b => b.type == BulletsType.small).prefab, TransformUsageFlags.Dynamic),
+                explosionBulletPrefab = GetEntity(authoring.bulletsMaps.Find(b => b.type == BulletsType.explosion).prefab, TransformUsageFlags.Dynamic),
+                shootLightPrefabEntity = GetEntity(authoring.shootLightPrefab, TransformUsageFlags.Dynamic)
             });
         }
     }
@@ -31,11 +30,24 @@ public class EntitiesReferencesAuthoring : MonoBehaviour
 
 public struct EntitiesReferences : IComponentData
 {
-    public Entity enemyPrefab_0;
-    public Entity enemyPrefab_1;
+    public Entity enemy_Arachnid;
+    public Entity enemy_Cockroach;
     public Entity playerPrefab;
-    public Entity bulletPrefabEntity_0;
-    public Entity bulletPrefabEntity_1;
+    public Entity smallBulletPrefab;
+    public Entity explosionBulletPrefab;
     public Entity shootLightPrefabEntity;
-    public int UnitsLayer;
+}
+
+[Serializable]
+public struct BulletsMap
+{
+    public BulletsType type;
+    public GameObject prefab;
+}
+
+[Serializable]
+public struct EnemiesMap
+{
+    public EnemyType type;
+    public GameObject prefab;
 }

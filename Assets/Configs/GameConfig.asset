@@ -13,20 +13,35 @@ MonoBehaviour:
   m_Name: GameConfig
   m_EditorClassIdentifier: 
   WaveSettingsList:
-  - enemiesCount: 10
-  - enemiesCount: 20
-  - enemiesCount: 30
-  - enemiesCount: 40
-  - enemiesCount: 50
-  - enemiesCount: 60
-  - enemiesCount: 70
-  - enemiesCount: 80
-  - enemiesCount: 90
-  - enemiesCount: 100
+  - EnemiesInWave:
+    - count: 5
+      type: 1
+  - EnemiesInWave:
+    - count: 10
+      type: 4
+  - EnemiesInWave:
+    - count: 5
+      type: 1
+    - count: 5
+      type: 4
   WeaponSettings:
   - fireRate: 300
     bulletType: 0
   - fireRate: 60
     bulletType: 1
-  UnitsLayer: 6
-  EnemySpawnDistance: 10
+  BulletSettingsList:
+  - type: 0
+    speed: 10
+    maxDistance: 10
+  - type: 1
+    speed: 5
+    maxDistance: 10
+  UnitsSettings:
+    Layer: 6
+    EnemySpawnDistance: 10
+  CameraSettings:
+    speed: 5
+    offset:
+      x: 0
+      y: 10
+      z: -2

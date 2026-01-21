@@ -1,3 +1,4 @@
+using DOTS;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Transforms;
@@ -11,6 +12,7 @@ public partial struct ShootAttackSystem : ISystem
         var config = SystemAPI.GetSingleton<GameConfigComponent>();
         ref var weaponsReference = ref config.Weapons;
         ref var weaponsArray = ref weaponsReference.Value;
+        ref var bulletsArray = ref config.Bullets.Value;
 
         foreach (var (localTransform, shootAttack) in
                  SystemAPI.Query<RefRW<LocalTransform>, RefRW<ShootAttack>>())
@@ -23,14 +25,25 @@ public partial struct ShootAttackSystem : ISystem
 
             shootAttack.ValueRW.timer = shootAttack.ValueRO.timerMax;
 
-            var bulletIndex = weaponsArray.Array[inputData.WeaponIndex].BulletIndex;
+            var bulletType = weaponsArray.Array[inputData.WeaponIndex].bulletType;
+            BulletSettings bulletConfig = default;
+            for (int i = 0; i < bulletsArray.Array.Length; i++)
+            {
+                if (bulletsArray.Array[i].type == bulletType)
+                {
+                    bulletConfig = bulletsArray.Array[i];
+                    break;
+                }
+            }
 
-            var bulletEntity = state.EntityManager.Instantiate(GetBulletEntity(bulletIndex));
+            var bulletEntity = state.EntityManager.Instantiate(GetBulletEntity(bulletType));
             var spawnWorldPosition = localTransform.ValueRO.TransformPoint(shootAttack.ValueRO.bulletSpawnPosition);
             SystemAPI.SetComponent(bulletEntity, LocalTransform.FromPosition(spawnWorldPosition));
 
             var bulletComponent = SystemAPI.GetComponentRW<Bullet>(bulletEntity);
             bulletComponent.ValueRW.direction = inputData.MousePos - spawnWorldPosition;
+            bulletComponent.ValueRW.maxDistance = bulletConfig.maxDistance;
+            bulletComponent.ValueRW.speed = bulletConfig.speed;
             
             var damageOnTrigger = SystemAPI.GetComponentRW<DamageOnTrigger>(bulletEntity);
             damageOnTrigger.ValueRW.triggered = false;
@@ -41,9 +54,17 @@ public partial struct ShootAttackSystem : ISystem
         }
     }
 
-    private Entity GetBulletEntity(int bulletIndex)
+    [BurstCompile]
+    private Entity GetBulletEntity(BulletsType bulletType)
     {
         var entitiesReferences = SystemAPI.GetSingleton<EntitiesReferences>();
-        return bulletIndex == 0 ? entitiesReferences.bulletPrefabEntity_0 : entitiesReferences.bulletPrefabEntity_1;
+        switch (bulletType)
+        {
+            case BulletsType.small:
+            default:
+                return entitiesReferences.smallBulletPrefab;
+            case BulletsType.explosion:
+                return entitiesReferences.explosionBulletPrefab;
+        }
     }
 }

@@ -9,7 +9,7 @@ public class EnemySpawnerAuthoring : MonoBehaviour
     {
         public override void Bake(EnemySpawnerAuthoring authoring)
         {
-            var entity = GetEntity(TransformUsageFlags.Dynamic);
+            var entity = GetEntity(TransformUsageFlags.None);
             AddComponent(entity, new EnemySpawner
             {
                 timerMax = authoring.timerMax
@@ -23,5 +23,4 @@ public struct EnemySpawner : IComponentData, IEnableableComponent
 {
     public float timer;
     public float timerMax;
-    public int spawnedCount;
 }

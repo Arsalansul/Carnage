@@ -1,3 +1,4 @@
+using DOTS;
 using Unity.Burst;
 using Unity.Entities;
 
@@ -11,11 +12,11 @@ namespace System
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            var config = SystemAPI.GetSingleton<GameConfigComponent>();
-            ref var wavesReference = ref config.Waves;
-            ref var wavesArray = ref wavesReference.Value;
+            var config = SystemAPI.GetSingletonRW<GameConfigComponent>();
+            ref var waveReference = ref config.ValueRW.Wave;
+            ref var enemiesArray = ref waveReference.Value;
 
-            var gameOverInThisFrame = false;
+            var gameOverInThisFrame = false; //TODO is it necessary?
 
             foreach (var (health, player, entity) in
                      SystemAPI.Query<RefRO<Health>, RefRO<Player>>().WithEntityAccess())
@@ -25,15 +26,14 @@ namespace System
                 if (health.ValueRO.amount <= 0) gameOverInThisFrame = true;
             }
 
-            var gameState = SystemAPI.GetSingleton<GameState>();
+            var gameState = SystemAPI.GetSingletonRW<GameState>();
             var eventsHandlerEntity = SystemAPI.GetSingletonEntity<EventsHandler>();
 
-            gameState.OnWaveChanged = false;
+            gameState.ValueRW.OnWaveChanged = false;
 
             if (gameOverInThisFrame)
             {
-                gameState.GameOver = true;
-                SystemAPI.SetSingleton(gameState);
+                gameState.ValueRW.GameOver = true;
                 return;
             }
 
@@ -43,57 +43,37 @@ namespace System
 
                 if (health.ValueRO.amount <= 0)
                 {
-                    gameState.Score += enemy.ValueRO.Points;
-                    gameState.EnemiesLeftCount --;
+                    gameState.ValueRW.Score += enemy.ValueRO.Points;
+                    config.ValueRW.enemiesCountLeft --;
 
-                    OnScoreChanged(gameState.Score, SystemAPI.GetComponentRW<OnScoreChanged>(eventsHandlerEntity), eventsHandlerEntity, ref state);
-                    OnEnemiesLeftCountChanged(gameState.EnemiesLeftCount, SystemAPI.GetComponentRW<OnEnemiesLeftCountChanged>(eventsHandlerEntity), eventsHandlerEntity, ref state);
+                    OnScoreChanged(gameState.ValueRO.Score, SystemAPI.GetComponentRW<OnScoreChanged>(eventsHandlerEntity), eventsHandlerEntity, ref state);
+
+                    var onEnemiesLeftCountChanged = SystemAPI.GetComponentRW<OnEnemiesLeftCountChanged>(eventsHandlerEntity);
+                    onEnemiesLeftCountChanged.ValueRW.enemiesLeftCount = config.ValueRO.enemiesCountLeft;
+                    SystemAPI.SetComponentEnabled<OnEnemiesLeftCountChanged>(eventsHandlerEntity, true);
                 }
             }
-
-            var spawnedEnemyCount = 0;
-            foreach (var enemySpawner in SystemAPI.Query<RefRO<EnemySpawner>>().WithPresent<EnemySpawner>())
-                spawnedEnemyCount += enemySpawner.ValueRO.spawnedCount;
-            gameState.SpawnedEnemiesCount = spawnedEnemyCount;
-
-            if (gameState.SpawnedEnemiesCount >= wavesArray.Array[gameState.Wave].EnemiesCount)
+            
+            if (config.ValueRO.enemiesCountLeft <= 0)
             {
-                var enemiesCount = 0;
-                foreach (var (health, enemy) in SystemAPI.Query<RefRO<Health>, RefRO<Enemy>>())
-                {
-                    enemiesCount++;
-                    break;
-                }
-
-                if (enemiesCount == 0)
-                {
-                    gameState.SpawnedEnemiesCount = 0;
-                    gameState.Wave++;
-                    gameState.OnWaveChanged = true;
-                    OnWaveChanged(gameState.Wave, SystemAPI.GetComponentRW<OnWaveChanged>(eventsHandlerEntity), eventsHandlerEntity, ref state);
-                }
-                else
-                {
-                    foreach (var enemySpawner in SystemAPI.Query<EnabledRefRW<EnemySpawner>>())
-                    {
-                        enemySpawner.ValueRW = false;
-                    }
-                }
+                gameState.ValueRW.Wave++;
+                gameState.ValueRW.OnWaveChanged = true;
+                OnWaveChanged(gameState, SystemAPI.GetComponentRW<OnWaveChanged>(eventsHandlerEntity), eventsHandlerEntity, ref enemiesArray, ref state);
             }
 
-            if (gameState.ShouldInitialize)
+            if (gameState.ValueRO.ShouldInitialize)
             {
                 var playerSpawner = SystemAPI.GetSingletonRW<PlayerSpawner>();
                 playerSpawner.ValueRW.shouldSpawn = true;
-                gameState.Score = 0;
-                gameState.Wave = 0;
-                gameState.OnWaveChanged = true;
+                gameState.ValueRW.Score = 0;
+                gameState.ValueRW.Wave = 0;
+                gameState.ValueRW.OnWaveChanged = true;
                 
-                OnScoreChanged(gameState.Score, SystemAPI.GetComponentRW<OnScoreChanged>(eventsHandlerEntity), eventsHandlerEntity, ref state);
-                OnWaveChanged(gameState.Wave, SystemAPI.GetComponentRW<OnWaveChanged>(eventsHandlerEntity), eventsHandlerEntity, ref state);
+                OnScoreChanged(gameState.ValueRO.Score, SystemAPI.GetComponentRW<OnScoreChanged>(eventsHandlerEntity), eventsHandlerEntity, ref state);
+                OnWaveChanged(gameState, SystemAPI.GetComponentRW<OnWaveChanged>(eventsHandlerEntity), eventsHandlerEntity, ref enemiesArray, ref state);
             }
 
-            if (gameState.Restart)
+            if (gameState.ValueRO.Restart)
             {
                 var entityCommandBuffer = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
                     .CreateCommandBuffer(state.WorldUnmanaged);
@@ -105,20 +85,6 @@ namespace System
                 inputData.ValueRW.MouseRight = false;
                 inputData.ValueRW.WeaponIndex = 0;
             }
-
-            if (gameState.OnWaveChanged)
-            {
-                foreach (var (player, health) in SystemAPI.Query<RefRO<Player>, RefRW<Health>>())
-                {
-                    health.ValueRW.amount = health.ValueRO.max;
-                    health.ValueRW.onHealthChanged = true;
-                }
-                
-                gameState.EnemiesLeftCount = wavesArray.Array[gameState.Wave].EnemiesCount;
-                OnEnemiesLeftCountChanged(gameState.EnemiesLeftCount, SystemAPI.GetComponentRW<OnEnemiesLeftCountChanged>(eventsHandlerEntity), eventsHandlerEntity, ref state);
-            }
-
-            SystemAPI.SetSingleton(gameState);
         }
 
         [BurstCompile]
@@ -129,17 +95,18 @@ namespace System
         }
         
         [BurstCompile]
-        private void OnWaveChanged(int wave, RefRW<OnWaveChanged> onWaveChanged, Entity entity, ref SystemState state)
+        private void OnWaveChanged(RefRW<GameState> gameState, RefRW<OnWaveChanged> onWaveChanged, Entity eventsHandlerEntity, 
+            ref WaveBlob waveBlob, ref SystemState state)
         {
-            onWaveChanged.ValueRW.wave = wave;
-            state.EntityManager.SetComponentEnabled<OnWaveChanged>(entity, true);
-        }
-        
-        [BurstCompile]
-        private void OnEnemiesLeftCountChanged(int count, RefRW<OnEnemiesLeftCountChanged> onEnemiesLeftCountChanged, Entity entity, ref SystemState state)
-        {
-            onEnemiesLeftCountChanged.ValueRW.enemiesLeftCount = count;
-            state.EntityManager.SetComponentEnabled<OnEnemiesLeftCountChanged>(entity, true);
+            onWaveChanged.ValueRW.wave = gameState.ValueRO.Wave;
+            
+            foreach (var (player, health) in SystemAPI.Query<RefRO<Player>, RefRW<Health>>())
+            {
+                health.ValueRW.amount = health.ValueRO.max;
+                health.ValueRW.onHealthChanged = true;
+            }
+            
+            state.EntityManager.SetComponentEnabled<OnWaveChanged>(eventsHandlerEntity, true);
         }
     }
 }

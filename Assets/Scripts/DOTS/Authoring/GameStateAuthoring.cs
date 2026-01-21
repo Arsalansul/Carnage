@@ -21,6 +21,4 @@ public struct GameState : IComponentData
     public bool ShouldInitialize;
     public int Wave;
     public bool OnWaveChanged;
-    public int SpawnedEnemiesCount;
-    public int EnemiesLeftCount;
 }
