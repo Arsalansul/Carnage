@@ -1,3 +1,4 @@
+using System;
 using DOTS;
 using Unity.Burst;
 using Unity.Entities;
@@ -36,7 +37,7 @@ public partial struct ShootAttackSystem : ISystem
                 }
             }
 
-            var bulletEntity = state.EntityManager.Instantiate(GetBulletEntity(bulletType));
+            var bulletEntity = state.EntityManager.Instantiate(GetBulletEntity(bulletType, ref state));
             var spawnWorldPosition = localTransform.ValueRO.TransformPoint(shootAttack.ValueRO.bulletSpawnPosition);
             SystemAPI.SetComponent(bulletEntity, LocalTransform.FromPosition(spawnWorldPosition));
 
@@ -55,16 +56,19 @@ public partial struct ShootAttackSystem : ISystem
     }
 
     [BurstCompile]
-    private Entity GetBulletEntity(BulletsType bulletType)
+    private Entity GetBulletEntity(BulletsType bulletType, ref SystemState state)
     {
-        var entitiesReferences = SystemAPI.GetSingleton<EntitiesReferences>();
-        switch (bulletType)
+        var entitiesReferencesEntity = SystemAPI.GetSingletonEntity<EntitiesReferences>();
+        
+        var map = state.EntityManager.GetBuffer<BulletsEntityMap>(entitiesReferencesEntity);
+        for (int i = 0; i < map.Length; i++)
         {
-            case BulletsType.small:
-            default:
-                return entitiesReferences.smallBulletPrefab;
-            case BulletsType.explosion:
-                return entitiesReferences.explosionBulletPrefab;
+            if (map[i].type == bulletType)
+            {
+                return map[i].entity;
+            }
         }
+
+        throw new Exception("bullet not found in map");
     }
 }

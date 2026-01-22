@@ -5,7 +5,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using Zenject;
 
-[CreateAssetMenu(fileName = "GameConfig", menuName = "DOTS/GameConfig")]
+[CreateAssetMenu(fileName = "GameConfig", menuName = "Configs/GameConfig")]
 public class GameConfig : ScriptableObjectInstaller<GameConfig>
 {
     public List<WaveSettings> WaveSettingsList;

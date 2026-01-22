@@ -50,7 +50,7 @@ internal partial struct EnemySpawnerSystem : ISystem
 
             enemySpawner.ValueRW.timer = enemySpawner.ValueRO.timerMax;
 
-            var enemyPrefab = GetNextEnemyEntity(ref enemiesArray);
+            var enemyPrefab = GetNextEnemyEntity(ref enemiesArray, ref state);
             if (enemyPrefab == Entity.Null)
             {
                 enemySpawnerEnable.ValueRW = false;
@@ -85,9 +85,9 @@ internal partial struct EnemySpawnerSystem : ISystem
     }
 
     [BurstCompile]
-    private Entity GetNextEnemyEntity(ref WaveBlob waveBlob)
+    private Entity GetNextEnemyEntity(ref WaveBlob waveBlob, ref SystemState state)
     {
-        var entitiesReferences = SystemAPI.GetSingleton<EntitiesReferences>();
+        var entitiesReferencesEntity = SystemAPI.GetSingletonEntity<EntitiesReferences>();
 
         var index = random.NextInt(0, waveBlob.Array.Length - 1);
 
@@ -104,14 +104,17 @@ internal partial struct EnemySpawnerSystem : ISystem
         }
 
         waveBlob.Array[index].count--;
-        
-        switch (waveBlob.Array[index].type)
+
+        var enemiesMap = state.EntityManager.GetBuffer<EnemiesEntityMap>(entitiesReferencesEntity);
+
+        for (int i = 0; i < enemiesMap.Length; i++)
         {
-            case EnemyType.Arachnid:
-            default:
-                return entitiesReferences.enemy_Arachnid;
-            case EnemyType.Cockroach:
-                return entitiesReferences.enemy_Cockroach;
+            if (enemiesMap[i].type == waveBlob.Array[index].type)
+            {
+                return enemiesMap[i].entity;
+            }
         }
+
+        throw new Exception("enemy not found in map");
     }
 }

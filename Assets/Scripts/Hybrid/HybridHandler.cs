@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using DOTS;
 using Unity.Collections;
 using Unity.Entities;
@@ -241,7 +240,6 @@ public class HybridHandler : MonoBehaviour
         }
 
         return builder.CreateBlobAssetReference<BulletsSettingsBlob>(Allocator.Persistent);
-        
     }
     
     private void GetComponentAndEntityWithAll<T>(out T component, out Entity entity, out EntityManager entityManager) where T : unmanaged, IComponentData
