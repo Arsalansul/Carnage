@@ -1,32 +1,45 @@
 using System;
 using System.Collections.Generic;
+using DOTS;
+using Unity.Mathematics;
 using UnityEngine;
+using Zenject;
 
-[CreateAssetMenu(fileName = "GameConfig", menuName = "DOTS/GameConfig")]
-public class GameConfig : ScriptableObject
+[CreateAssetMenu(fileName = "GameConfig", menuName = "Configs/GameConfig")]
+public class GameConfig : ScriptableObjectInstaller<GameConfig>
 {
     public List<WaveSettings> WaveSettingsList;
     public List<WeaponSettings> WeaponSettings;
-    public int UnitsLayer;
-    public float EnemySpawnDistance;
+    public List<BulletSettings> BulletSettingsList;
+    public UnitsSettings UnitsSettings;
+    public CameraSettings CameraSettings;
+    
+    public override void InstallBindings()
+    {
+        Container.BindInstance(WaveSettingsList);
+        Container.BindInstance(WeaponSettings);
+        Container.BindInstance(BulletSettingsList);
+        Container.BindInstance(UnitsSettings);
+        Container.BindInstance(CameraSettings);
+    }
 }
 
 [Serializable]
 public class WaveSettings
 {
-    // public List<GameObject> enemyDotsPrefab;
-    public int enemiesCount;
+    public List<EnemyInWave> EnemiesInWave;
 }
 
 [Serializable]
-public class WeaponSettings
+public struct WeaponSettings
 {
     public float fireRate;
     public BulletsType bulletType;
 }
 
-public enum BulletsType
+[Serializable]
+public struct CameraSettings
 {
-    small,
-    explosion
+    public float speed;
+    public float3 offset;
 }

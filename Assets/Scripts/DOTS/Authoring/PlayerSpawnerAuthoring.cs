@@ -7,7 +7,7 @@ public class PlayerSpawnerAuthoring : MonoBehaviour
     {
         public override void Bake(PlayerSpawnerAuthoring authoring)
         {
-            var entity = GetEntity(TransformUsageFlags.Dynamic);
+            var entity = GetEntity(TransformUsageFlags.None);
             AddComponent(entity, new PlayerSpawner());
         }
     }

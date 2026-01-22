@@ -1,18 +1,21 @@
+using System.Collections.Generic;
+using DOTS;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Zenject;
 
-public class HybridHandler
+public class HybridHandler : MonoBehaviour
 {
-    private NewInputActions inputActions;
-
-    public HybridHandler(NewInputActions inputActions)
-    {
-        this.inputActions = inputActions;
-    }
+    [Inject] private NewInputActions inputActions;
+    [Inject] private List<WaveSettings> waveSettingsList;
+    [Inject] private List<WeaponSettings> weaponSettingsList;
+    [Inject] private List<BulletSettings> bulletSettingsList;
+    [Inject] private UnitsSettings unitsSettings;
+    [Inject] private CameraSettings cameraSettings;
     
     public void SetInputDataField(InputDataActionType inputAction, InputAction.CallbackContext context = default)
     {
@@ -133,6 +136,110 @@ public class HybridHandler
         clip = component.AudioClip;
             
         return true;
+    }
+
+    public void SetGameConfig()
+    {
+        GetComponentAndEntityWithAll<GameConfigComponent>(out var component, out var entity, out var entityManager);
+        component.Weapons = CreateWeaponsBlobAsset(weaponSettingsList);
+        component.unitsSettings = new UnitsSettings()
+        {
+            Layer = unitsSettings.Layer,
+            EnemySpawnDistance = unitsSettings.EnemySpawnDistance
+        };
+
+        component.Bullets = CreateBulletsBlobAsset(bulletSettingsList);
+        
+        entityManager.SetComponentData(entity, component);
+        SetCameraSettings();
+    }
+
+    public void SetWaveSettings(int waveIndex)
+    {
+        GetComponentAndEntityWithAll<GameConfigComponent>(out var component, out var entity, out var entityManager);
+        if (component.Wave != default)
+        {
+            component.Wave.Dispose();
+        }
+        component.Wave = CreateWaveBlobAsset(waveSettingsList[waveIndex]);
+        var countLeft = 0;
+        for (int i = 0; i < waveSettingsList[waveIndex].EnemiesInWave.Count; i++)
+        {
+            countLeft += waveSettingsList[waveIndex].EnemiesInWave[i].count;
+        }
+
+        component.enemiesCountLeft = countLeft;
+        entityManager.SetComponentData(entity, component);
+        
+        InvokeEnemiesLeftCountChanged(countLeft);
+    }
+
+    private void InvokeEnemiesLeftCountChanged(int countLeft)
+    {
+        GetComponentAndEntityWithPresent<OnEnemiesLeftCountChanged>(out var component, out var entity, out var entityManager);
+        component.enemiesLeftCount = countLeft;
+        entityManager.SetComponentData(entity, component);
+        entityManager.SetComponentEnabled<OnEnemiesLeftCountChanged>(entity, true);
+    }
+
+    private void SetCameraSettings()
+    {
+        GetComponentAndEntityWithAll<CameraFollow>(out var component, out var entity, out var entityManager);
+
+        component.offset = cameraSettings.offset;
+        component.moveSpeed = cameraSettings.speed;
+        
+        entityManager.SetComponentData(entity, component);
+    }
+
+    private BlobAssetReference<WaveBlob> CreateWaveBlobAsset(WaveSettings settings)
+    {
+        using var builder = new BlobBuilder(Allocator.Temp);
+        ref var waveBlob = ref builder.ConstructRoot<WaveBlob>();
+
+        var arrayBuilder = builder.Allocate(ref waveBlob.Array, settings.EnemiesInWave.Count);
+
+        for (var i = 0; i < settings.EnemiesInWave.Count; i++)
+        {
+            arrayBuilder[i].type = settings.EnemiesInWave[i].type;
+            arrayBuilder[i].count = settings.EnemiesInWave[i].count;
+        }
+
+        return builder.CreateBlobAssetReference<WaveBlob>(Allocator.Persistent);
+    }
+
+    private BlobAssetReference<WeaponsBlob> CreateWeaponsBlobAsset(IReadOnlyList<WeaponSettings> weaponsSettings)
+    {
+        using var builder = new BlobBuilder(Allocator.Temp);
+        ref var weaponBlob = ref builder.ConstructRoot<WeaponsBlob>();
+
+        var arrayBuilder = builder.Allocate(ref weaponBlob.Array, weaponsSettings.Count);
+
+        for (var i = 0; i < weaponsSettings.Count; i++)
+        {
+            var settings = weaponsSettings[i];
+            arrayBuilder[i].bulletType = settings.bulletType;
+            arrayBuilder[i].TimeMax = 60 / settings.fireRate;
+        }
+
+        return builder.CreateBlobAssetReference<WeaponsBlob>(Allocator.Persistent);
+    }
+
+    private BlobAssetReference<BulletsSettingsBlob> CreateBulletsBlobAsset(IReadOnlyList<BulletSettings> settings)
+    {
+        using var builder = new BlobBuilder(Allocator.Temp);
+        ref var bulletsBlob = ref builder.ConstructRoot<BulletsSettingsBlob>();
+
+        var arrayBuilder = builder.Allocate(ref bulletsBlob.Array, settings.Count);
+
+        for (var i = 0; i < settings.Count; i++)
+        {
+            arrayBuilder[i].type = settings[i].type;
+            arrayBuilder[i].speed = settings[i].speed;
+            arrayBuilder[i].maxDistance = settings[i].maxDistance;
+        }
+
+        return builder.CreateBlobAssetReference<BulletsSettingsBlob>(Allocator.Persistent);
     }
     
     private void GetComponentAndEntityWithAll<T>(out T component, out Entity entity, out EntityManager entityManager) where T : unmanaged, IComponentData

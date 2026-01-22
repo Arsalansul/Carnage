@@ -1,3 +1,4 @@
+using DOTS;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Transforms;
@@ -7,8 +8,7 @@ public partial struct PlayerSpawnerSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        foreach (var (localTransform, playerSpawner) in
-                 SystemAPI.Query<RefRO<LocalTransform>, RefRW<PlayerSpawner>>())
+        foreach (var playerSpawner in SystemAPI.Query<RefRW<PlayerSpawner>>())
         {
             if (!playerSpawner.ValueRO.shouldSpawn) continue;
 

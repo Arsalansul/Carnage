@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         uiManager.HideGameOverPanel();
+        hybridHandler.SetGameConfig();
         hybridHandler.InitializeEcs();
     }
 
@@ -22,7 +23,11 @@ public class GameManager : MonoBehaviour
         }
         
         if (hybridHandler.IsScoreChanged(out var score)) uiManager.SetScore(score);
-        if (hybridHandler.IsWaveChanged(out var wave)) uiManager.SetWave(wave);
+        if (hybridHandler.IsWaveChanged(out var wave))
+        {
+            uiManager.SetWave(wave);
+            hybridHandler.SetWaveSettings(wave);
+        }
         if (hybridHandler.IsEnemiesLeftChanged(out var enemiesLeftCount)) uiManager.SetEnemiesLeftCount(enemiesLeftCount);
     }
 
