@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class ShootAttackAuthoring : MonoBehaviour
 {
-    public float timerMax;
     public Transform bulletSpawnTransform;
 
     public class Baker : Baker<ShootAttackAuthoring>
@@ -14,7 +13,6 @@ public class ShootAttackAuthoring : MonoBehaviour
             var entity = GetEntity(TransformUsageFlags.Dynamic);
             AddComponent(entity, new ShootAttack
             {
-                timerMax = authoring.timerMax,
                 bulletSpawnPosition = authoring.bulletSpawnTransform.localPosition
             });
         }
