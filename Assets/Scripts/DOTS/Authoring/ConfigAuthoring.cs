@@ -34,6 +34,7 @@ namespace DOTS
     public struct EnemyInWave
     {
         public int count;
+        public int points;
         public EnemyType type;
     }
 

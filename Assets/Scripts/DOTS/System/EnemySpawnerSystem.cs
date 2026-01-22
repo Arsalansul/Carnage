@@ -50,7 +50,7 @@ internal partial struct EnemySpawnerSystem : ISystem
 
             enemySpawner.ValueRW.timer = enemySpawner.ValueRO.timerMax;
 
-            var enemyPrefab = GetNextEnemyEntity(ref enemiesArray, ref state);
+            var enemyPrefab = GetNextEnemyEntity(ref enemiesArray, ref state, out var enemyInWaveConf);
             if (enemyPrefab == Entity.Null)
             {
                 enemySpawnerEnable.ValueRW = false;
@@ -62,18 +62,17 @@ internal partial struct EnemySpawnerSystem : ISystem
             var spawnPosition = RandomPosition(currentCenterPosition, config.unitsSettings.EnemySpawnDistance);
             SystemAPI.SetComponent(enemyEntity, LocalTransform.FromPosition(spawnPosition));
 
-            var randomWalking = SystemAPI.GetComponent<RandomWalking>(enemyEntity);
-            randomWalking.originPosition = spawnPosition;
-            randomWalking.targetPosition = spawnPosition;
-            randomWalking.random = new Random((uint)enemyEntity.Index);
+            var randomWalking = SystemAPI.GetComponentRW<RandomWalking>(enemyEntity);
+            randomWalking.ValueRW.originPosition = spawnPosition;
+            randomWalking.ValueRW.targetPosition = spawnPosition;
+            randomWalking.ValueRW.random = new Random((uint)enemyEntity.Index);
 
-            SystemAPI.SetComponent(enemyEntity, randomWalking);
-
-            var health = SystemAPI.GetComponent<Health>(enemyEntity);
-            health.max = (int) (health.max * (gameState.Wave + 0.5f));
-            health.amount = health.max;
+            var health = SystemAPI.GetComponentRW<Health>(enemyEntity);
+            health.ValueRW.max = (int) (health.ValueRW.max * (gameState.Wave + 0.5f));
+            health.ValueRW.amount = health.ValueRW.max;
             
-            SystemAPI.SetComponent(enemyEntity, health);
+            var enemyComponent = SystemAPI.GetComponentRW<Enemy>(enemyEntity);
+            enemyComponent.ValueRW.Points = enemyInWaveConf.points;
         }
     }
 
@@ -85,7 +84,7 @@ internal partial struct EnemySpawnerSystem : ISystem
     }
 
     [BurstCompile]
-    private Entity GetNextEnemyEntity(ref WaveBlob waveBlob, ref SystemState state)
+    private Entity GetNextEnemyEntity(ref WaveBlob waveBlob, ref SystemState state, out EnemyInWave enemyInWaveConf)
     {
         var entitiesReferencesEntity = SystemAPI.GetSingletonEntity<EntitiesReferences>();
 
@@ -98,6 +97,8 @@ internal partial struct EnemySpawnerSystem : ISystem
             index = (index + 1) % waveBlob.Array.Length;
         }
 
+        enemyInWaveConf = waveBlob.Array[index];
+        
         if (waveBlob.Array[index].count <= 0)
         {
             return Entity.Null;

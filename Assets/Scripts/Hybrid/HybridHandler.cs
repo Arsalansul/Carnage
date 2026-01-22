@@ -203,6 +203,7 @@ public class HybridHandler : MonoBehaviour
         {
             arrayBuilder[i].type = settings.EnemiesInWave[i].type;
             arrayBuilder[i].count = settings.EnemiesInWave[i].count;
+            arrayBuilder[i].points = settings.EnemiesInWave[i].points;
         }
 
         return builder.CreateBlobAssetReference<WaveBlob>(Allocator.Persistent);

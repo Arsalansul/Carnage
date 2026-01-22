@@ -15,14 +15,18 @@ MonoBehaviour:
   WaveSettingsList:
   - EnemiesInWave:
     - count: 5
+      points: 1
       type: 1
   - EnemiesInWave:
     - count: 10
+      points: 2
       type: 4
   - EnemiesInWave:
     - count: 5
+      points: 3
       type: 1
     - count: 5
+      points: 3
       type: 4
   WeaponSettings:
   - fireRate: 300
