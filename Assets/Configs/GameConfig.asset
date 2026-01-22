@@ -33,9 +33,15 @@ MonoBehaviour:
   - type: 0
     speed: 10
     maxDistance: 10
+    damageOnTrigger: 10
+    explosionRadius: 0
+    explosionDamage: 0
   - type: 1
     speed: 5
     maxDistance: 10
+    damageOnTrigger: 0
+    explosionRadius: 5
+    explosionDamage: 35
   UnitsSettings:
     Layer: 6
     EnemySpawnDistance: 10

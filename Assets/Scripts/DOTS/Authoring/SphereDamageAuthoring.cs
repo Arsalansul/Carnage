@@ -3,9 +3,6 @@ using UnityEngine;
 
 public class SphereDamageAuthoring : MonoBehaviour
 {
-    public float explosionRadius;
-    public int damage;
-
     private class Baker : Baker<SphereDamageAuthoring>
     {
         public override void Bake(SphereDamageAuthoring authoring)
@@ -13,8 +10,6 @@ public class SphereDamageAuthoring : MonoBehaviour
             var entity = GetEntity(TransformUsageFlags.Dynamic);
             AddComponent(entity, new SphereDamage
             {
-                ExplosionRadius = authoring.explosionRadius,
-                Damage = authoring.damage
             });
             SetComponentEnabled<SphereDamage>(entity, false);
         }

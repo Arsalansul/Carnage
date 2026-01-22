@@ -237,6 +237,9 @@ public class HybridHandler : MonoBehaviour
             arrayBuilder[i].type = settings[i].type;
             arrayBuilder[i].speed = settings[i].speed;
             arrayBuilder[i].maxDistance = settings[i].maxDistance;
+            arrayBuilder[i].damageOnTrigger = settings[i].damageOnTrigger;
+            arrayBuilder[i].explosionRadius = settings[i].explosionRadius;
+            arrayBuilder[i].explosionDamage = settings[i].explosionDamage;
         }
 
         return builder.CreateBlobAssetReference<BulletsSettingsBlob>(Allocator.Persistent);

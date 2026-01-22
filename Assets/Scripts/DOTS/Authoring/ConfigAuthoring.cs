@@ -66,5 +66,8 @@ namespace DOTS
         public BulletsType type;
         public float speed;
         public float maxDistance;
+        public int damageOnTrigger;
+        public float explosionRadius;
+        public int explosionDamage;
     }
 }

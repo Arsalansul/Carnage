@@ -49,6 +49,14 @@ public partial struct ShootAttackSystem : ISystem
             var damageOnTrigger = SystemAPI.GetComponentRW<DamageOnTrigger>(bulletEntity);
             damageOnTrigger.ValueRW.triggered = false;
             damageOnTrigger.ValueRW.damageTargetFaction = Faction.Enemy;
+            damageOnTrigger.ValueRW.amount = bulletConfig.damageOnTrigger;
+
+            if (bulletType == BulletsType.explosion)
+            {
+                var sphereDamage = SystemAPI.GetComponentRW<SphereDamage>(bulletEntity);
+                sphereDamage.ValueRW.Damage = bulletConfig.explosionDamage;
+                sphereDamage.ValueRW.ExplosionRadius = bulletConfig.explosionRadius;
+            }
 
             shootAttack.ValueRW.onShoot.isTrigger = true;
             shootAttack.ValueRW.onShoot.shootFromPosition = spawnWorldPosition;

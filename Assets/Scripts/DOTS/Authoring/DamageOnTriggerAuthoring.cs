@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class DamageOnTriggerAuthoring : MonoBehaviour
 {
-    public int damage;
     private class Baker : Baker<DamageOnTriggerAuthoring>
     {
         public override void Bake(DamageOnTriggerAuthoring authoring)
@@ -11,7 +10,6 @@ public class DamageOnTriggerAuthoring : MonoBehaviour
             var entity = GetEntity(TransformUsageFlags.Dynamic);
             AddComponent(entity, new DamageOnTrigger()
             {
-                amount = authoring.damage,
             });
         }
     }
