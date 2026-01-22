@@ -23,8 +23,11 @@ internal partial struct EnemySpawnerSystem : ISystem
         var gameStateEntity = SystemAPI.GetSingletonEntity<GameState>();
         var gameState = SystemAPI.GetComponent<GameState>(gameStateEntity);
         var config = SystemAPI.GetSingleton<GameConfigComponent>();
+        
         ref var waveReference = ref config.Wave;
         ref var enemiesArray = ref waveReference.Value;
+
+        ref var enemySettingsArray = ref config.EnemySettings.Value.Array;
 
         foreach (var (player, localTransform) in SystemAPI.Query<RefRO<Player>, RefRO<LocalTransform>>())
         {
@@ -73,6 +76,19 @@ internal partial struct EnemySpawnerSystem : ISystem
             
             var enemyComponent = SystemAPI.GetComponentRW<Enemy>(enemyEntity);
             enemyComponent.ValueRW.Points = enemyInWaveConf.points;
+
+            var enemySettings = enemySettingsArray[0];
+            for (int i = 0; i < enemySettingsArray.Length; i++)
+            {
+                if (enemySettingsArray[i].type == enemyInWaveConf.type)
+                {
+                    enemySettings = enemySettingsArray[i];
+                }
+            }
+            
+            var unitMover = SystemAPI.GetComponentRW<UnitMover>(enemyEntity);
+            unitMover.ValueRW.moveSpeed = enemySettings.moveSpeed;
+            unitMover.ValueRW.rotationSpeed = enemySettings.rotationSpeed;
         }
     }
 

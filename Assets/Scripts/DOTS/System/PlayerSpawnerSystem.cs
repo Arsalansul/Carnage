@@ -14,16 +14,20 @@ public partial struct PlayerSpawnerSystem : ISystem
 
             var entitiesReferences = SystemAPI.GetSingleton<EntitiesReferences>();
             var cameraFollowEntity = SystemAPI.GetSingletonEntity<CameraFollow>();
+            var config = SystemAPI.GetSingleton<GameConfigComponent>();
             var cameraFollowLocalTransform = SystemAPI.GetComponentRO<LocalTransform>(cameraFollowEntity);
             var cameraFollow = SystemAPI.GetComponentRO<CameraFollow>(cameraFollowEntity);
 
             var playerEntity = state.EntityManager.Instantiate(entitiesReferences.playerPrefab);
             playerSpawner.ValueRW.shouldSpawn = false;
+            
+            var unitMover = SystemAPI.GetComponentRW<UnitMover>(playerEntity);
+            unitMover.ValueRW.moveSpeed = config.playerSettings.moveSpeed;
+            unitMover.ValueRW.rotationSpeed = config.playerSettings.rotationSpeed;
 
             if (SystemAPI.HasComponent<ShootAttack>(playerEntity))
             {
                 var inputData = SystemAPI.GetSingleton<InputData>();
-                var config = SystemAPI.GetSingleton<GameConfigComponent>();
                 ref var weaponsReference = ref config.Weapons;
                 ref var weaponsArray = ref weaponsReference.Value;
                 var shootAttack = SystemAPI.GetComponentRW<ShootAttack>(playerEntity);

@@ -20,9 +20,11 @@ namespace DOTS
     {
         public BlobAssetReference<WaveBlob> Wave;
         public BlobAssetReference<WeaponsBlob> Weapons;
+        public BlobAssetReference<EnemySettingsBlob> EnemySettings;
         public BlobAssetReference<BulletsSettingsBlob> Bullets;
         public UnitsSettings unitsSettings;
         public int enemiesCountLeft;
+        public PlayerSettings playerSettings;
     }
 
     public struct WaveBlob
@@ -36,6 +38,19 @@ namespace DOTS
         public int count;
         public int points;
         public EnemyType type;
+    }
+
+    public struct EnemySettingsBlob
+    {
+        public BlobArray<EnemySettings> Array;
+    }
+    
+    [Serializable]
+    public struct EnemySettings
+    {
+        public EnemyType type;
+        public float moveSpeed;
+        public float rotationSpeed;
     }
 
     public struct WeaponsBlob
@@ -70,5 +85,12 @@ namespace DOTS
         public int damageOnTrigger;
         public float explosionRadius;
         public int explosionDamage;
+    }
+
+    [Serializable]
+    public struct PlayerSettings
+    {
+        public float moveSpeed;
+        public float rotationSpeed;
     }
 }

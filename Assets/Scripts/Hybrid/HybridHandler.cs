@@ -16,6 +16,8 @@ public class HybridHandler : MonoBehaviour
     [Inject] private List<BulletSettings> bulletSettingsList;
     [Inject] private UnitsSettings unitsSettings;
     [Inject] private CameraSettings cameraSettings;
+    [Inject] private List<EnemySettings> enemySettingsList;
+    [Inject] private PlayerSettings playerSettings;
     
     public void SetInputDataField(InputDataActionType inputAction, InputAction.CallbackContext context = default)
     {
@@ -149,6 +151,12 @@ public class HybridHandler : MonoBehaviour
         };
 
         component.Bullets = CreateBulletsBlobAsset(bulletSettingsList);
+        component.EnemySettings = CreateEnemySettingsBlobAsset(enemySettingsList);
+        component.playerSettings = new PlayerSettings()
+        {
+            moveSpeed = playerSettings.moveSpeed,
+            rotationSpeed = playerSettings.rotationSpeed
+        };
         
         entityManager.SetComponentData(entity, component);
         SetCameraSettings();
@@ -244,6 +252,23 @@ public class HybridHandler : MonoBehaviour
         }
 
         return builder.CreateBlobAssetReference<BulletsSettingsBlob>(Allocator.Persistent);
+    }
+
+    private BlobAssetReference<EnemySettingsBlob> CreateEnemySettingsBlobAsset(List<EnemySettings> settingsList)
+    {
+        using var builder = new BlobBuilder(Allocator.Temp);
+        ref var blob = ref builder.ConstructRoot<EnemySettingsBlob>();
+
+        var arrayBuilder = builder.Allocate(ref blob.Array, settingsList.Count);
+        
+        for (var i = 0; i < settingsList.Count; i++)
+        {
+            arrayBuilder[i].type = settingsList[i].type;
+            arrayBuilder[i].moveSpeed = settingsList[i].moveSpeed;
+            arrayBuilder[i].rotationSpeed = settingsList[i].rotationSpeed;
+        }
+
+        return builder.CreateBlobAssetReference<EnemySettingsBlob>(Allocator.Persistent);
     }
     
     private void GetComponentAndEntityWithAll<T>(out T component, out Entity entity, out EntityManager entityManager) where T : unmanaged, IComponentData

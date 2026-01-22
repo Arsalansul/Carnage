@@ -13,6 +13,8 @@ public class GameConfig : ScriptableObjectInstaller<GameConfig>
     public List<BulletSettings> BulletSettingsList;
     public UnitsSettings UnitsSettings;
     public CameraSettings CameraSettings;
+    public PlayerSettings PlayerSettings;
+    public List<EnemySettings> EnemySettingsList;
     
     public override void InstallBindings()
     {
@@ -21,6 +23,8 @@ public class GameConfig : ScriptableObjectInstaller<GameConfig>
         Container.BindInstance(BulletSettingsList);
         Container.BindInstance(UnitsSettings);
         Container.BindInstance(CameraSettings);
+        Container.BindInstance(EnemySettingsList);
+        Container.BindInstance(PlayerSettings);
     }
 }
 
