@@ -1,4 +1,5 @@
-using Core;
+using Ui;
+using Ui.Controller;
 using UnityEngine;
 using Zenject;
 
@@ -9,7 +10,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        uiManager.HideGameOverPanel();
+        uiManager.invokeEndGameUiAction(EndGameAction.hide);
         hybridHandler.SetGameConfig();
         hybridHandler.InitializeEcs();
     }
@@ -18,17 +19,17 @@ public class GameManager : MonoBehaviour
     {
         if (hybridHandler.IsGameOver())
         {
-            uiManager.ShowGameOverPanel();
+            uiManager.invokeEndGameUiAction(EndGameAction.show);
             return;
         }
         
-        if (hybridHandler.IsScoreChanged(out var score)) uiManager.SetScore(score);
+        if (hybridHandler.IsScoreChanged(out var score)) uiManager.setInGameScore(score);
         if (hybridHandler.IsWaveChanged(out var wave))
         {
-            uiManager.SetWave(wave);
+            uiManager.setInGameWave(wave);
             hybridHandler.SetWaveSettings(wave);
         }
-        if (hybridHandler.IsEnemiesLeftChanged(out var enemiesLeftCount)) uiManager.SetEnemiesLeftCount(enemiesLeftCount);
+        if (hybridHandler.IsEnemiesLeftChanged(out var enemiesLeftCount)) uiManager.setInGameEnemiesLeft(enemiesLeftCount);
     }
 
     private void OnEnable()
@@ -44,6 +45,6 @@ public class GameManager : MonoBehaviour
     private void RestartGame()
     {
         hybridHandler.RestartEcsGame();
-        uiManager.HideGameOverPanel();
+        uiManager.invokeEndGameUiAction(EndGameAction.hide);
     }
 }

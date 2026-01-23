@@ -1,55 +1,47 @@
 using System;
+using Ui.Controller;
 using UnityEngine;
-using UnityEngine.UI;
+using Zenject;
 
-public class UiManager : MonoBehaviour
+namespace Ui
 {
-
-    [SerializeField] private Transform gameOverPanel;
-    [SerializeField] private Button restartButton;
-    [SerializeField] private Text scoreText;
-    [SerializeField] private Text waveText;
-    [SerializeField] private Text enemiesLeftText;
-
-    private void OnEnable()
+    public class UiManager : MonoBehaviour
     {
-        restartButton.onClick.AddListener(OnRestartButtonClick);
-    }
+        [Inject] private InventoryController inventoryController;
+        [Inject] private InGameHudController inGameHudController;
+        [Inject] private EndGameUiController endGameUiController;
 
-    private void OnDisable()
-    {
-        restartButton.onClick.RemoveAllListeners();
-    }
+        public delegate void SetInGameData(int value);
+        public delegate void InvokeEndGameUiAction(EndGameAction action);
 
-    public event Action OnRestartButton;
+        public SetInGameData setInGameScore;
+        public SetInGameData setInGameWave;
+        public SetInGameData setInGameEnemiesLeft;
+        public InvokeEndGameUiAction invokeEndGameUiAction;
+        public event Action OnRestartButton;
+        
 
-    public void ShowGameOverPanel()
-    {
-        gameOverPanel.gameObject.SetActive(true);
-    }
+        private void OnEnable()
+        {
+            setInGameScore += inGameHudController.SetScore;
+            setInGameWave += inGameHudController.SetWave;
+            setInGameEnemiesLeft += inGameHudController.SetEnemiesLeftCount;
+            invokeEndGameUiAction += endGameUiController.InvokeAction;
+            endGameUiController.OnRestartButton += OnRestartButtonInvoke;
+        }
 
-    public void HideGameOverPanel()
-    {
-        gameOverPanel.gameObject.SetActive(false);
-    }
+        private void OnDisable()
+        {
+            setInGameScore -= inGameHudController.SetScore;
+            setInGameWave -= inGameHudController.SetWave;
+            setInGameEnemiesLeft -= inGameHudController.SetEnemiesLeftCount;
+            invokeEndGameUiAction -= endGameUiController.InvokeAction;
+            endGameUiController.OnRestartButton -= OnRestartButtonInvoke;
+        }
 
-    private void OnRestartButtonClick()
-    {
-        OnRestartButton?.Invoke();
-    }
-
-    public void SetScore(int score)
-    {
-        scoreText.text = $"Score: {score}";
-    }
-
-    public void SetWave(int wave)
-    {
-        waveText.text = $"Wave {wave + 1}";
-    }
-
-    public void SetEnemiesLeftCount(int count)
-    {
-        enemiesLeftText.text = $"Left: {count}";
+        private void OnRestartButtonInvoke()
+        {
+            OnRestartButton?.Invoke();
+        }
     }
 }
