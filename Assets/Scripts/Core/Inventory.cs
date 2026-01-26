@@ -6,8 +6,8 @@ namespace Core
 {
     public interface IInventory
     {
-        void AddItem(ItemType item);
-        void RemoveItem(ItemType item);
+        void AddItem(ItemType type);
+        void RemoveItem(ItemType type);
     }
     
     public class Inventory : IInventory

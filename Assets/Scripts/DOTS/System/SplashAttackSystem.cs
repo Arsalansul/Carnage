@@ -26,7 +26,7 @@ namespace System
 
                 var inputData = SystemAPI.GetSingleton<InputData>();
 
-                if (inputData.MouseLeft)
+                if (inputData.Fire)
                 {
                     splashAttack.ValueRW.timer = splashAttack.ValueRO.timerMax;
                     var gameConfig = SystemAPI.GetSingleton<GameConfigComponent>();

@@ -34,13 +34,22 @@ public class HybridHandler : MonoBehaviour
                     Camera.main.ScreenToWorldPoint(new Vector3(inputMousePosition.x, inputMousePosition.y, 10));
                 break;
             case InputDataActionType.MouseLeftButton:
-                component.MouseLeft = true;
+                component.Fire = true;
                 break;
             case InputDataActionType.MouseRightButton:
-                component.MouseRight = true;
+                component.SwitchWeapon = true;
+                component.WeaponIndex++;
                 break;
             case InputDataActionType.MouseLeftButtonCancel:
-                component.MouseLeft = false;
+                component.Fire = false;
+                break;
+            case InputDataActionType.One:
+                component.SwitchWeapon = true;
+                component.WeaponIndex = 0;
+                break;
+            case InputDataActionType.Two:
+                component.SwitchWeapon = true;
+                component.WeaponIndex = 1;
                 break;
         }
 

@@ -29,9 +29,9 @@ namespace System
                 var speed = math.length(inputData.Movement) * unitMover.ValueRO.moveSpeed;
                 animatorReference.unitView.Move(speed);
 
-                if (inputData.MouseLeft) animatorReference.unitView.Attack();
+                if (inputData.Fire) animatorReference.unitView.Attack();
 
-                if (inputData.MouseRight)
+                if (inputData.SwitchWeapon)
                 {
                     var playerView = (PlayerView)animatorReference.unitView;
                     playerView.ShowWeapon(inputData.WeaponIndex);

@@ -127,6 +127,24 @@ public partial class @NewInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""One"",
+                    ""type"": ""Button"",
+                    ""id"": ""4a58feb7-1db1-466a-8657-4c66db077a30"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Two"",
+                    ""type"": ""Button"",
+                    ""id"": ""ea994d00-1948-420d-a373-0ae351cb31a2"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -217,6 +235,28 @@ public partial class @NewInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f201460b-0229-4ce4-ae10-3a005a85b8df"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""One"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ad60bfd4-2fff-4643-9907-c9fdbc537e5b"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Two"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -257,6 +297,8 @@ public partial class @NewInputActions: IInputActionCollection2, IDisposable
         m_GameMap_MouseRightButtonClick = m_GameMap.FindAction("MouseRightButtonClick", throwIfNotFound: true);
         m_GameMap_MousePosition = m_GameMap.FindAction("MousePosition", throwIfNotFound: true);
         m_GameMap_Move = m_GameMap.FindAction("Move", throwIfNotFound: true);
+        m_GameMap_One = m_GameMap.FindAction("One", throwIfNotFound: true);
+        m_GameMap_Two = m_GameMap.FindAction("Two", throwIfNotFound: true);
         // UiMap
         m_UiMap = asset.FindActionMap("UiMap", throwIfNotFound: true);
         m_UiMap_Newaction = m_UiMap.FindAction("New action", throwIfNotFound: true);
@@ -345,6 +387,8 @@ public partial class @NewInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_GameMap_MouseRightButtonClick;
     private readonly InputAction m_GameMap_MousePosition;
     private readonly InputAction m_GameMap_Move;
+    private readonly InputAction m_GameMap_One;
+    private readonly InputAction m_GameMap_Two;
     /// <summary>
     /// Provides access to input actions defined in input action map "GameMap".
     /// </summary>
@@ -372,6 +416,14 @@ public partial class @NewInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "GameMap/Move".
         /// </summary>
         public InputAction @Move => m_Wrapper.m_GameMap_Move;
+        /// <summary>
+        /// Provides access to the underlying input action "GameMap/One".
+        /// </summary>
+        public InputAction @One => m_Wrapper.m_GameMap_One;
+        /// <summary>
+        /// Provides access to the underlying input action "GameMap/Two".
+        /// </summary>
+        public InputAction @Two => m_Wrapper.m_GameMap_Two;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -410,6 +462,12 @@ public partial class @NewInputActions: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
+            @One.started += instance.OnOne;
+            @One.performed += instance.OnOne;
+            @One.canceled += instance.OnOne;
+            @Two.started += instance.OnTwo;
+            @Two.performed += instance.OnTwo;
+            @Two.canceled += instance.OnTwo;
         }
 
         /// <summary>
@@ -433,6 +491,12 @@ public partial class @NewInputActions: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
+            @One.started -= instance.OnOne;
+            @One.performed -= instance.OnOne;
+            @One.canceled -= instance.OnOne;
+            @Two.started -= instance.OnTwo;
+            @Two.performed -= instance.OnTwo;
+            @Two.canceled -= instance.OnTwo;
         }
 
         /// <summary>
@@ -597,6 +661,20 @@ public partial class @NewInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMove(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "One" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnOne(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Two" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnTwo(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UiMap" which allows adding and removing callbacks.

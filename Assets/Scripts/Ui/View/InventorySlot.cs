@@ -23,6 +23,7 @@ namespace Ui.View
         public void SetCount(int count)
         {
             countText.text = count.ToString();
+            countText.gameObject.SetActive(count > 1);
         }
 
         public class Pool : MemoryPool<Transform, InventorySlot>

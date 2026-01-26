@@ -81,8 +81,8 @@ namespace System
                     entityCommandBuffer.DestroyEntity(entity);
 
                 var inputData = SystemAPI.GetSingletonRW<InputData>();
-                inputData.ValueRW.MouseLeft = false;
-                inputData.ValueRW.MouseRight = false;
+                inputData.ValueRW.Fire = false;
+                inputData.ValueRW.SwitchWeapon = false;
                 inputData.ValueRW.WeaponIndex = 0;
             }
         }

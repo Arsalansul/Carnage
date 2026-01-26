@@ -14,7 +14,7 @@ internal partial struct ResetEventsSystem : ISystem
         
         foreach (var inputData in SystemAPI.Query<RefRW<InputData>>())
         {
-            inputData.ValueRW.MouseRight = false;
+            inputData.ValueRW.SwitchWeapon = false;
         }
 
         foreach (var meleeAttack in SystemAPI.Query<RefRW<MeleeAttack>>())

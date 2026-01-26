@@ -17,8 +17,8 @@ public class InputDataAuthoring : MonoBehaviour
 public struct InputData : IComponentData
 {
     public float2 Movement;
-    public bool MouseLeft;
-    public bool MouseRight;
+    public bool Fire;
+    public bool SwitchWeapon;
     public float3 MousePos;
     public int WeaponIndex;
 }

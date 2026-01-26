@@ -1,7 +1,6 @@
 using DOTS;
 using Unity.Burst;
 using Unity.Entities;
-using UnityEngine;
 
 [UpdateBefore(typeof(PlayerSpawnerSystem))]
 public partial struct SwitchWeaponSystem : ISystem
@@ -11,15 +10,15 @@ public partial struct SwitchWeaponSystem : ISystem
     {
         var inputData = SystemAPI.GetSingletonRW<InputData>();
         
-        if (!inputData.ValueRO.MouseRight) return;
+        if (!inputData.ValueRO.SwitchWeapon) return;
         
         var config = SystemAPI.GetSingleton<GameConfigComponent>();
         ref var weaponsReference = ref config.Weapons;
         ref var weaponsArray = ref weaponsReference.Value;
-
-        var weaponIndex = (inputData.ValueRO.WeaponIndex + 1) % weaponsArray.Array.Length;
-
+        
+        var weaponIndex = inputData.ValueRO.WeaponIndex % weaponsArray.Array.Length;
         inputData.ValueRW.WeaponIndex = weaponIndex;
+        
         foreach (var (shootAttack, player) in SystemAPI.Query<RefRW<ShootAttack>, RefRO<Player>>())
         {
             shootAttack.ValueRW.timerMax = weaponsArray.Array[inputData.ValueRO.WeaponIndex].TimeMax;

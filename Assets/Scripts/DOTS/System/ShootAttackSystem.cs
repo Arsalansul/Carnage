@@ -22,7 +22,7 @@ public partial struct ShootAttackSystem : ISystem
 
             if (shootAttack.ValueRO.timer > 0f) continue;
 
-            if (!inputData.MouseLeft) continue;
+            if (!inputData.Fire) continue;
 
             shootAttack.ValueRW.timer = shootAttack.ValueRO.timerMax;
 

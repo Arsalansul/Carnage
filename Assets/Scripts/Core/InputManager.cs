@@ -18,6 +18,9 @@ public class InputManager : MonoBehaviour
         inputActions.GameMap.MouseLeftButtonClick.performed += OnMouseLeftButtonClickPerformed;
         inputActions.GameMap.MouseLeftButtonClick.canceled += OnMouseLeftButtonClickCanceled;
         inputActions.GameMap.MouseRightButtonClick.performed += OnMouseRightButtonClickPerformed;
+        
+        inputActions.GameMap.One.performed += OnOneButtonPerformed;
+        inputActions.GameMap.Two.performed += OnTwoButtonPerformed;
     }
     
     private void OnDisable()
@@ -26,25 +29,17 @@ public class InputManager : MonoBehaviour
         inputActions.GameMap.MouseLeftButtonClick.performed -= OnMouseLeftButtonClickPerformed;
         inputActions.GameMap.MouseLeftButtonClick.canceled -= OnMouseLeftButtonClickCanceled;
         inputActions.GameMap.MouseRightButtonClick.performed -= OnMouseRightButtonClickPerformed;
+        
+        inputActions.GameMap.One.performed -= OnOneButtonPerformed;
+        inputActions.GameMap.Two.performed -= OnTwoButtonPerformed;
     }
     
-    private void OnMouseRightButtonClickPerformed(InputAction.CallbackContext context)
-    {
-        hybridHandler.SetInputDataField(InputDataActionType.MouseRightButton, context);
-    }
+    private void OnMouseRightButtonClickPerformed(InputAction.CallbackContext context) => hybridHandler.SetInputDataField(InputDataActionType.MouseRightButton);
+    private void OnMouseLeftButtonClickPerformed(InputAction.CallbackContext context) => hybridHandler.SetInputDataField(InputDataActionType.MouseLeftButton);
     
-    private void OnMouseLeftButtonClickPerformed(InputAction.CallbackContext context)
-    {
-        hybridHandler.SetInputDataField(InputDataActionType.MouseLeftButton, context);
-    }
+    private void OnMousePositionPerformed(InputAction.CallbackContext context) => hybridHandler.SetInputDataField(InputDataActionType.MousePos, context);
+    private void OnMouseLeftButtonClickCanceled(InputAction.CallbackContext context) => hybridHandler.SetInputDataField(InputDataActionType.MouseLeftButtonCancel);
     
-    private void OnMousePositionPerformed(InputAction.CallbackContext context)
-    {
-        hybridHandler.SetInputDataField(InputDataActionType.MousePos, context);
-    }
-    
-    private void OnMouseLeftButtonClickCanceled(InputAction.CallbackContext context)
-    {
-        hybridHandler.SetInputDataField(InputDataActionType.MouseLeftButtonCancel, context);
-    }
+    private void OnOneButtonPerformed(InputAction.CallbackContext context) => hybridHandler.SetInputDataField(InputDataActionType.One);
+    private void OnTwoButtonPerformed(InputAction.CallbackContext context) => hybridHandler.SetInputDataField(InputDataActionType.Two);
 }
