@@ -1,5 +1,5 @@
 using System;
-using Ui.Controller;
+using Ui.Controllers;
 using UnityEngine;
 using Zenject;
 

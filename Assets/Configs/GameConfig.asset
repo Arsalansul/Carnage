@@ -29,10 +29,14 @@ MonoBehaviour:
       points: 3
       type: 4
   WeaponSettings:
-  - fireRate: 300
+  - type: 1
+    fireRate: 300
     bulletType: 0
-  - fireRate: 60
+    sprite: {fileID: -981311414, guid: cecbc1e21bfd4654cace7246a1733982, type: 3}
+  - type: 2
+    fireRate: 60
     bulletType: 1
+    sprite: {fileID: -2002544289, guid: cecbc1e21bfd4654cace7246a1733982, type: 3}
   BulletSettingsList:
   - type: 0
     speed: 10

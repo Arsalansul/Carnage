@@ -1,3 +1,4 @@
+using Core;
 using Ui;
 using UnityEngine;
 using Zenject;
@@ -16,5 +17,6 @@ public class MainSceneMonoInstaller : MonoInstaller
         poolManager.InitializePools();
         Container.Bind<PoolManager>().FromInstance(poolManager).AsSingle();
         Container.Bind<HybridHandler>().FromInstance(hybridHandler).AsSingle();
+        Container.Bind<IInventory>().To<Inventory>().AsSingle();
     }
 }

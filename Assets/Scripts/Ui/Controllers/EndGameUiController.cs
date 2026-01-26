@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Ui.Controller
+namespace Ui.Controllers
 {
     public enum EndGameAction
     {

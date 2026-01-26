@@ -1,5 +1,7 @@
+using Core;
 using Ui;
-using Ui.Controller;
+using Ui.Controllers;
+using Ui.Models;
 using UnityEngine;
 using Zenject;
 
@@ -7,12 +9,16 @@ public class GameManager : MonoBehaviour
 {
     [Inject] private UiManager uiManager;
     [Inject] private HybridHandler hybridHandler;
+    [Inject] private IInventory inventory;
 
     private void Start()
     {
         uiManager.invokeEndGameUiAction(EndGameAction.hide);
         hybridHandler.SetGameConfig();
         hybridHandler.InitializeEcs();
+        
+        inventory.AddItem(ItemType.SimpleGun);
+        inventory.AddItem(ItemType.RocketGun);
     }
 
     private void Update()

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using DOTS;
+using Ui.Models;
 using Unity.Mathematics;
 using UnityEngine;
 using Zenject;
@@ -37,8 +38,10 @@ public class WaveSettings
 [Serializable]
 public struct WeaponSettings
 {
+    public ItemType type;
     public float fireRate;
     public BulletsType bulletType;
+    public Sprite sprite;
 }
 
 [Serializable]
