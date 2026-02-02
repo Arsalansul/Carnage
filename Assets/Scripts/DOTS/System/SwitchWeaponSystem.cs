@@ -32,6 +32,11 @@ public partial struct SwitchWeaponSystem : ISystem
             player.ValueRW.currentWeapon = weaponBlob;
             shootAttack.ValueRW.timerMax = weaponBlob.TimeMax;
             inputData.ValueRW.SwitchWeapon = false;
+            
+            var eventsHandlerEntity = SystemAPI.GetSingletonEntity<EventsHandler>();
+            var onSwitchWeapon = SystemAPI.GetComponentRW<OnSwitchWeaponAnim>(eventsHandlerEntity);
+            onSwitchWeapon.ValueRW.weaponType = weaponBlob.type;
+            SystemAPI.SetComponentEnabled<OnSwitchWeaponAnim>(eventsHandlerEntity, true);
         }
     }
 }

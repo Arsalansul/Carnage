@@ -21,8 +21,7 @@ namespace System
             }
 
             foreach (var (localTransform, animatorReference, unitMover, moveInput) in
-                     SystemAPI
-                         .Query<RefRO<LocalTransform>, UnitGameObjectReference, RefRO<UnitMover>, RefRO<MoveInput>>())
+                     SystemAPI.Query<RefRO<LocalTransform>, UnitGameObjectReference, RefRO<UnitMover>, RefRO<MoveInput>>())
             {
                 var inputData = SystemAPI.GetSingleton<InputData>();
 
@@ -31,10 +30,13 @@ namespace System
 
                 if (inputData.Fire) animatorReference.unitView.Attack();
 
-                if (inputData.SwitchWeapon)
+                var eventsHandlerEntity = SystemAPI.GetSingletonEntity<EventsHandler>();
+                if (SystemAPI.IsComponentEnabled<OnSwitchWeaponAnim>(eventsHandlerEntity))
                 {
+                    var onSwitchWeapon = SystemAPI.GetComponentRO<OnSwitchWeaponAnim>(eventsHandlerEntity);
                     var playerView = (PlayerView)animatorReference.unitView;
-                    playerView.ShowWeapon(inputData.WeaponType);
+                    playerView.ShowWeapon(onSwitchWeapon.ValueRO.weaponType);
+                    SystemAPI.SetComponentEnabled<OnSwitchWeaponAnim>(eventsHandlerEntity, false);
                 }
 
                 if (speed < 0.1f) continue;
@@ -45,6 +47,8 @@ namespace System
 
                 animatorReference.unitView.SetLookAngle(angle, math.cross(lookDirection, moveDirection).y > 0);
             }
+
+            
 
             foreach (var (health, animatorReference, entity) in
                      SystemAPI.Query<RefRO<Health>, UnitGameObjectReference>().WithEntityAccess())

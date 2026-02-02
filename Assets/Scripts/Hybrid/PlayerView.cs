@@ -18,11 +18,6 @@ public class PlayerView : UnitView, IArmed
 {
     [SerializeField] private List<WeaponMeshMap> weaponsMeshMap;
 
-    private void OnEnable()
-    {
-        ShowWeapon(WeaponType.SimpleGun);
-    }
-
     public void ShowWeapon(WeaponType weaponType)
     {
         for (var i = 0; i < weaponsMeshMap.Count; i++)

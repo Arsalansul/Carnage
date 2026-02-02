@@ -15,6 +15,8 @@ public class EventsHandlerAuthoring : MonoBehaviour
             SetComponentEnabled<OnWaveChanged>(entity, true);
             AddComponent<OnEnemiesLeftCountChanged>(entity);
             SetComponentEnabled<OnEnemiesLeftCountChanged>(entity, true);
+            AddComponent<OnSwitchWeaponAnim>(entity);
+            SetComponentEnabled<OnSwitchWeaponAnim>(entity, false);
         }
     }
 }
@@ -34,4 +36,9 @@ public struct OnWaveChanged : IComponentData, IEnableableComponent
 public struct OnEnemiesLeftCountChanged : IComponentData, IEnableableComponent
 {
     public int enemiesLeftCount;
+}
+
+public struct OnSwitchWeaponAnim : IComponentData, IEnableableComponent
+{
+    public WeaponType weaponType;
 }
