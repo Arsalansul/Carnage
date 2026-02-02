@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using DOTS;
+using Ui.Controllers;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -18,6 +19,8 @@ public class HybridHandler : MonoBehaviour
     [Inject] private CameraSettings cameraSettings;
     [Inject] private List<EnemySettings> enemySettingsList;
     [Inject] private PlayerSettings playerSettings;
+    [Inject] private InventoryController inventoryController;
+    [Inject] private List<WeaponTypeToItemType> weaponTypeToItemTypeMap;
     
     public void SetInputDataField(InputDataActionType inputAction, InputAction.CallbackContext context = default)
     {
@@ -37,19 +40,16 @@ public class HybridHandler : MonoBehaviour
                 component.Fire = true;
                 break;
             case InputDataActionType.MouseRightButton:
-                component.SwitchWeapon = true;
-                component.WeaponIndex++;
+                // component = SwitchWeapon();
                 break;
             case InputDataActionType.MouseLeftButtonCancel:
                 component.Fire = false;
                 break;
             case InputDataActionType.One:
-                component.SwitchWeapon = true;
-                component.WeaponIndex = 0;
+                component = SwitchWeapon(WeaponType.SimpleGun, component);
                 break;
             case InputDataActionType.Two:
-                component.SwitchWeapon = true;
-                component.WeaponIndex = 1;
+                component = SwitchWeapon(WeaponType.RocketGun, component);
                 break;
         }
 
@@ -236,6 +236,7 @@ public class HybridHandler : MonoBehaviour
         for (var i = 0; i < weaponsSettings.Count; i++)
         {
             var settings = weaponsSettings[i];
+            arrayBuilder[i].type = settings.type;
             arrayBuilder[i].bulletType = settings.bulletType;
             arrayBuilder[i].TimeMax = 60 / settings.fireRate;
         }
@@ -323,5 +324,15 @@ public class HybridHandler : MonoBehaviour
             .Build(entityManager);
         components = entityQuery.ToComponentDataArray<T>(Allocator.Temp);
         entities = entityQuery.ToEntityArray(Allocator.Temp);
+    }
+    
+    private InputData SwitchWeapon(WeaponType weaponType, InputData inputData)
+    {
+        var newInputData = inputData;
+        newInputData.SwitchWeapon = true;
+        newInputData.WeaponType = weaponType;
+        var itemType = weaponTypeToItemTypeMap.Find(x => x.weaponType == weaponType).itemType;
+        inventoryController.Select(itemType);
+        return newInputData;
     }
 }

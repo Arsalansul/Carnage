@@ -60,6 +60,7 @@ namespace DOTS
 
     public struct WeaponBlob
     {
+        public WeaponType type;
         public float TimeMax;
         public BulletsType bulletType;
     }

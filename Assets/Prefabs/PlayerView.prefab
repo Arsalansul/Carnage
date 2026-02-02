@@ -647,13 +647,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 9536810}
-  weaponsMeshs:
-  - {fileID: 2396422}
-  - {fileID: 2337856}
-  - {fileID: 2378546}
-  - {fileID: 2356694}
-  - {fileID: 2396268}
-  - {fileID: 2325148}
+  weaponsMeshMap:
+  - mesh: {fileID: 2396268}
+    weaponType: 0
+  - mesh: {fileID: 2337856}
+    weaponType: 1
 --- !u!1 &132654
 GameObject:
   m_ObjectHideFlags: 0

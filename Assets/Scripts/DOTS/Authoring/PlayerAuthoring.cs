@@ -1,3 +1,4 @@
+using DOTS;
 using Unity.Entities;
 using UnityEngine;
 
@@ -15,4 +16,5 @@ public class PlayerAuthoring : MonoBehaviour
 
 public struct Player : IComponentData
 {
+    public WeaponBlob currentWeapon;
 }

@@ -15,13 +15,23 @@ public partial struct SwitchWeaponSystem : ISystem
         var config = SystemAPI.GetSingleton<GameConfigComponent>();
         ref var weaponsReference = ref config.Weapons;
         ref var weaponsArray = ref weaponsReference.Value;
+
+        var weaponBlob = weaponsArray.Array[0];
         
-        var weaponIndex = inputData.ValueRO.WeaponIndex % weaponsArray.Array.Length;
-        inputData.ValueRW.WeaponIndex = weaponIndex;
-        
-        foreach (var (shootAttack, player) in SystemAPI.Query<RefRW<ShootAttack>, RefRO<Player>>())
+        for (int i = 0; i < weaponsArray.Array.Length; i++)
         {
-            shootAttack.ValueRW.timerMax = weaponsArray.Array[inputData.ValueRO.WeaponIndex].TimeMax;
+            if (weaponsArray.Array[i].type == inputData.ValueRO.WeaponType)
+            {
+                weaponBlob = weaponsArray.Array[i];
+                break;
+            }
+        }
+        
+        foreach (var (shootAttack, player) in SystemAPI.Query<RefRW<ShootAttack>, RefRW<Player>>())
+        {
+            player.ValueRW.currentWeapon = weaponBlob;
+            shootAttack.ValueRW.timerMax = weaponBlob.TimeMax;
+            inputData.ValueRW.SwitchWeapon = false;
         }
     }
 }

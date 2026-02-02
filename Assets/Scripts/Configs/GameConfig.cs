@@ -16,6 +16,7 @@ public class GameConfig : ScriptableObjectInstaller<GameConfig>
     public CameraSettings CameraSettings;
     public PlayerSettings PlayerSettings;
     public List<EnemySettings> EnemySettingsList;
+    public List<WeaponTypeToItemType> WeaponTypeToItemTypeMap;
     
     public override void InstallBindings()
     {
@@ -26,6 +27,7 @@ public class GameConfig : ScriptableObjectInstaller<GameConfig>
         Container.BindInstance(CameraSettings);
         Container.BindInstance(EnemySettingsList);
         Container.BindInstance(PlayerSettings);
+        Container.BindInstance(WeaponTypeToItemTypeMap);
     }
 }
 
@@ -38,7 +40,7 @@ public class WaveSettings
 [Serializable]
 public struct WeaponSettings
 {
-    public ItemType type;
+    public WeaponType type;
     public float fireRate;
     public BulletsType bulletType;
     public Sprite sprite;
@@ -49,4 +51,11 @@ public struct CameraSettings
 {
     public float speed;
     public float3 offset;
+}
+
+[Serializable]
+public struct WeaponTypeToItemType
+{
+    public WeaponType weaponType;
+    public ItemType itemType;
 }

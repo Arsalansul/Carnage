@@ -33,5 +33,13 @@ namespace Ui.Controllers
         {
             items.Remove(itemType);
         }
+
+        public void Select(ItemType itemType)
+        {
+            foreach (var item in items)
+            {
+                item.Value.SetSelected(itemType == item.Key);
+            }
+        }
     }
 }

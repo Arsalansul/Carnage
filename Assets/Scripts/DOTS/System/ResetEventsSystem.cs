@@ -11,11 +11,6 @@ internal partial struct ResetEventsSystem : ISystem
         {
             health.ValueRW.onHealthChanged = false;
         }
-        
-        foreach (var inputData in SystemAPI.Query<RefRW<InputData>>())
-        {
-            inputData.ValueRW.SwitchWeapon = false;
-        }
 
         foreach (var meleeAttack in SystemAPI.Query<RefRW<MeleeAttack>>())
         {

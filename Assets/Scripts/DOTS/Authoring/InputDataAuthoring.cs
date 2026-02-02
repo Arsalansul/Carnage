@@ -20,5 +20,5 @@ public struct InputData : IComponentData
     public bool Fire;
     public bool SwitchWeapon;
     public float3 MousePos;
-    public int WeaponIndex;
+    public WeaponType WeaponType;
 }

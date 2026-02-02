@@ -12,14 +12,16 @@ namespace Core
     
     public class Inventory : IInventory
     {
-        public Inventory(InventoryController inventoryController, List<WeaponSettings> weaponSettingsList)
+        public Inventory(InventoryController inventoryController, List<WeaponSettings> weaponSettingsList, List<WeaponTypeToItemType> weaponTypeToItemTypesMap)
         {
             this.inventoryController = inventoryController;
             this.weaponSettingsList = weaponSettingsList;
+            this.weaponTypeToItemTypesMap = weaponTypeToItemTypesMap;
         }
         
         private InventoryController inventoryController;
         private List<WeaponSettings> weaponSettingsList;
+        private List<WeaponTypeToItemType> weaponTypeToItemTypesMap;
         private Dictionary<ItemType, InventoryItem> inventoryItems = new ();
         
         public void AddItem(ItemType itemType)
@@ -30,7 +32,8 @@ namespace Core
             }
             else
             {
-                inventoryItems.Add(itemType, new InventoryItem(itemType, weaponSettingsList.Find(s => s.type == itemType).sprite,1));
+                var weaponType = weaponTypeToItemTypesMap.Find(x => x.itemType == itemType).weaponType;
+                inventoryItems.Add(itemType, new InventoryItem(itemType, weaponSettingsList.Find(s => s.type == weaponType).sprite,1));
             }
             
             inventoryController.SetItem(inventoryItems[itemType]);

@@ -34,7 +34,7 @@ namespace System
                 if (inputData.SwitchWeapon)
                 {
                     var playerView = (PlayerView)animatorReference.unitView;
-                    playerView.ShowWeapon(inputData.WeaponIndex);
+                    playerView.ShowWeapon(inputData.WeaponType);
                 }
 
                 if (speed < 0.1f) continue;

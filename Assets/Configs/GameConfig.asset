@@ -29,11 +29,11 @@ MonoBehaviour:
       points: 3
       type: 4
   WeaponSettings:
-  - type: 1
+  - type: 0
     fireRate: 300
     bulletType: 0
     sprite: {fileID: -981311414, guid: cecbc1e21bfd4654cace7246a1733982, type: 3}
-  - type: 2
+  - type: 1
     fireRate: 60
     bulletType: 1
     sprite: {fileID: -2002544289, guid: cecbc1e21bfd4654cace7246a1733982, type: 3}
@@ -69,3 +69,8 @@ MonoBehaviour:
   - type: 4
     moveSpeed: 10
     rotationSpeed: 10
+  WeaponTypeToItemTypeMap:
+  - weaponType: 0
+    itemType: 1
+  - weaponType: 1
+    itemType: 2

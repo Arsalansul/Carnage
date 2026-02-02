@@ -15,8 +15,8 @@ public partial struct ShootAttackSystem : ISystem
         ref var weaponsArray = ref weaponsReference.Value;
         ref var bulletsArray = ref config.Bullets.Value;
 
-        foreach (var (localTransform, shootAttack) in
-                 SystemAPI.Query<RefRW<LocalTransform>, RefRW<ShootAttack>>())
+        foreach (var (localTransform, shootAttack, player) in
+                 SystemAPI.Query<RefRW<LocalTransform>, RefRW<ShootAttack>, RefRO<Player>>())
         {
             shootAttack.ValueRW.timer -= SystemAPI.Time.DeltaTime;
 
@@ -26,7 +26,7 @@ public partial struct ShootAttackSystem : ISystem
 
             shootAttack.ValueRW.timer = shootAttack.ValueRO.timerMax;
 
-            var bulletType = weaponsArray.Array[inputData.WeaponIndex].bulletType;
+            var bulletType = player.ValueRO.currentWeapon.bulletType;
             BulletSettings bulletConfig = default;
             for (int i = 0; i < bulletsArray.Array.Length; i++)
             {

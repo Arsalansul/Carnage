@@ -1,23 +1,34 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public interface IArmed
 {
-    void ShowWeapon(int id);
+    void ShowWeapon(WeaponType weaponType);
+}
+
+[Serializable]
+public struct WeaponMeshMap
+{
+    public MeshRenderer mesh;
+    public WeaponType weaponType;
 }
 
 public class PlayerView : UnitView, IArmed
 {
-    [SerializeField] private List<MeshRenderer> weaponsMeshs;
+    [SerializeField] private List<WeaponMeshMap> weaponsMeshMap;
 
     private void OnEnable()
     {
-        ShowWeapon(0);
+        ShowWeapon(WeaponType.SimpleGun);
     }
 
-    public void ShowWeapon(int id)
+    public void ShowWeapon(WeaponType weaponType)
     {
-        for (var i = 0; i < weaponsMeshs.Count; i++) weaponsMeshs[i].enabled = i == id;
+        for (var i = 0; i < weaponsMeshMap.Count; i++)
+        {
+            weaponsMeshMap[i].mesh.enabled = weaponsMeshMap[i].weaponType == weaponType;
+        }
     }
 
     public override void Move(float speed)

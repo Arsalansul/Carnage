@@ -24,15 +24,7 @@ public partial struct PlayerSpawnerSystem : ISystem
             var unitMover = SystemAPI.GetComponentRW<UnitMover>(playerEntity);
             unitMover.ValueRW.moveSpeed = config.playerSettings.moveSpeed;
             unitMover.ValueRW.rotationSpeed = config.playerSettings.rotationSpeed;
-
-            if (SystemAPI.HasComponent<ShootAttack>(playerEntity))
-            {
-                var inputData = SystemAPI.GetSingleton<InputData>();
-                ref var weaponsReference = ref config.Weapons;
-                ref var weaponsArray = ref weaponsReference.Value;
-                var shootAttack = SystemAPI.GetComponentRW<ShootAttack>(playerEntity);
-                shootAttack.ValueRW.timerMax = weaponsArray.Array[inputData.WeaponIndex].TimeMax;
-            }
+            
             SystemAPI.SetComponent(playerEntity, LocalTransform.FromPosition(cameraFollowLocalTransform.ValueRO.Position - cameraFollow.ValueRO.offset));
         }
     }
