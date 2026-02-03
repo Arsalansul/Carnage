@@ -3,7 +3,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 
-namespace System
+namespace DOTS.System
 {
     public partial struct MoveInputSystem : ISystem
     {

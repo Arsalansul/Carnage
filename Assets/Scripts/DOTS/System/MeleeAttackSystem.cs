@@ -6,64 +6,67 @@ using Unity.Physics;
 using Unity.Transforms;
 using RaycastHit = Unity.Physics.RaycastHit;
 
-[UpdateInGroup(typeof(LateSimulationSystemGroup), OrderFirst = true)]
-internal partial struct MeleeAttackSystem : ISystem
+namespace DOTS.System
 {
-    [BurstCompile]
-    public void OnUpdate(ref SystemState state)
+    [UpdateInGroup(typeof(LateSimulationSystemGroup), OrderFirst = true)]
+    internal partial struct MeleeAttackSystem : ISystem
     {
-        var physicsWorldSingleton = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
-        var collisionWorld = physicsWorldSingleton.CollisionWorld;
-        var raycastHitList = new NativeList<RaycastHit>(Allocator.Temp);
-
-        foreach (var (localTransform, meleeAttack, target)
-                 in SystemAPI.Query<RefRO<LocalTransform>, RefRW<MeleeAttack>, RefRO<Target>>())
+        [BurstCompile]
+        public void OnUpdate(ref SystemState state)
         {
-            if (meleeAttack.ValueRO.timer > 0)
-            {
-                meleeAttack.ValueRW.timer -= SystemAPI.Time.DeltaTime;
-            }
-            
-            if (target.ValueRO.targetEntity == Entity.Null) continue;
+            var physicsWorldSingleton = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
+            var collisionWorld = physicsWorldSingleton.CollisionWorld;
+            var raycastHitList = new NativeList<RaycastHit>(Allocator.Temp);
 
-            var targetLocalTransform = SystemAPI.GetComponent<LocalTransform>(target.ValueRO.targetEntity);
-            var isCloseEnoughToAttack =
-                math.distancesq(localTransform.ValueRO.Position, targetLocalTransform.Position) <=
-                meleeAttack.ValueRO.attackDistance;
-            var isTouchingTarget = false;
-
-            if (!isCloseEnoughToAttack)
+            foreach (var (localTransform, meleeAttack, target)
+                     in SystemAPI.Query<RefRO<LocalTransform>, RefRW<MeleeAttack>, RefRO<Target>>())
             {
-                var dirToTarget = targetLocalTransform.Position - localTransform.ValueRO.Position;
-                dirToTarget = math.normalize(dirToTarget);
-                var distanceExtraToTestRaycast = 0.4f;
-                var raycastInput = new RaycastInput
+                if (meleeAttack.ValueRO.timer > 0)
                 {
-                    Start = localTransform.ValueRO.Position,
-                    End = localTransform.ValueRO.Position +
-                          dirToTarget * (meleeAttack.ValueRO.colliderSize + distanceExtraToTestRaycast),
-                    Filter = CollisionFilter.Default
-                };
-                raycastHitList.Clear();
-                if (collisionWorld.CastRay(raycastInput, ref raycastHitList))
-                    foreach (var raycastHit in raycastHitList)
-                        if (raycastHit.Entity == target.ValueRO.targetEntity)
-                        {
-                            isTouchingTarget = true;
-                            break;
-                        }
-            }
+                    meleeAttack.ValueRW.timer -= SystemAPI.Time.DeltaTime;
+                }
+            
+                if (target.ValueRO.targetEntity == Entity.Null) continue;
 
-            if (isCloseEnoughToAttack || isTouchingTarget)
-            {
-                if (meleeAttack.ValueRO.timer > 0f) continue;
+                var targetLocalTransform = SystemAPI.GetComponent<LocalTransform>(target.ValueRO.targetEntity);
+                var isCloseEnoughToAttack =
+                    math.distancesq(localTransform.ValueRO.Position, targetLocalTransform.Position) <=
+                    meleeAttack.ValueRO.attackDistance;
+                var isTouchingTarget = false;
 
-                meleeAttack.ValueRW.timer = meleeAttack.ValueRO.timerMax;
-                meleeAttack.ValueRW.animateAttack = true;
+                if (!isCloseEnoughToAttack)
+                {
+                    var dirToTarget = targetLocalTransform.Position - localTransform.ValueRO.Position;
+                    dirToTarget = math.normalize(dirToTarget);
+                    var distanceExtraToTestRaycast = 0.4f;
+                    var raycastInput = new RaycastInput
+                    {
+                        Start = localTransform.ValueRO.Position,
+                        End = localTransform.ValueRO.Position +
+                              dirToTarget * (meleeAttack.ValueRO.colliderSize + distanceExtraToTestRaycast),
+                        Filter = CollisionFilter.Default
+                    };
+                    raycastHitList.Clear();
+                    if (collisionWorld.CastRay(raycastInput, ref raycastHitList))
+                        foreach (var raycastHit in raycastHitList)
+                            if (raycastHit.Entity == target.ValueRO.targetEntity)
+                            {
+                                isTouchingTarget = true;
+                                break;
+                            }
+                }
 
-                var targetHealth = SystemAPI.GetComponentRW<Health>(target.ValueRO.targetEntity);
-                targetHealth.ValueRW.amount -= meleeAttack.ValueRO.damage;
-                targetHealth.ValueRW.onHealthChanged = true;
+                if (isCloseEnoughToAttack || isTouchingTarget)
+                {
+                    if (meleeAttack.ValueRO.timer > 0f) continue;
+
+                    meleeAttack.ValueRW.timer = meleeAttack.ValueRO.timerMax;
+                    meleeAttack.ValueRW.animateAttack = true;
+
+                    var targetHealth = SystemAPI.GetComponentRW<Health>(target.ValueRO.targetEntity);
+                    targetHealth.ValueRW.amount -= meleeAttack.ValueRO.damage;
+                    targetHealth.ValueRW.onHealthChanged = true;
+                }
             }
         }
     }

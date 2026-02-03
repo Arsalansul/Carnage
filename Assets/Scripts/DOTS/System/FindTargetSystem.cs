@@ -1,49 +1,51 @@
-using DOTS;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Physics;
 using Unity.Transforms;
 
-internal partial struct FindTargetSystem : ISystem
+namespace DOTS.System
 {
-    [BurstCompile]
-    public void OnUpdate(ref SystemState state)
+    internal partial struct FindTargetSystem : ISystem
     {
-        var physicsWorldSingleton = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
-        var gameConfig = SystemAPI.GetSingleton<GameConfigComponent>();
-        var collisionWorld = physicsWorldSingleton.CollisionWorld;
-        var distanceHitList = new NativeList<DistanceHit>(Allocator.Temp);
-        var collisionFilter = new CollisionFilter
+        [BurstCompile]
+        public void OnUpdate(ref SystemState state)
         {
-            BelongsTo = ~0u,
-            CollidesWith = 1u << gameConfig.unitsSettings.Layer,
-            GroupIndex = 0
-        };
-        foreach (var (localTransform, findTarget, target) in
-                 SystemAPI.Query<RefRO<LocalTransform>, RefRW<FindTarget>, RefRW<Target>>())
-        {
-            findTarget.ValueRW.timer -= SystemAPI.Time.DeltaTime;
-            if (findTarget.ValueRO.timer > 0) continue;
-
-            findTarget.ValueRW.timer = findTarget.ValueRO.timerMax;
-
-            distanceHitList.Clear();
-            
-            target.ValueRW.targetEntity = Entity.Null;
-
-            if (!collisionWorld.OverlapSphere(localTransform.ValueRO.Position, findTarget.ValueRO.range, ref distanceHitList, collisionFilter)) continue;
-            
-            foreach (var distanceHit in distanceHitList)
+            var physicsWorldSingleton = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
+            var gameConfig = SystemAPI.GetSingleton<GameConfigComponent>();
+            var collisionWorld = physicsWorldSingleton.CollisionWorld;
+            var distanceHitList = new NativeList<DistanceHit>(Allocator.Temp);
+            var collisionFilter = new CollisionFilter
             {
-                if (!SystemAPI.Exists(distanceHit.Entity) ||
-                    !SystemAPI.HasComponent<Unit>(distanceHit.Entity)) continue;
+                BelongsTo = ~0u,
+                CollidesWith = 1u << gameConfig.unitsSettings.Layer,
+                GroupIndex = 0
+            };
+            foreach (var (localTransform, findTarget, target) in
+                     SystemAPI.Query<RefRO<LocalTransform>, RefRW<FindTarget>, RefRW<Target>>())
+            {
+                findTarget.ValueRW.timer -= SystemAPI.Time.DeltaTime;
+                if (findTarget.ValueRO.timer > 0) continue;
 
-                var targetUnit = SystemAPI.GetComponent<Unit>(distanceHit.Entity);
-                if (targetUnit.faction == findTarget.ValueRO.targetFaction)
+                findTarget.ValueRW.timer = findTarget.ValueRO.timerMax;
+
+                distanceHitList.Clear();
+            
+                target.ValueRW.targetEntity = Entity.Null;
+
+                if (!collisionWorld.OverlapSphere(localTransform.ValueRO.Position, findTarget.ValueRO.range, ref distanceHitList, collisionFilter)) continue;
+            
+                foreach (var distanceHit in distanceHitList)
                 {
-                    target.ValueRW.targetEntity = distanceHit.Entity;
-                    break;
+                    if (!SystemAPI.Exists(distanceHit.Entity) ||
+                        !SystemAPI.HasComponent<Unit>(distanceHit.Entity)) continue;
+
+                    var targetUnit = SystemAPI.GetComponent<Unit>(distanceHit.Entity);
+                    if (targetUnit.faction == findTarget.ValueRO.targetFaction)
+                    {
+                        target.ValueRW.targetEntity = distanceHit.Entity;
+                        break;
+                    }
                 }
             }
         }

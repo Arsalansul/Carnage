@@ -1,8 +1,7 @@
-using DOTS;
 using Unity.Burst;
 using Unity.Entities;
 
-namespace System
+namespace DOTS.System
 {
     [UpdateInGroup(typeof(LateSimulationSystemGroup))]
     [UpdateBefore(typeof(ResetEventsSystem))]

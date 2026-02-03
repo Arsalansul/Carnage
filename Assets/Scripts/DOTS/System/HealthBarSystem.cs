@@ -3,33 +3,36 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 
-[UpdateInGroup(typeof(LateSimulationSystemGroup))]
-internal partial struct HealthBarSystem : ISystem
+namespace DOTS.System
 {
-    // [BurstCompile]
-    public void OnUpdate(ref SystemState state)
+    [UpdateInGroup(typeof(LateSimulationSystemGroup))]
+    internal partial struct HealthBarSystem : ISystem
     {
-        var cameraForward = Vector3.zero;
-        if (Camera.main != null) cameraForward = Camera.main.transform.forward;
-
-        foreach (var (healthBar, localTransform) in
-                 SystemAPI.Query<RefRO<HealthBar>, RefRW<LocalTransform>>())
+        // [BurstCompile]
+        public void OnUpdate(ref SystemState state)
         {
-            var parentLocalTransform = SystemAPI.GetComponent<LocalTransform>(healthBar.ValueRO.healthEntity);
-            if (localTransform.ValueRO.Scale > 0f)
-                localTransform.ValueRW.Rotation =
-                    parentLocalTransform.InverseTransformRotation(quaternion.LookRotation(cameraForward, math.up()));
+            var cameraForward = Vector3.zero;
+            if (Camera.main != null) cameraForward = Camera.main.transform.forward;
 
-            var healthEntity = SystemAPI.GetComponent<Health>(healthBar.ValueRO.healthEntity);
+            foreach (var (healthBar, localTransform) in
+                     SystemAPI.Query<RefRO<HealthBar>, RefRW<LocalTransform>>())
+            {
+                var parentLocalTransform = SystemAPI.GetComponent<LocalTransform>(healthBar.ValueRO.healthEntity);
+                if (localTransform.ValueRO.Scale > 0f)
+                    localTransform.ValueRW.Rotation =
+                        parentLocalTransform.InverseTransformRotation(quaternion.LookRotation(cameraForward, math.up()));
 
-            if (!healthEntity.onHealthChanged) continue;
-            var healthNormalized = (float)healthEntity.amount / healthEntity.max;
+                var healthEntity = SystemAPI.GetComponent<Health>(healthBar.ValueRO.healthEntity);
 
-            // localTransform.ValueRW.Scale = healthNormalized == 1f ? 0 : 1;
+                if (!healthEntity.onHealthChanged) continue;
+                var healthNormalized = (float)healthEntity.amount / healthEntity.max;
 
-            var barVisualPostTransformMatrix =
-                SystemAPI.GetComponentRW<PostTransformMatrix>(healthBar.ValueRO.barVisualEntity);
-            barVisualPostTransformMatrix.ValueRW.Value = float4x4.Scale(healthNormalized, 1, 1);
+                // localTransform.ValueRW.Scale = healthNormalized == 1f ? 0 : 1;
+
+                var barVisualPostTransformMatrix =
+                    SystemAPI.GetComponentRW<PostTransformMatrix>(healthBar.ValueRO.barVisualEntity);
+                barVisualPostTransformMatrix.ValueRW.Value = float4x4.Scale(healthNormalized, 1, 1);
+            }
         }
     }
 }

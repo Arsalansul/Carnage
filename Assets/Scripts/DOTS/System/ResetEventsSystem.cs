@@ -1,31 +1,34 @@
 using Unity.Burst;
 using Unity.Entities;
 
-[UpdateInGroup(typeof(LateSimulationSystemGroup), OrderLast = true)]
-internal partial struct ResetEventsSystem : ISystem
+namespace DOTS.System
 {
-    [BurstCompile]
-    public void OnUpdate(ref SystemState state)
+    [UpdateInGroup(typeof(LateSimulationSystemGroup), OrderLast = true)]
+    internal partial struct ResetEventsSystem : ISystem
     {
-        foreach (var health in SystemAPI.Query<RefRW<Health>>())
+        [BurstCompile]
+        public void OnUpdate(ref SystemState state)
         {
-            health.ValueRW.onHealthChanged = false;
-        }
+            foreach (var health in SystemAPI.Query<RefRW<Health>>())
+            {
+                health.ValueRW.onHealthChanged = false;
+            }
 
-        foreach (var meleeAttack in SystemAPI.Query<RefRW<MeleeAttack>>())
-        {
-            meleeAttack.ValueRW.animateAttack = false;
-        }
+            foreach (var meleeAttack in SystemAPI.Query<RefRW<MeleeAttack>>())
+            {
+                meleeAttack.ValueRW.animateAttack = false;
+            }
         
-        foreach (var gameState in SystemAPI.Query<RefRW<GameState>>())
-        {
-            gameState.ValueRW.Restart = false;
-            gameState.ValueRW.ShouldInitialize = false;
-        }
+            foreach (var gameState in SystemAPI.Query<RefRW<GameState>>())
+            {
+                gameState.ValueRW.Restart = false;
+                gameState.ValueRW.ShouldInitialize = false;
+            }
 
-        foreach (var shootAttack in SystemAPI.Query<RefRW<ShootAttack>>())
-        {
-            shootAttack.ValueRW.onShoot.isTrigger = false;
+            foreach (var shootAttack in SystemAPI.Query<RefRW<ShootAttack>>())
+            {
+                shootAttack.ValueRW.onShoot.isTrigger = false;
+            }
         }
     }
 }

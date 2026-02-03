@@ -3,37 +3,40 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Transforms;
 
-[UpdateInGroup(typeof(LateSimulationSystemGroup))]
-public partial struct ShootLightSpawnerSystem : ISystem
+namespace DOTS.System
 {
-    [BurstCompile]
-    public void OnUpdate(ref SystemState state)
+    [UpdateInGroup(typeof(LateSimulationSystemGroup))]
+    public partial struct ShootLightSpawnerSystem : ISystem
     {
-        var entitiesReferences = SystemAPI.GetSingleton<EntitiesReferences>();
-        var ecbSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
-        var ecb = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged);
-
-        var job = new ShootLightJob()
+        [BurstCompile]
+        public void OnUpdate(ref SystemState state)
         {
-            entitiesReferences = entitiesReferences ,
-            entityCommandBuffer = ecb.AsParallelWriter()
-        };
-        job.ScheduleParallel();
+            var entitiesReferences = SystemAPI.GetSingleton<EntitiesReferences>();
+            var ecbSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
+            var ecb = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged);
+
+            var job = new ShootLightJob()
+            {
+                entitiesReferences = entitiesReferences ,
+                entityCommandBuffer = ecb.AsParallelWriter()
+            };
+            job.ScheduleParallel();
+        }
     }
-}
 
-[BurstCompile]
-public partial struct ShootLightJob : IJobEntity
-{
-    [ReadOnly] public EntitiesReferences entitiesReferences;
-    public EntityCommandBuffer.ParallelWriter entityCommandBuffer;
-
-    public void Execute(in ShootAttack shootAttack, [ChunkIndexInQuery] int chunkIndex)
+    [BurstCompile]
+    public partial struct ShootLightJob : IJobEntity
     {
-        if (shootAttack.onShoot.isTrigger)
+        [ReadOnly] public EntitiesReferences entitiesReferences;
+        public EntityCommandBuffer.ParallelWriter entityCommandBuffer;
+
+        public void Execute(in ShootAttack shootAttack, [ChunkIndexInQuery] int chunkIndex)
         {
-            var shootLight = entityCommandBuffer.Instantiate(chunkIndex, entitiesReferences.shootLightPrefabEntity);
-            entityCommandBuffer.SetComponent(chunkIndex, shootLight, LocalTransform.FromPosition(shootAttack.onShoot.shootFromPosition));
+            if (shootAttack.onShoot.isTrigger)
+            {
+                var shootLight = entityCommandBuffer.Instantiate(chunkIndex, entitiesReferences.shootLightPrefabEntity);
+                entityCommandBuffer.SetComponent(chunkIndex, shootLight, LocalTransform.FromPosition(shootAttack.onShoot.shootFromPosition));
+            }
         }
     }
 }

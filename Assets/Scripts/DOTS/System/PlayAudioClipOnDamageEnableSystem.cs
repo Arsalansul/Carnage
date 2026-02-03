@@ -2,25 +2,28 @@ using Unity.Burst;
 using Unity.Entities;
 using Unity.Transforms;
 
-[UpdateAfter(typeof(TransformSystemGroup))]
-[UpdateBefore(typeof(LateSimulationSystemGroup))]
-public partial struct PlayAudioClipOnDamageEnableSystem : ISystem
+namespace DOTS.System
 {
-    [BurstCompile]
-    public void OnUpdate(ref SystemState state)
+    [UpdateAfter(typeof(TransformSystemGroup))]
+    [UpdateBefore(typeof(LateSimulationSystemGroup))]
+    public partial struct PlayAudioClipOnDamageEnableSystem : ISystem
     {
-        new PlayAudioClipOnDamageEnableJob().ScheduleParallel();
+        [BurstCompile]
+        public void OnUpdate(ref SystemState state)
+        {
+            new PlayAudioClipOnDamageEnableJob().ScheduleParallel();
+        }
     }
-}
 
-[BurstCompile]
-[WithDisabled(typeof(PlayAudioClipOnDamageData))]
-public partial struct PlayAudioClipOnDamageEnableJob : IJobEntity
-{
-    public void Execute(in Health health, EnabledRefRW<PlayAudioClipOnDamageData> playClip)
+    [BurstCompile]
+    [WithDisabled(typeof(PlayAudioClipOnDamageData))]
+    public partial struct PlayAudioClipOnDamageEnableJob : IJobEntity
     {
-        if (!health.onHealthChanged || health.amount >= health.max) return;
+        public void Execute(in Health health, EnabledRefRW<PlayAudioClipOnDamageData> playClip)
+        {
+            if (!health.onHealthChanged || health.amount >= health.max) return;
 
-        playClip.ValueRW = true;
+            playClip.ValueRW = true;
+        }
     }
 }

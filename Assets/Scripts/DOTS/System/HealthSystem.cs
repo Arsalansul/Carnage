@@ -1,30 +1,33 @@
 using Unity.Burst;
 using Unity.Entities;
 
-[UpdateInGroup(typeof(LateSimulationSystemGroup))]
-internal partial struct HealthSystem : ISystem
+namespace DOTS.System
 {
-    [BurstCompile]
-    public void OnUpdate(ref SystemState state)
+    [UpdateInGroup(typeof(LateSimulationSystemGroup))]
+    internal partial struct HealthSystem : ISystem
     {
-        var entityCommandBuffer = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
-            .CreateCommandBuffer(state.WorldUnmanaged);
-        var healthJob = new HealthJob
+        [BurstCompile]
+        public void OnUpdate(ref SystemState state)
         {
-            entityCommandBuffer = entityCommandBuffer.AsParallelWriter()
-        };
+            var entityCommandBuffer = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
+                .CreateCommandBuffer(state.WorldUnmanaged);
+            var healthJob = new HealthJob
+            {
+                entityCommandBuffer = entityCommandBuffer.AsParallelWriter()
+            };
 
-        healthJob.ScheduleParallel();
+            healthJob.ScheduleParallel();
+        }
     }
-}
 
-[BurstCompile]
-public partial struct HealthJob : IJobEntity
-{
-    public EntityCommandBuffer.ParallelWriter entityCommandBuffer;
-
-    public void Execute([ChunkIndexInQuery] int chunkIndex, in Health health, in Entity entity)
+    [BurstCompile]
+    public partial struct HealthJob : IJobEntity
     {
-        if (health.amount <= 0) entityCommandBuffer.DestroyEntity(chunkIndex, entity);
+        public EntityCommandBuffer.ParallelWriter entityCommandBuffer;
+
+        public void Execute([ChunkIndexInQuery] int chunkIndex, in Health health, in Entity entity)
+        {
+            if (health.amount <= 0) entityCommandBuffer.DestroyEntity(chunkIndex, entity);
+        }
     }
 }

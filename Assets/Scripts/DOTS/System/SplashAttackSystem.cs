@@ -1,4 +1,3 @@
-using DOTS;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -6,7 +5,7 @@ using Unity.Physics;
 using Unity.Physics.Systems;
 using Unity.Transforms;
 
-namespace System
+namespace DOTS.System
 {
     [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
     [UpdateAfter(typeof(PhysicsSystemGroup))]
