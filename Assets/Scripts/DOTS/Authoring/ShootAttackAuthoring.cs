@@ -1,3 +1,4 @@
+using DOTS;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
@@ -5,6 +6,7 @@ using UnityEngine;
 public class ShootAttackAuthoring : MonoBehaviour
 {
     public Transform bulletSpawnTransform;
+    public Faction targetFaction;
 
     public class Baker : Baker<ShootAttackAuthoring>
     {
@@ -13,7 +15,8 @@ public class ShootAttackAuthoring : MonoBehaviour
             var entity = GetEntity(TransformUsageFlags.Dynamic);
             AddComponent(entity, new ShootAttack
             {
-                bulletSpawnPosition = authoring.bulletSpawnTransform.localPosition
+                bulletSpawnPosition = authoring.bulletSpawnTransform.localPosition,
+                targetFaction = authoring.targetFaction,
             });
         }
     }
@@ -25,6 +28,10 @@ public struct ShootAttack : IComponentData
     public float timerMax;
     public float3 bulletSpawnPosition;
     public OnShootEvent onShoot;
+    public WeaponBlob currentWeapon;
+    public Faction targetFaction;
+    public bool canShoot;
+    public float3 shootDirection;
 
     public struct OnShootEvent
     {

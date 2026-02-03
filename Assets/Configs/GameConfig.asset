@@ -125,9 +125,13 @@ MonoBehaviour:
     fireRate: 1000
     bulletType: 0
     sprite: {fileID: -1115473031, guid: cecbc1e21bfd4654cace7246a1733982, type: 3}
+  - type: 6
+    fireRate: 60
+    bulletType: 0
+    sprite: {fileID: -1115473031, guid: cecbc1e21bfd4654cace7246a1733982, type: 3}
   BulletSettingsList:
   - type: 0
-    speed: 10
+    speed: 20
     maxDistance: 10
     damageOnTrigger: 10
     explosionRadius: 0

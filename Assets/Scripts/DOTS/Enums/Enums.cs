@@ -29,5 +29,8 @@ public enum WeaponType
     M4,
     Benelli,
     M110,
-    M249
+    M249,
+    
+    //enemy range weapons
+    Arachnid,
 }

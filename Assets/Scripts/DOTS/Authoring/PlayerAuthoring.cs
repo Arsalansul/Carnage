@@ -16,5 +16,4 @@ public class PlayerAuthoring : MonoBehaviour
 
 public struct Player : IComponentData
 {
-    public WeaponBlob currentWeapon;
 }
