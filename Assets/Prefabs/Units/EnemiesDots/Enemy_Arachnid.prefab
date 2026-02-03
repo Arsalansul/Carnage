@@ -241,7 +241,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponType: 6
-  attackRange: 10
+  attackRange: 5
 --- !u!4 &3803176065934587317 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7007773382403092494, guid: b7bc502d4ccbfe54e90b37bfc7619670, type: 3}

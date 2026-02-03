@@ -11,6 +11,7 @@ namespace DOTS.System
 {
     [UpdateAfter(typeof(UnitMoverSystem))]
     [UpdateAfter(typeof(RandomWalkingSystem))]
+    [UpdateBefore(typeof(ShootAttackEnemySystem))]
     public partial struct NavAgentSystem : ISystem
     {
         [BurstCompile]
