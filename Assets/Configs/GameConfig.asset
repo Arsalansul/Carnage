@@ -18,7 +18,10 @@ MonoBehaviour:
       points: 1
       type: 1
   - EnemiesInWave:
-    - count: 10
+    - count: 5
+      points: 2
+      type: 1
+    - count: 5
       points: 2
       type: 2
   - EnemiesInWave:
@@ -27,7 +30,80 @@ MonoBehaviour:
       type: 1
     - count: 5
       points: 3
+      type: 2
+    - count: 5
+      points: 3
+      type: 3
+  - EnemiesInWave:
+    - count: 5
+      points: 3
+      type: 1
+    - count: 5
+      points: 3
+      type: 2
+    - count: 5
+      points: 3
+      type: 3
+    - count: 5
+      points: 3
       type: 4
+  - EnemiesInWave:
+    - count: 5
+      points: 3
+      type: 1
+    - count: 5
+      points: 3
+      type: 2
+    - count: 5
+      points: 3
+      type: 3
+    - count: 5
+      points: 3
+      type: 4
+    - count: 5
+      points: 3
+      type: 5
+  - EnemiesInWave:
+    - count: 5
+      points: 3
+      type: 1
+    - count: 5
+      points: 3
+      type: 2
+    - count: 5
+      points: 3
+      type: 3
+    - count: 5
+      points: 3
+      type: 4
+    - count: 5
+      points: 3
+      type: 5
+    - count: 5
+      points: 3
+      type: 6
+  - EnemiesInWave:
+    - count: 5
+      points: 3
+      type: 1
+    - count: 5
+      points: 3
+      type: 2
+    - count: 5
+      points: 3
+      type: 3
+    - count: 5
+      points: 3
+      type: 4
+    - count: 5
+      points: 3
+      type: 5
+    - count: 5
+      points: 3
+      type: 6
+    - count: 5
+      points: 3
+      type: 7
   WeaponSettings:
   - type: 0
     fireRate: 300
@@ -78,8 +154,23 @@ MonoBehaviour:
   - type: 1
     moveSpeed: 5
     rotationSpeed: 10
+  - type: 2
+    moveSpeed: 6
+    rotationSpeed: 10
+  - type: 3
+    moveSpeed: 7
+    rotationSpeed: 10
   - type: 4
+    moveSpeed: 8
+    rotationSpeed: 10
+  - type: 5
+    moveSpeed: 9
+    rotationSpeed: 10
+  - type: 6
     moveSpeed: 10
+    rotationSpeed: 10
+  - type: 7
+    moveSpeed: 11
     rotationSpeed: 10
   WeaponTypeToItemTypeMap:
   - weaponType: 0

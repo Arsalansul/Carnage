@@ -74,7 +74,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7214147989266240639, guid: b7bc502d4ccbfe54e90b37bfc7619670, type: 3}
       propertyPath: m_Name
-      value: EnemyUnit_1
+      value: Enemy_Cockroach
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -116,7 +116,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3caf1ace0c1e2504ca761c6af38d4a30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  range: 10
+  range: 100
   targetFaction: 0
   timerMax: 0.2
 --- !u!114 &5552663894656224805
@@ -173,7 +173,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 520bc05372726ed48a8b440f39dfdd45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  points: 2
 --- !u!114 &-8372555941762790955
 MonoBehaviour:
   m_ObjectHideFlags: 0

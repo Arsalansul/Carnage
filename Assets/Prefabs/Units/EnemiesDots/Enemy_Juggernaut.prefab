@@ -116,7 +116,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3caf1ace0c1e2504ca761c6af38d4a30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  range: 10
+  range: 100
   targetFaction: 0
   timerMax: 0.2
 --- !u!114 &5552663894656224805
