@@ -127,7 +127,7 @@ MonoBehaviour:
     sprite: {fileID: -1115473031, guid: cecbc1e21bfd4654cace7246a1733982, type: 3}
   - type: 6
     fireRate: 60
-    bulletType: 0
+    bulletType: 2
     sprite: {fileID: -1115473031, guid: cecbc1e21bfd4654cace7246a1733982, type: 3}
   BulletSettingsList:
   - type: 0
@@ -142,6 +142,12 @@ MonoBehaviour:
     damageOnTrigger: 0
     explosionRadius: 5
     explosionDamage: 35
+  - type: 2
+    speed: 10
+    maxDistance: 100
+    damageOnTrigger: 10
+    explosionRadius: 0
+    explosionDamage: 0
   UnitsSettings:
     Layer: 6
     EnemySpawnDistance: 10

@@ -19,7 +19,10 @@ public enum EnemyType
 public enum BulletsType
 {
     small,
-    explosion
+    explosion,
+    
+    //enemy projectiles
+    enemySmall
 }
 
 public enum WeaponType

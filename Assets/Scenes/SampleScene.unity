@@ -1858,6 +1858,8 @@ MonoBehaviour:
     initialSize: 50
   - prefab: {fileID: 6723769671836293756, guid: e8476680e98ba08419988b1ba61ed6c8, type: 3}
     initialSize: 50
+  - prefab: {fileID: 6723769671836293756, guid: b4f5c2c8d3ebba746bf1da8078a5fbf0, type: 3}
+    initialSize: 50
   audioSourceConfig:
     audioSource: {fileID: 2679629191477484416, guid: a2df1636fdc944c4ebde04bc26b17a88, type: 3}
     initialSize: 50

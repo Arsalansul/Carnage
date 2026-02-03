@@ -325,6 +325,8 @@ MonoBehaviour:
     prefab: {fileID: 6723769671836293756, guid: 13bb0311f0cadd3468dc3f7d63f8248a, type: 3}
   - type: 1
     prefab: {fileID: 6723769671836293756, guid: a29919d57a002754ca57894f286a4b65, type: 3}
+  - type: 2
+    prefab: {fileID: 6723769671836293756, guid: 2820d9fc047602043b6654c9e19f768e, type: 3}
   shootLightPrefab: {fileID: 4313532480974411597, guid: b8d084e612a0fb145b4d0998d676eb1a, type: 3}
 --- !u!4 &679963101
 Transform:
