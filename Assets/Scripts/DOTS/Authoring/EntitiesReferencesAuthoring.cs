@@ -32,7 +32,7 @@ public class EntitiesReferencesAuthoring : MonoBehaviour
             }
             
             var bulletsBuffer = AddBuffer<BulletsEntityMap>(entity);
-            for (int i = 0; i < authoring.enemyMap.Count; i++)
+            for (int i = 0; i < authoring.bulletsMaps.Count; i++)
             {
                 bulletsBuffer.Add(new BulletsEntityMap()
                 {
