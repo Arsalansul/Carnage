@@ -26,6 +26,7 @@ namespace Ui.Controllers
                 var newSlot = inventorySlotPool.Spawn(inventoryParent);
                 newSlot.SetSprite(item.Sprite);
                 newSlot.SetCount(item.Amount);
+                items.Add(item.Type, newSlot);
             }
         }
 

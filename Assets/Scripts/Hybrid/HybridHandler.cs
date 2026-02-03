@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using Core;
 using DOTS;
 using Ui.Controllers;
+using Ui.Models;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -19,8 +21,8 @@ public class HybridHandler : MonoBehaviour
     [Inject] private CameraSettings cameraSettings;
     [Inject] private List<EnemySettings> enemySettingsList;
     [Inject] private PlayerSettings playerSettings;
-    [Inject] private InventoryController inventoryController;
     [Inject] private List<WeaponTypeToItemType> weaponTypeToItemTypeMap;
+    [Inject] private IInventory inventory;
     
     public void SetInputDataField(InputDataActionType inputAction, InputAction.CallbackContext context = default)
     {
@@ -33,8 +35,7 @@ public class HybridHandler : MonoBehaviour
                 break;
             case InputDataActionType.MousePos:
                 var inputMousePosition = context.ReadValue<Vector2>();
-                component.MousePos =
-                    Camera.main.ScreenToWorldPoint(new Vector3(inputMousePosition.x, inputMousePosition.y, 10));
+                component.MousePos = Camera.main.ScreenToWorldPoint(new Vector3(inputMousePosition.x, inputMousePosition.y, 10));
                 break;
             case InputDataActionType.MouseLeftButton:
                 component.Fire = true;
@@ -46,10 +47,12 @@ public class HybridHandler : MonoBehaviour
                 component.Fire = false;
                 break;
             case InputDataActionType.One:
-                component = SwitchWeapon(WeaponType.SimpleGun, component);
+                component = SwitchWeaponInputData(WeaponType.SimpleGun, component);
+                InventorySelectWeapon(component.WeaponType);
                 break;
             case InputDataActionType.Two:
-                component = SwitchWeapon(WeaponType.RocketGun, component);
+                component = SwitchWeaponInputData(WeaponType.RocketGun, component);
+                InventorySelectWeapon(component.WeaponType);
                 break;
         }
 
@@ -58,22 +61,25 @@ public class HybridHandler : MonoBehaviour
     
     public void RestartEcsGame()
     {
-        TryGetComponentAndEntityWithAll<GameState>(out var component, out var entity, out var entityManager);
-    
-        component.GameOver = false;
-        component.Restart = true;
-        component.Score = 0;
-        component.ShouldInitialize = true;
-    
-        entityManager.SetComponentData(entity, component);
+        InitializeEcs(false, true, 0);
     }
 
-    public void InitializeEcs()
+    public void InitializeEcs(params object[] args)
     {
         TryGetComponentAndEntityWithAll<GameState>(out var component, out var entity, out var entityManager);
-    
+
+        if (args != null && args.Length == 3)
+        {
+            component.GameOver = (bool)args[0];
+            component.Restart = (bool)args[1];
+            component.Score = (int)args[2];
+        }
+        
         component.ShouldInitialize = true;
+
         entityManager.SetComponentData(entity, component);
+
+        SetInputDataField(InputDataActionType.One);
     }
 
     public bool IsGameOver()
@@ -326,13 +332,17 @@ public class HybridHandler : MonoBehaviour
         entities = entityQuery.ToEntityArray(Allocator.Temp);
     }
     
-    private InputData SwitchWeapon(WeaponType weaponType, InputData inputData)
+    private InputData SwitchWeaponInputData(WeaponType weaponType, InputData inputData)
     {
         var newInputData = inputData;
         newInputData.SwitchWeapon = true;
         newInputData.WeaponType = weaponType;
-        var itemType = weaponTypeToItemTypeMap.Find(x => x.weaponType == weaponType).itemType;
-        inventoryController.Select(itemType);
         return newInputData;
+    }
+
+    private void InventorySelectWeapon(WeaponType weaponType)
+    {
+        var itemType = weaponTypeToItemTypeMap.Find(x => x.weaponType == weaponType).itemType;
+        inventory.SelectItem(itemType);
     }
 }

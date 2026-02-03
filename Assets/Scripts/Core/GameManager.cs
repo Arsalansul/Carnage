@@ -14,11 +14,12 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         uiManager.invokeEndGameUiAction(EndGameAction.hide);
+        
+        inventory.AddItem(ItemType.SimpleGun); //todo
+        inventory.AddItem(ItemType.RocketGun);
+        
         hybridHandler.SetGameConfig();
         hybridHandler.InitializeEcs();
-        
-        inventory.AddItem(ItemType.SimpleGun);
-        inventory.AddItem(ItemType.RocketGun);
     }
 
     private void Update()

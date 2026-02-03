@@ -8,6 +8,7 @@ namespace Core
     {
         void AddItem(ItemType type);
         void RemoveItem(ItemType type);
+        void SelectItem(ItemType type);
     }
     
     public class Inventory : IInventory
@@ -22,7 +23,9 @@ namespace Core
         private InventoryController inventoryController;
         private List<WeaponSettings> weaponSettingsList;
         private List<WeaponTypeToItemType> weaponTypeToItemTypesMap;
+        
         private Dictionary<ItemType, InventoryItem> inventoryItems = new ();
+        private ItemType selectedItem;
         
         public void AddItem(ItemType itemType)
         {
@@ -53,6 +56,14 @@ namespace Core
                 inventoryItems.Remove(itemType);
                 inventoryController.Remove(itemType);
             }
+        }
+
+        public void SelectItem(ItemType itemType)
+        {
+            if (!inventoryItems.TryGetValue(itemType, out var item)) return;
+
+            selectedItem = itemType;
+            inventoryController.Select(itemType);
         }
     }
 }

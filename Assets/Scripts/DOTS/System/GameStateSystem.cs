@@ -68,11 +68,6 @@ namespace System
                 gameState.ValueRW.Score = 0;
                 gameState.ValueRW.Wave = 0;
                 gameState.ValueRW.OnWaveChanged = true;
-
-                var inputData = SystemAPI.GetSingletonRW<InputData>();
-                inputData.ValueRW.Fire = false;
-                inputData.ValueRW.SwitchWeapon = true;
-                inputData.ValueRW.WeaponType = WeaponType.SimpleGun;
                 
                 OnScoreChanged(gameState.ValueRO.Score, SystemAPI.GetComponentRW<OnScoreChanged>(eventsHandlerEntity), eventsHandlerEntity, ref state);
                 OnWaveChanged(gameState, SystemAPI.GetComponentRW<OnWaveChanged>(eventsHandlerEntity), eventsHandlerEntity, ref enemiesArray, ref state);
@@ -80,8 +75,7 @@ namespace System
 
             if (gameState.ValueRO.Restart)
             {
-                var entityCommandBuffer = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
-                    .CreateCommandBuffer(state.WorldUnmanaged);
+                var entityCommandBuffer = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
                 foreach (var (unit, entity) in SystemAPI.Query<RefRO<Unit>>().WithEntityAccess())
                     entityCommandBuffer.DestroyEntity(entity);
             }
