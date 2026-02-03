@@ -144,7 +144,7 @@ MonoBehaviour:
     explosionDamage: 35
   - type: 2
     speed: 10
-    maxDistance: 100
+    maxDistance: 20
     damageOnTrigger: 10
     explosionRadius: 0
     explosionDamage: 0

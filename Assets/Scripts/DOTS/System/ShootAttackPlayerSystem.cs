@@ -17,6 +17,7 @@ namespace DOTS.System
                 var spawnWorldPosition = localTransform.ValueRO.TransformPoint(shootAttack.ValueRO.bulletSpawnPosition);
                 shootAttack.ValueRW.canShoot = inputData.Fire;
                 shootAttack.ValueRW.shootDirection = inputData.MousePos - spawnWorldPosition;
+                shootAttack.ValueRW.shootDirection.y = 0;
             }
         }
     }

@@ -22,6 +22,7 @@ namespace DOTS.System
                 
                 shootAttack.ValueRW.canShoot = math.length(targetTransform.ValueRO.Position - localTransform.ValueRO.Position) < enemyShootAttack.ValueRO.attackRange;
                 shootAttack.ValueRW.shootDirection = targetTransform.ValueRO.Position - spawnWorldPosition;
+                shootAttack.ValueRW.shootDirection.y = 0;
             }
         }
     }
