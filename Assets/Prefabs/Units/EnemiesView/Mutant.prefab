@@ -1095,7 +1095,7 @@ GameObject:
   - component: {fileID: 95129775397711042}
   - component: {fileID: 4274337629535113226}
   m_Layer: 8
-  m_Name: Creature_Mutant
+  m_Name: Mutant
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

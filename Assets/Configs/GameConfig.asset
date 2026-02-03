@@ -20,7 +20,7 @@ MonoBehaviour:
   - EnemiesInWave:
     - count: 10
       points: 2
-      type: 4
+      type: 2
   - EnemiesInWave:
     - count: 5
       points: 3

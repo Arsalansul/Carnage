@@ -848,7 +848,7 @@ GameObject:
   - component: {fileID: 95532514817859268}
   - component: {fileID: 7295764952813895306}
   m_Layer: 8
-  m_Name: Creature_Slug
+  m_Name: Slug
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

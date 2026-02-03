@@ -1840,9 +1840,19 @@ MonoBehaviour:
   - prefab: {fileID: 5910943981205727927, guid: 6d6bca3fff66d2648b6d7089c9196388, type: 3}
     initialSize: 2
   - prefab: {fileID: -8233840296418376532, guid: a96ef977dc6d810478fa76a90e870f7d, type: 3}
-    initialSize: 100
+    initialSize: 10
   - prefab: {fileID: 4039196450133499185, guid: da7bd22e97af1684b8f81edb35383ce7, type: 3}
-    initialSize: 100
+    initialSize: 10
+  - prefab: {fileID: -8102263421570579394, guid: 3461130f4adbceb4b8bbbd5b9706a654, type: 3}
+    initialSize: 10
+  - prefab: {fileID: -7737359327032257325, guid: 644a3d58498954a4b9fdccd9c3557908, type: 3}
+    initialSize: 10
+  - prefab: {fileID: 4274337629535113226, guid: 05947391f5c976a4ab24cca584d7a0e4, type: 3}
+    initialSize: 10
+  - prefab: {fileID: -5001111354106438706, guid: 2854125102f2f1f4aab549280e0868a3, type: 3}
+    initialSize: 10
+  - prefab: {fileID: 7295764952813895306, guid: 0afd10fecb724ea4d8da8ac2fea4b9f5, type: 3}
+    initialSize: 10
   bulletsConfigs:
   - prefab: {fileID: 6723769671836293756, guid: 41a836b9bad839644b041515d566327b, type: 3}
     initialSize: 50

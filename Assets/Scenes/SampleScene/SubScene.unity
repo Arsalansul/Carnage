@@ -309,6 +309,16 @@ MonoBehaviour:
     prefab: {fileID: 3574391251091231172, guid: 7d086ab5e7dd08d42aa0adfdc62a567e, type: 3}
   - type: 4
     prefab: {fileID: 3574391251091231172, guid: dd4a0a70666c9ca4484967c561fe90b9, type: 3}
+  - type: 5
+    prefab: {fileID: 3574391251091231172, guid: dfed11c635435174dbe9567c881704ac, type: 3}
+  - type: 2
+    prefab: {fileID: 3574391251091231172, guid: adc76ab7a4815fa48a86c1af7ebf8e4b, type: 3}
+  - type: 3
+    prefab: {fileID: 3574391251091231172, guid: 41846ca436000d3478532dc25bbf9ce7, type: 3}
+  - type: 6
+    prefab: {fileID: 3574391251091231172, guid: 5cff9414ad3ab6b44bc7d65b4dbba5ed, type: 3}
+  - type: 7
+    prefab: {fileID: 3574391251091231172, guid: c76114bb685bb9d48be46c3624664c1a, type: 3}
   playerPrefab: {fileID: 922366511744387219, guid: f43a82aafbd0e9a418cd9343c039117e, type: 3}
   bulletsMaps:
   - type: 0
