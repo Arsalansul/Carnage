@@ -1,26 +1,29 @@
 using Unity.Entities;
 using UnityEngine;
 
-public class EnemySpawnerAuthoring : MonoBehaviour
+namespace DOTS.Authoring
 {
-    public float timerMax;
-
-    public class Baker : Baker<EnemySpawnerAuthoring>
+    public class EnemySpawnerAuthoring : MonoBehaviour
     {
-        public override void Bake(EnemySpawnerAuthoring authoring)
+        public float timerMax;
+
+        public class Baker : Baker<EnemySpawnerAuthoring>
         {
-            var entity = GetEntity(TransformUsageFlags.None);
-            AddComponent(entity, new EnemySpawner
+            public override void Bake(EnemySpawnerAuthoring authoring)
             {
-                timerMax = authoring.timerMax
-            });
-            SetComponentEnabled<EnemySpawner>(entity, false);
+                var entity = GetEntity(TransformUsageFlags.None);
+                AddComponent(entity, new EnemySpawner
+                {
+                    timerMax = authoring.timerMax
+                });
+                SetComponentEnabled<EnemySpawner>(entity, false);
+            }
         }
     }
-}
 
-public struct EnemySpawner : IComponentData, IEnableableComponent
-{
-    public float timer;
-    public float timerMax;
+    public struct EnemySpawner : IComponentData, IEnableableComponent
+    {
+        public float timer;
+        public float timerMax;
+    }
 }

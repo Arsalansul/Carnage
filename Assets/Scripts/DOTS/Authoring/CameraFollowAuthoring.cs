@@ -2,22 +2,25 @@ using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class CameraFollowAuthoring : MonoBehaviour
+namespace DOTS.Authoring
 {
-    public class Baker : Baker<CameraFollowAuthoring>
+    public class CameraFollowAuthoring : MonoBehaviour
     {
-        public override void Bake(CameraFollowAuthoring authoring)
+        public class Baker : Baker<CameraFollowAuthoring>
         {
-            var entity = GetEntity(TransformUsageFlags.Dynamic);
-            AddComponent(entity, new CameraFollow
+            public override void Bake(CameraFollowAuthoring authoring)
             {
-            });
+                var entity = GetEntity(TransformUsageFlags.Dynamic);
+                AddComponent(entity, new CameraFollow
+                {
+                });
+            }
         }
     }
-}
 
-public struct CameraFollow : IComponentData
-{
-    public float moveSpeed;
-    public float3 offset;
+    public struct CameraFollow : IComponentData
+    {
+        public float moveSpeed;
+        public float3 offset;
+    }
 }

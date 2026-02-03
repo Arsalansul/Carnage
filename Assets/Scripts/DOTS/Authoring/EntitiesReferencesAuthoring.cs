@@ -3,75 +3,78 @@ using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
 
-public class EntitiesReferencesAuthoring : MonoBehaviour
+namespace DOTS.Authoring
 {
-    public List<EnemyPrefabsMap> enemyMap;
-    public GameObject playerPrefab;
-    public List<BulletsPrefabsMap> bulletsMaps;
-    public GameObject shootLightPrefab;
-
-    public class Baker : Baker<EntitiesReferencesAuthoring>
+    public class EntitiesReferencesAuthoring : MonoBehaviour
     {
-        public override void Bake(EntitiesReferencesAuthoring authoring)
+        public List<EnemyPrefabsMap> enemyMap;
+        public GameObject playerPrefab;
+        public List<BulletsPrefabsMap> bulletsMaps;
+        public GameObject shootLightPrefab;
+
+        public class Baker : Baker<EntitiesReferencesAuthoring>
         {
-            var entity = GetEntity(TransformUsageFlags.Dynamic);
-            AddComponent(entity, new EntitiesReferences
+            public override void Bake(EntitiesReferencesAuthoring authoring)
             {
-                playerPrefab = GetEntity(authoring.playerPrefab, TransformUsageFlags.Dynamic),
-                shootLightPrefabEntity = GetEntity(authoring.shootLightPrefab, TransformUsageFlags.Dynamic)
-            });
-            
-            var enemyBuffer = AddBuffer<EnemiesEntityMap>(entity);
-            for (int i = 0; i < authoring.enemyMap.Count; i++)
-            {
-                enemyBuffer.Add(new EnemiesEntityMap()
+                var entity = GetEntity(TransformUsageFlags.Dynamic);
+                AddComponent(entity, new EntitiesReferences
                 {
-                    type = authoring.enemyMap[i].type,
-                    entity = GetEntity(authoring.enemyMap[i].prefab, TransformUsageFlags.Dynamic)
+                    playerPrefab = GetEntity(authoring.playerPrefab, TransformUsageFlags.Dynamic),
+                    shootLightPrefabEntity = GetEntity(authoring.shootLightPrefab, TransformUsageFlags.Dynamic)
                 });
-            }
             
-            var bulletsBuffer = AddBuffer<BulletsEntityMap>(entity);
-            for (int i = 0; i < authoring.bulletsMaps.Count; i++)
-            {
-                bulletsBuffer.Add(new BulletsEntityMap()
+                var enemyBuffer = AddBuffer<EnemiesEntityMap>(entity);
+                for (int i = 0; i < authoring.enemyMap.Count; i++)
                 {
-                    type = authoring.bulletsMaps[i].type,
-                    entity = GetEntity(authoring.bulletsMaps[i].prefab, TransformUsageFlags.Dynamic)
-                });
+                    enemyBuffer.Add(new EnemiesEntityMap()
+                    {
+                        type = authoring.enemyMap[i].type,
+                        entity = GetEntity(authoring.enemyMap[i].prefab, TransformUsageFlags.Dynamic)
+                    });
+                }
+            
+                var bulletsBuffer = AddBuffer<BulletsEntityMap>(entity);
+                for (int i = 0; i < authoring.bulletsMaps.Count; i++)
+                {
+                    bulletsBuffer.Add(new BulletsEntityMap()
+                    {
+                        type = authoring.bulletsMaps[i].type,
+                        entity = GetEntity(authoring.bulletsMaps[i].prefab, TransformUsageFlags.Dynamic)
+                    });
+                }
             }
         }
     }
-}
 
-public struct EntitiesReferences : IComponentData
-{
-    public Entity playerPrefab;
-    public Entity shootLightPrefabEntity;
-}
+    public struct EntitiesReferences : IComponentData
+    {
+        public Entity playerPrefab;
+        public Entity shootLightPrefabEntity;
+    }
 
-[Serializable]
-public struct BulletsPrefabsMap
-{
-    public BulletsType type;
-    public GameObject prefab;
-}
+    [Serializable]
+    public struct BulletsPrefabsMap
+    {
+        public BulletsType type;
+        public GameObject prefab;
+    }
 
-public struct BulletsEntityMap : IBufferElementData
-{
-    public BulletsType type;
-    public Entity entity;
-}
+    public struct BulletsEntityMap : IBufferElementData
+    {
+        public BulletsType type;
+        public Entity entity;
+    }
 
-[Serializable]
-public struct EnemyPrefabsMap
-{
-    public EnemyType type;
-    public GameObject prefab;
-}
+    [Serializable]
+    public struct EnemyPrefabsMap
+    {
+        public EnemyType type;
+        public GameObject prefab;
+    }
 
-public struct EnemiesEntityMap : IBufferElementData
-{
-    public EnemyType type;
-    public Entity entity;
+    public struct EnemiesEntityMap : IBufferElementData
+    {
+        public EnemyType type;
+        public Entity entity;
+    }
 }

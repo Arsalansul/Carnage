@@ -1,18 +1,21 @@
 using Unity.Entities;
 using UnityEngine;
 
-public class MoveInputAuthoring : MonoBehaviour
+namespace DOTS.Authoring
 {
-    private class Baker : Baker<MoveInputAuthoring>
+    public class MoveInputAuthoring : MonoBehaviour
     {
-        public override void Bake(MoveInputAuthoring authoring)
+        private class Baker : Baker<MoveInputAuthoring>
         {
-            var entity = GetEntity(TransformUsageFlags.Dynamic);
-            AddComponent(entity, new MoveInput());
+            public override void Bake(MoveInputAuthoring authoring)
+            {
+                var entity = GetEntity(TransformUsageFlags.Dynamic);
+                AddComponent(entity, new MoveInput());
+            }
         }
     }
-}
 
-public struct MoveInput : IComponentData
-{
+    public struct MoveInput : IComponentData
+    {
+    }
 }

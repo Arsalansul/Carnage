@@ -1,22 +1,25 @@
 using Unity.Entities;
 using UnityEngine;
 
-public class EnemyAuthoring : MonoBehaviour
+namespace DOTS.Authoring
 {
-
-    public class Baker : Baker<EnemyAuthoring>
+    public class EnemyAuthoring : MonoBehaviour
     {
-        public override void Bake(EnemyAuthoring authoring)
+
+        public class Baker : Baker<EnemyAuthoring>
         {
-            var entity = GetEntity(TransformUsageFlags.Dynamic);
-            AddComponent(entity, new Enemy
+            public override void Bake(EnemyAuthoring authoring)
             {
-            });
+                var entity = GetEntity(TransformUsageFlags.Dynamic);
+                AddComponent(entity, new Enemy
+                {
+                });
+            }
         }
     }
-}
 
-public struct Enemy : IComponentData
-{
-    public int Points;
+    public struct Enemy : IComponentData
+    {
+        public int Points;
+    }
 }

@@ -1,27 +1,30 @@
 using Unity.Entities;
 using UnityEngine;
 
-public class HealthBarAuthoring : MonoBehaviour
+namespace DOTS.Authoring
 {
-    public GameObject barVisualGameObject;
-    public GameObject healthGameObject;
-
-    public class HealthBarAuthoringBaker : Baker<HealthBarAuthoring>
+    public class HealthBarAuthoring : MonoBehaviour
     {
-        public override void Bake(HealthBarAuthoring authoring)
+        public GameObject barVisualGameObject;
+        public GameObject healthGameObject;
+
+        public class HealthBarAuthoringBaker : Baker<HealthBarAuthoring>
         {
-            var entity = GetEntity(TransformUsageFlags.Dynamic);
-            AddComponent(entity, new HealthBar
+            public override void Bake(HealthBarAuthoring authoring)
             {
-                barVisualEntity = GetEntity(authoring.barVisualGameObject, TransformUsageFlags.NonUniformScale),
-                healthEntity = GetEntity(authoring.healthGameObject, TransformUsageFlags.Dynamic)
-            });
+                var entity = GetEntity(TransformUsageFlags.Dynamic);
+                AddComponent(entity, new HealthBar
+                {
+                    barVisualEntity = GetEntity(authoring.barVisualGameObject, TransformUsageFlags.NonUniformScale),
+                    healthEntity = GetEntity(authoring.healthGameObject, TransformUsageFlags.Dynamic)
+                });
+            }
         }
     }
-}
 
-public struct HealthBar : IComponentData
-{
-    public Entity barVisualEntity;
-    public Entity healthEntity;
+    public struct HealthBar : IComponentData
+    {
+        public Entity barVisualEntity;
+        public Entity healthEntity;
+    }
 }

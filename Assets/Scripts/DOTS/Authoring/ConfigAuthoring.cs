@@ -2,7 +2,7 @@ using System;
 using Unity.Entities;
 using UnityEngine;
 
-namespace DOTS
+namespace DOTS.Authoring
 {
     public class ConfigAuthoring : MonoBehaviour
     {

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Core;
 using DOTS;
+using DOTS.Authoring;
 using Ui.Controllers;
 using Ui.Models;
 using Unity.Collections;

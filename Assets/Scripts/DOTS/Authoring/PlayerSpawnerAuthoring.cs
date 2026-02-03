@@ -1,19 +1,22 @@
 using Unity.Entities;
 using UnityEngine;
 
-public class PlayerSpawnerAuthoring : MonoBehaviour
+namespace DOTS.Authoring
 {
-    private class Baker : Baker<PlayerSpawnerAuthoring>
+    public class PlayerSpawnerAuthoring : MonoBehaviour
     {
-        public override void Bake(PlayerSpawnerAuthoring authoring)
+        private class Baker : Baker<PlayerSpawnerAuthoring>
         {
-            var entity = GetEntity(TransformUsageFlags.None);
-            AddComponent(entity, new PlayerSpawner());
+            public override void Bake(PlayerSpawnerAuthoring authoring)
+            {
+                var entity = GetEntity(TransformUsageFlags.None);
+                AddComponent(entity, new PlayerSpawner());
+            }
         }
     }
-}
 
-public struct PlayerSpawner : IComponentData
-{
-    public bool shouldSpawn;
+    public struct PlayerSpawner : IComponentData
+    {
+        public bool shouldSpawn;
+    }
 }

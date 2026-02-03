@@ -1,23 +1,26 @@
 using Unity.Entities;
 using UnityEngine;
 
-public class SphereDamageAuthoring : MonoBehaviour
+namespace DOTS.Authoring
 {
-    private class Baker : Baker<SphereDamageAuthoring>
+    public class SphereDamageAuthoring : MonoBehaviour
     {
-        public override void Bake(SphereDamageAuthoring authoring)
+        private class Baker : Baker<SphereDamageAuthoring>
         {
-            var entity = GetEntity(TransformUsageFlags.Dynamic);
-            AddComponent(entity, new SphereDamage
+            public override void Bake(SphereDamageAuthoring authoring)
             {
-            });
-            SetComponentEnabled<SphereDamage>(entity, false);
+                var entity = GetEntity(TransformUsageFlags.Dynamic);
+                AddComponent(entity, new SphereDamage
+                {
+                });
+                SetComponentEnabled<SphereDamage>(entity, false);
+            }
         }
     }
-}
 
-public struct SphereDamage : IComponentData, IEnableableComponent
-{
-    public int Damage;
-    public float ExplosionRadius;
+    public struct SphereDamage : IComponentData, IEnableableComponent
+    {
+        public int Damage;
+        public float ExplosionRadius;
+    }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using DOTS;
+using DOTS.Authoring;
 using Ui.Models;
 using Unity.Mathematics;
 using UnityEngine;

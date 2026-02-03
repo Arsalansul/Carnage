@@ -2,23 +2,26 @@ using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class InputDataAuthoring : MonoBehaviour
+namespace DOTS.Authoring
 {
-    private class Baker : Baker<InputDataAuthoring>
+    public class InputDataAuthoring : MonoBehaviour
     {
-        public override void Bake(InputDataAuthoring authoring)
+        private class Baker : Baker<InputDataAuthoring>
         {
-            var entity = GetEntity(TransformUsageFlags.Dynamic);
-            AddComponent(entity, new InputData());
+            public override void Bake(InputDataAuthoring authoring)
+            {
+                var entity = GetEntity(TransformUsageFlags.Dynamic);
+                AddComponent(entity, new InputData());
+            }
         }
     }
-}
 
-public struct InputData : IComponentData
-{
-    public float2 Movement;
-    public bool Fire;
-    public bool SwitchWeapon;
-    public float3 MousePos;
-    public WeaponType WeaponType;
+    public struct InputData : IComponentData
+    {
+        public float2 Movement;
+        public bool Fire;
+        public bool SwitchWeapon;
+        public float3 MousePos;
+        public WeaponType WeaponType;
+    }
 }

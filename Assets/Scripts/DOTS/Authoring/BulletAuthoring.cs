@@ -2,23 +2,26 @@ using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class BulletAuthoring : MonoBehaviour
+namespace DOTS.Authoring
 {
-    public class Baker : Baker<BulletAuthoring>
+    public class BulletAuthoring : MonoBehaviour
     {
-        public override void Bake(BulletAuthoring authoring)
+        public class Baker : Baker<BulletAuthoring>
         {
-            var entity = GetEntity(TransformUsageFlags.Dynamic);
-            AddComponent(entity, new Bullet
+            public override void Bake(BulletAuthoring authoring)
             {
-            });
+                var entity = GetEntity(TransformUsageFlags.Dynamic);
+                AddComponent(entity, new Bullet
+                {
+                });
+            }
         }
     }
-}
 
-public struct Bullet : IComponentData
-{
-    public float speed;
-    public float3 direction;
-    public float maxDistance;
+    public struct Bullet : IComponentData
+    {
+        public float speed;
+        public float3 direction;
+        public float maxDistance;
+    }
 }

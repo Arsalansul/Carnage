@@ -1,3 +1,4 @@
+using DOTS.Authoring;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;

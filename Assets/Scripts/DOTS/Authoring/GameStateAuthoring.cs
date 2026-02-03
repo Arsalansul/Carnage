@@ -1,24 +1,27 @@
 using Unity.Entities;
 using UnityEngine;
 
-public class GameStateAuthoring : MonoBehaviour
+namespace DOTS.Authoring
 {
-    private class Baker : Baker<GameStateAuthoring>
+    public class GameStateAuthoring : MonoBehaviour
     {
-        public override void Bake(GameStateAuthoring authoring)
+        private class Baker : Baker<GameStateAuthoring>
         {
-            var entity = GetEntity(TransformUsageFlags.None);
-            AddComponent(entity, new GameState());
+            public override void Bake(GameStateAuthoring authoring)
+            {
+                var entity = GetEntity(TransformUsageFlags.None);
+                AddComponent(entity, new GameState());
+            }
         }
     }
-}
 
-public struct GameState : IComponentData
-{
-    public bool GameOver;
-    public bool Restart;
-    public int Score;
-    public bool ShouldInitialize;
-    public int Wave;
-    public bool OnWaveChanged;
+    public struct GameState : IComponentData
+    {
+        public bool GameOver;
+        public bool Restart;
+        public int Score;
+        public bool ShouldInitialize;
+        public int Wave;
+        public bool OnWaveChanged;
+    }
 }

@@ -1,18 +1,21 @@
 using Unity.Entities;
 using UnityEngine;
 
-public class CameraTargetAuthoring : MonoBehaviour
+namespace DOTS.Authoring
 {
-    private class Baker : Baker<CameraTargetAuthoring>
+    public class CameraTargetAuthoring : MonoBehaviour
     {
-        public override void Bake(CameraTargetAuthoring authoring)
+        private class Baker : Baker<CameraTargetAuthoring>
         {
-            var entity = GetEntity(TransformUsageFlags.Dynamic);
-            AddComponent(entity, new CameraTarget());
+            public override void Bake(CameraTargetAuthoring authoring)
+            {
+                var entity = GetEntity(TransformUsageFlags.Dynamic);
+                AddComponent(entity, new CameraTarget());
+            }
         }
     }
-}
 
-public struct CameraTarget : IComponentData
-{
+    public struct CameraTarget : IComponentData
+    {
+    }
 }

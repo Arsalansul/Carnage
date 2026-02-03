@@ -1,23 +1,26 @@
 using Unity.Entities;
 using UnityEngine;
 
-public class DamageOnTriggerAuthoring : MonoBehaviour
+namespace DOTS.Authoring
 {
-    private class Baker : Baker<DamageOnTriggerAuthoring>
+    public class DamageOnTriggerAuthoring : MonoBehaviour
     {
-        public override void Bake(DamageOnTriggerAuthoring authoring)
+        private class Baker : Baker<DamageOnTriggerAuthoring>
         {
-            var entity = GetEntity(TransformUsageFlags.Dynamic);
-            AddComponent(entity, new DamageOnTrigger()
+            public override void Bake(DamageOnTriggerAuthoring authoring)
             {
-            });
+                var entity = GetEntity(TransformUsageFlags.Dynamic);
+                AddComponent(entity, new DamageOnTrigger()
+                {
+                });
+            }
         }
     }
-}
 
-public struct DamageOnTrigger : IComponentData
-{
-    public int amount;
-    public Faction damageTargetFaction;
-    public bool triggered;
+    public struct DamageOnTrigger : IComponentData
+    {
+        public int amount;
+        public Faction damageTargetFaction;
+        public bool triggered;
+    }
 }

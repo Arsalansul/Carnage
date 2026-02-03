@@ -2,26 +2,29 @@ using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class UnitMoverAuthoring : MonoBehaviour
+namespace DOTS.Authoring
 {
-
-    public class Baker : Baker<UnitMoverAuthoring>
+    public class UnitMoverAuthoring : MonoBehaviour
     {
-        public override void Bake(UnitMoverAuthoring authoring)
+
+        public class Baker : Baker<UnitMoverAuthoring>
         {
-            var entity = GetEntity(TransformUsageFlags.Dynamic);
-            AddComponent(entity, new UnitMover
+            public override void Bake(UnitMoverAuthoring authoring)
             {
-            });
+                var entity = GetEntity(TransformUsageFlags.Dynamic);
+                AddComponent(entity, new UnitMover
+                {
+                });
+            }
         }
     }
-}
 
-public struct UnitMover : IComponentData
-{
-    public float moveSpeed;
-    public float rotationSpeed;
-    public float3 targetPosition;
-    public float3 lookPosition;
-    public bool reachedTarget;
+    public struct UnitMover : IComponentData
+    {
+        public float moveSpeed;
+        public float rotationSpeed;
+        public float3 targetPosition;
+        public float3 lookPosition;
+        public bool reachedTarget;
+    }
 }

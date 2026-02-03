@@ -1,41 +1,43 @@
-using DOTS;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class ShootAttackAuthoring : MonoBehaviour
+namespace DOTS.Authoring
 {
-    public Transform bulletSpawnTransform;
-    public Faction targetFaction;
-
-    public class Baker : Baker<ShootAttackAuthoring>
+    public class ShootAttackAuthoring : MonoBehaviour
     {
-        public override void Bake(ShootAttackAuthoring authoring)
+        public Transform bulletSpawnTransform;
+        public Faction targetFaction;
+
+        public class Baker : Baker<ShootAttackAuthoring>
         {
-            var entity = GetEntity(TransformUsageFlags.Dynamic);
-            AddComponent(entity, new ShootAttack
+            public override void Bake(ShootAttackAuthoring authoring)
             {
-                bulletSpawnPosition = authoring.bulletSpawnTransform.localPosition,
-                targetFaction = authoring.targetFaction,
-            });
+                var entity = GetEntity(TransformUsageFlags.Dynamic);
+                AddComponent(entity, new ShootAttack
+                {
+                    bulletSpawnPosition = authoring.bulletSpawnTransform.localPosition,
+                    targetFaction = authoring.targetFaction,
+                });
+            }
         }
     }
-}
 
-public struct ShootAttack : IComponentData
-{
-    public float timer;
-    public float timerMax;
-    public float3 bulletSpawnPosition;
-    public OnShootEvent onShoot;
-    public WeaponBlob currentWeapon;
-    public Faction targetFaction;
-    public bool canShoot;
-    public float3 shootDirection;
-
-    public struct OnShootEvent
+    public struct ShootAttack : IComponentData
     {
-        public bool isTrigger;
-        public float3 shootFromPosition;
+        public float timer;
+        public float timerMax;
+        public float3 bulletSpawnPosition;
+        public OnShootEvent onShoot;
+        public WeaponBlob currentWeapon;
+        public Faction targetFaction;
+        public bool canShoot;
+        public float3 shootDirection;
+
+        public struct OnShootEvent
+        {
+            public bool isTrigger;
+            public float3 shootFromPosition;
+        }
     }
 }

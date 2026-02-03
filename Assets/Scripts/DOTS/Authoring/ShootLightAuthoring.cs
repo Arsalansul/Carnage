@@ -1,24 +1,27 @@
 using Unity.Entities;
 using UnityEngine;
 
-public class ShootLightAuthoring : MonoBehaviour
+namespace DOTS.Authoring
 {
-    public float timer;
-
-    public class Baker : Baker<ShootLightAuthoring>
+    public class ShootLightAuthoring : MonoBehaviour
     {
-        public override void Bake(ShootLightAuthoring authoring)
+        public float timer;
+
+        public class Baker : Baker<ShootLightAuthoring>
         {
-            var entity = GetEntity(TransformUsageFlags.Dynamic);
-            AddComponent(entity, new ShootLight
+            public override void Bake(ShootLightAuthoring authoring)
             {
-                timer = authoring.timer
-            });
+                var entity = GetEntity(TransformUsageFlags.Dynamic);
+                AddComponent(entity, new ShootLight
+                {
+                    timer = authoring.timer
+                });
+            }
         }
     }
-}
 
-public struct ShootLight : IComponentData
-{
-    public float timer;
+    public struct ShootLight : IComponentData
+    {
+        public float timer;
+    }
 }

@@ -1,24 +1,27 @@
 using Unity.Entities;
 using UnityEngine;
 
-public class PlayAudioClipOnDamageAuthoring : MonoBehaviour
+namespace DOTS.Authoring
 {
-    public AudioClip AudioClip;
-        
-    private class Baker : Baker<PlayAudioClipOnDamageAuthoring>
+    public class PlayAudioClipOnDamageAuthoring : MonoBehaviour
     {
-        public override void Bake(PlayAudioClipOnDamageAuthoring authoring)
+        public AudioClip AudioClip;
+        
+        private class Baker : Baker<PlayAudioClipOnDamageAuthoring>
         {
-            var entity = GetEntity(TransformUsageFlags.None);
-            AddComponent(entity, new PlayAudioClipOnDamageData
+            public override void Bake(PlayAudioClipOnDamageAuthoring authoring)
             {
-                AudioClip = authoring.AudioClip
-            });
-            SetComponentEnabled<PlayAudioClipOnDamageData>(entity, false);
+                var entity = GetEntity(TransformUsageFlags.None);
+                AddComponent(entity, new PlayAudioClipOnDamageData
+                {
+                    AudioClip = authoring.AudioClip
+                });
+                SetComponentEnabled<PlayAudioClipOnDamageData>(entity, false);
+            }
         }
     }
-}
-public struct PlayAudioClipOnDamageData : IComponentData, IEnableableComponent
-{
-    public UnityObjectRef<AudioClip> AudioClip;
+    public struct PlayAudioClipOnDamageData : IComponentData, IEnableableComponent
+    {
+        public UnityObjectRef<AudioClip> AudioClip;
+    }
 }

@@ -1,3 +1,4 @@
+using DOTS.Authoring;
 using Unity.Burst;
 using Unity.Entities;
 

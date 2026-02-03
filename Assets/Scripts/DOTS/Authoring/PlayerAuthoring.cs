@@ -1,19 +1,21 @@
-using DOTS;
 using Unity.Entities;
 using UnityEngine;
 
-public class PlayerAuthoring : MonoBehaviour
+namespace DOTS.Authoring
 {
-    private class Baker : Baker<PlayerAuthoring>
+    public class PlayerAuthoring : MonoBehaviour
     {
-        public override void Bake(PlayerAuthoring authoring)
+        private class Baker : Baker<PlayerAuthoring>
         {
-            var entity = GetEntity(TransformUsageFlags.Dynamic);
-            AddComponent(entity, new Player());
+            public override void Bake(PlayerAuthoring authoring)
+            {
+                var entity = GetEntity(TransformUsageFlags.Dynamic);
+                AddComponent(entity, new Player());
+            }
         }
     }
-}
 
-public struct Player : IComponentData
-{
+    public struct Player : IComponentData
+    {
+    }
 }
