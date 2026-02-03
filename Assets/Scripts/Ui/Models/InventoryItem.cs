@@ -5,8 +5,11 @@ namespace Ui.Models
     public enum ItemType
     {
         None = 0,
-        SimpleGun = 1,
+        Mp5 = 1,
         RocketGun = 2,
+        M4 = 3,
+        Benelli = 4,
+        M249 = 5
     }
     
     public struct InventoryItem

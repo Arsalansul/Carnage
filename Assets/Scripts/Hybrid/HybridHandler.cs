@@ -47,11 +47,23 @@ public class HybridHandler : MonoBehaviour
                 component.Fire = false;
                 break;
             case InputDataActionType.One:
-                component = SwitchWeaponInputData(WeaponType.SimpleGun, component);
+                component = SwitchWeaponInputData(WeaponType.Mp5, component);
                 InventorySelectWeapon(component.WeaponType);
                 break;
             case InputDataActionType.Two:
                 component = SwitchWeaponInputData(WeaponType.RocketGun, component);
+                InventorySelectWeapon(component.WeaponType);
+                break;
+            case InputDataActionType.Three:
+                component = SwitchWeaponInputData(WeaponType.M4, component);
+                InventorySelectWeapon(component.WeaponType);
+                break;
+            case InputDataActionType.Four:
+                component = SwitchWeaponInputData(WeaponType.Benelli, component);
+                InventorySelectWeapon(component.WeaponType);
+                break;
+            case InputDataActionType.Five:
+                component = SwitchWeaponInputData(WeaponType.M249, component);
                 InventorySelectWeapon(component.WeaponType);
                 break;
         }

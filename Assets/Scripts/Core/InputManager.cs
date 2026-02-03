@@ -21,6 +21,9 @@ public class InputManager : MonoBehaviour
         
         inputActions.GameMap.One.performed += OnOneButtonPerformed;
         inputActions.GameMap.Two.performed += OnTwoButtonPerformed;
+        inputActions.GameMap.Three.performed += OnThreeButtonPerformed;
+        inputActions.GameMap.Four.performed += OnFourButtonPerformed;
+        inputActions.GameMap.Five.performed += OnFiveButtonPerformed;
     }
     
     private void OnDisable()
@@ -32,6 +35,9 @@ public class InputManager : MonoBehaviour
         
         inputActions.GameMap.One.performed -= OnOneButtonPerformed;
         inputActions.GameMap.Two.performed -= OnTwoButtonPerformed;
+        inputActions.GameMap.Three.performed -= OnThreeButtonPerformed;
+        inputActions.GameMap.Four.performed -= OnFourButtonPerformed;
+        inputActions.GameMap.Five.performed -= OnFiveButtonPerformed;
     }
     
     private void OnMouseRightButtonClickPerformed(InputAction.CallbackContext context) => hybridHandler.SetInputDataField(InputDataActionType.MouseRightButton);
@@ -42,4 +48,7 @@ public class InputManager : MonoBehaviour
     
     private void OnOneButtonPerformed(InputAction.CallbackContext context) => hybridHandler.SetInputDataField(InputDataActionType.One);
     private void OnTwoButtonPerformed(InputAction.CallbackContext context) => hybridHandler.SetInputDataField(InputDataActionType.Two);
+    private void OnThreeButtonPerformed(InputAction.CallbackContext context) => hybridHandler.SetInputDataField(InputDataActionType.Three);
+    private void OnFourButtonPerformed(InputAction.CallbackContext context) => hybridHandler.SetInputDataField(InputDataActionType.Four);
+    private void OnFiveButtonPerformed(InputAction.CallbackContext context) => hybridHandler.SetInputDataField(InputDataActionType.Five);
 }

@@ -24,6 +24,10 @@ public enum BulletsType
 
 public enum WeaponType
 {
-    SimpleGun,
+    Mp5,
     RocketGun,
+    M4,
+    Benelli,
+    M110,
+    M249
 }

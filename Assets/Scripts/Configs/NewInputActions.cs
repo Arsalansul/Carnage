@@ -145,6 +145,33 @@ public partial class @NewInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Three"",
+                    ""type"": ""Button"",
+                    ""id"": ""245e17df-7ca2-47b3-93e6-c44835f214f5"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Four"",
+                    ""type"": ""Button"",
+                    ""id"": ""a188d0ee-66c0-4ccf-a8ec-154f5f04700e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Five"",
+                    ""type"": ""Button"",
+                    ""id"": ""f974849a-cc82-42e0-875e-f76bf0f1154f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -257,6 +284,39 @@ public partial class @NewInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Two"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""22768822-150f-4b8a-adfa-e396578981e5"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Three"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d186035f-7f85-4aa4-82f9-ddfa9b15bf00"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Four"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""14213a4a-b036-4e64-890d-98d3ecd1f630"",
+                    ""path"": ""<Keyboard>/5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Five"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -299,6 +359,9 @@ public partial class @NewInputActions: IInputActionCollection2, IDisposable
         m_GameMap_Move = m_GameMap.FindAction("Move", throwIfNotFound: true);
         m_GameMap_One = m_GameMap.FindAction("One", throwIfNotFound: true);
         m_GameMap_Two = m_GameMap.FindAction("Two", throwIfNotFound: true);
+        m_GameMap_Three = m_GameMap.FindAction("Three", throwIfNotFound: true);
+        m_GameMap_Four = m_GameMap.FindAction("Four", throwIfNotFound: true);
+        m_GameMap_Five = m_GameMap.FindAction("Five", throwIfNotFound: true);
         // UiMap
         m_UiMap = asset.FindActionMap("UiMap", throwIfNotFound: true);
         m_UiMap_Newaction = m_UiMap.FindAction("New action", throwIfNotFound: true);
@@ -389,6 +452,9 @@ public partial class @NewInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_GameMap_Move;
     private readonly InputAction m_GameMap_One;
     private readonly InputAction m_GameMap_Two;
+    private readonly InputAction m_GameMap_Three;
+    private readonly InputAction m_GameMap_Four;
+    private readonly InputAction m_GameMap_Five;
     /// <summary>
     /// Provides access to input actions defined in input action map "GameMap".
     /// </summary>
@@ -424,6 +490,18 @@ public partial class @NewInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "GameMap/Two".
         /// </summary>
         public InputAction @Two => m_Wrapper.m_GameMap_Two;
+        /// <summary>
+        /// Provides access to the underlying input action "GameMap/Three".
+        /// </summary>
+        public InputAction @Three => m_Wrapper.m_GameMap_Three;
+        /// <summary>
+        /// Provides access to the underlying input action "GameMap/Four".
+        /// </summary>
+        public InputAction @Four => m_Wrapper.m_GameMap_Four;
+        /// <summary>
+        /// Provides access to the underlying input action "GameMap/Five".
+        /// </summary>
+        public InputAction @Five => m_Wrapper.m_GameMap_Five;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -468,6 +546,15 @@ public partial class @NewInputActions: IInputActionCollection2, IDisposable
             @Two.started += instance.OnTwo;
             @Two.performed += instance.OnTwo;
             @Two.canceled += instance.OnTwo;
+            @Three.started += instance.OnThree;
+            @Three.performed += instance.OnThree;
+            @Three.canceled += instance.OnThree;
+            @Four.started += instance.OnFour;
+            @Four.performed += instance.OnFour;
+            @Four.canceled += instance.OnFour;
+            @Five.started += instance.OnFive;
+            @Five.performed += instance.OnFive;
+            @Five.canceled += instance.OnFive;
         }
 
         /// <summary>
@@ -497,6 +584,15 @@ public partial class @NewInputActions: IInputActionCollection2, IDisposable
             @Two.started -= instance.OnTwo;
             @Two.performed -= instance.OnTwo;
             @Two.canceled -= instance.OnTwo;
+            @Three.started -= instance.OnThree;
+            @Three.performed -= instance.OnThree;
+            @Three.canceled -= instance.OnThree;
+            @Four.started -= instance.OnFour;
+            @Four.performed -= instance.OnFour;
+            @Four.canceled -= instance.OnFour;
+            @Five.started -= instance.OnFive;
+            @Five.performed -= instance.OnFive;
+            @Five.canceled -= instance.OnFive;
         }
 
         /// <summary>
@@ -675,6 +771,27 @@ public partial class @NewInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnTwo(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Three" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnThree(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Four" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnFour(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Five" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnFive(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UiMap" which allows adding and removing callbacks.

@@ -15,8 +15,11 @@ public class GameManager : MonoBehaviour
     {
         uiManager.invokeEndGameUiAction(EndGameAction.hide);
         
-        inventory.AddItem(ItemType.SimpleGun); //todo
+        inventory.AddItem(ItemType.Mp5); //todo
         inventory.AddItem(ItemType.RocketGun);
+        inventory.AddItem(ItemType.M4);
+        inventory.AddItem(ItemType.Benelli);
+        inventory.AddItem(ItemType.M249);
         
         hybridHandler.SetGameConfig();
         hybridHandler.InitializeEcs();

@@ -37,6 +37,18 @@ MonoBehaviour:
     fireRate: 60
     bulletType: 1
     sprite: {fileID: -1562211268, guid: cecbc1e21bfd4654cace7246a1733982, type: 3}
+  - type: 2
+    fireRate: 500
+    bulletType: 0
+    sprite: {fileID: 1138565974, guid: cecbc1e21bfd4654cace7246a1733982, type: 3}
+  - type: 3
+    fireRate: 120
+    bulletType: 1
+    sprite: {fileID: 330935418, guid: cecbc1e21bfd4654cace7246a1733982, type: 3}
+  - type: 5
+    fireRate: 1000
+    bulletType: 0
+    sprite: {fileID: -1115473031, guid: cecbc1e21bfd4654cace7246a1733982, type: 3}
   BulletSettingsList:
   - type: 0
     speed: 10
@@ -74,3 +86,9 @@ MonoBehaviour:
     itemType: 1
   - weaponType: 1
     itemType: 2
+  - weaponType: 2
+    itemType: 3
+  - weaponType: 3
+    itemType: 4
+  - weaponType: 5
+    itemType: 5

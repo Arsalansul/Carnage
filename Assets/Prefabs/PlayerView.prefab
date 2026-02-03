@@ -652,6 +652,14 @@ MonoBehaviour:
     weaponType: 0
   - mesh: {fileID: 2337856}
     weaponType: 1
+  - mesh: {fileID: 2325148}
+    weaponType: 2
+  - mesh: {fileID: 2396422}
+    weaponType: 3
+  - mesh: {fileID: 2378546}
+    weaponType: 4
+  - mesh: {fileID: 2356694}
+    weaponType: 5
 --- !u!1 &132654
 GameObject:
   m_ObjectHideFlags: 0
