@@ -19,6 +19,8 @@ namespace DOTS.Authoring
                 SetComponentEnabled<OnEnemiesLeftCountChanged>(entity, true);
                 AddComponent<OnSwitchWeaponAnim>(entity);
                 SetComponentEnabled<OnSwitchWeaponAnim>(entity, false);
+                AddComponent<OnPickup>(entity);
+                SetComponentEnabled<OnPickup>(entity, false);
             }
         }
     }
@@ -43,5 +45,10 @@ namespace DOTS.Authoring
     public struct OnSwitchWeaponAnim : IComponentData, IEnableableComponent
     {
         public WeaponType weaponType;
+    }
+
+    public struct OnPickup : IComponentData, IEnableableComponent
+    {
+        public PickupType pickupType;
     }
 }
