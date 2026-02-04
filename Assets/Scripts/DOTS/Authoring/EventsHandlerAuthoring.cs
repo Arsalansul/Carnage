@@ -22,8 +22,8 @@ namespace DOTS.Authoring
                 SetComponentEnabled<OnSwitchWeaponAnim>(entity, false);
                 AddComponent<OnPickup>(entity);
                 SetComponentEnabled<OnPickup>(entity, false);
-                AddComponent<TrySpawnPickup>(entity);
-                SetComponentEnabled<TrySpawnPickup>(entity, false);
+                AddComponent<TryDropItem>(entity);
+                SetComponentEnabled<TryDropItem>(entity, false);
             }
         }
     }
@@ -55,7 +55,7 @@ namespace DOTS.Authoring
         public PickupType pickupType;
     }
 
-    public struct TrySpawnPickup : IComponentData, IEnableableComponent
+    public struct TryDropItem : IComponentData, IEnableableComponent
     {
         public float3 position;
     }

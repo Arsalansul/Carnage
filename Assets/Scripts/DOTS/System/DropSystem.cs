@@ -7,7 +7,7 @@ using Random = Unity.Mathematics.Random;
 
 namespace DOTS.System
 {
-    public partial struct PickupSpawnSystem : ISystem
+    public partial struct DropSystem : ISystem
     {
         private Random random;
         
@@ -22,14 +22,16 @@ namespace DOTS.System
         public void OnUpdate(ref SystemState state)
         {
             var config = SystemAPI.GetSingleton<GameConfigComponent>();
+            var dropSettings = config.dropSettings;
             var entitiesReferences = SystemAPI.GetSingleton<EntitiesReferences>();
 
-            foreach (var (trySpawnPickup, enabledTrySpawnPickup) in SystemAPI.Query<RefRO<TrySpawnPickup>, EnabledRefRW<TrySpawnPickup>>())
+            foreach (var (tryDrop, enabledTryDrop) in SystemAPI.Query<RefRO<TryDropItem>, EnabledRefRW<TryDropItem>>())
             {
+                enabledTryDrop.ValueRW = false;
+                if (random.NextFloat() > dropSettings.chance) continue;
+                
                 var pickupEntity = state.EntityManager.Instantiate(entitiesReferences.pickupPrefab);
-                SystemAPI.SetComponent(pickupEntity, LocalTransform.FromPosition(trySpawnPickup.ValueRO.position));
-
-                enabledTrySpawnPickup.ValueRW = false;
+                SystemAPI.SetComponent(pickupEntity, LocalTransform.FromPosition(tryDrop.ValueRO.position));
             }
         }
         

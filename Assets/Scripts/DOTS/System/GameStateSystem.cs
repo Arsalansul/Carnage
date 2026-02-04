@@ -54,9 +54,9 @@ namespace DOTS.System
                     onEnemiesLeftCountChanged.ValueRW.enemiesLeftCount = config.ValueRO.enemiesCountLeft;
                     SystemAPI.SetComponentEnabled<OnEnemiesLeftCountChanged>(eventsHandlerEntity, true);
 
-                    var trySpawnPickup = SystemAPI.GetComponentRW<TrySpawnPickup>(eventsHandlerEntity);
-                    trySpawnPickup.ValueRW.position = localTransform.ValueRO.Position;
-                    SystemAPI.SetComponentEnabled<TrySpawnPickup>(eventsHandlerEntity, true);
+                    var tryDropItem = SystemAPI.GetComponentRW<TryDropItem>(eventsHandlerEntity);
+                    tryDropItem.ValueRW.position = localTransform.ValueRO.Position;
+                    SystemAPI.SetComponentEnabled<TryDropItem>(eventsHandlerEntity, true);
                 }
             }
             

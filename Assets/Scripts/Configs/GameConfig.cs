@@ -18,6 +18,8 @@ public class GameConfig : ScriptableObjectInstaller<GameConfig>
     public PlayerSettings PlayerSettings;
     public List<EnemySettings> EnemySettingsList;
     public List<WeaponTypeToItemType> WeaponTypeToItemTypeMap;
+    public List<PickupSettings> PickupSettings;
+    public DropSettings DropSettings;
     
     public override void InstallBindings()
     {
@@ -29,6 +31,8 @@ public class GameConfig : ScriptableObjectInstaller<GameConfig>
         Container.BindInstance(EnemySettingsList);
         Container.BindInstance(PlayerSettings);
         Container.BindInstance(WeaponTypeToItemTypeMap);
+        Container.BindInstance(PickupSettings);
+        Container.BindInstance(DropSettings);
     }
 }
 
