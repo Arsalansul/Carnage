@@ -1,4 +1,5 @@
 using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace DOTS.Authoring
@@ -21,6 +22,8 @@ namespace DOTS.Authoring
                 SetComponentEnabled<OnSwitchWeaponAnim>(entity, false);
                 AddComponent<OnPickup>(entity);
                 SetComponentEnabled<OnPickup>(entity, false);
+                AddComponent<TrySpawnPickup>(entity);
+                SetComponentEnabled<TrySpawnPickup>(entity, false);
             }
         }
     }
@@ -50,5 +53,10 @@ namespace DOTS.Authoring
     public struct OnPickup : IComponentData, IEnableableComponent
     {
         public PickupType pickupType;
+    }
+
+    public struct TrySpawnPickup : IComponentData, IEnableableComponent
+    {
+        public float3 position;
     }
 }

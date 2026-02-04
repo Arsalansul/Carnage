@@ -1,6 +1,7 @@
 using DOTS.Authoring;
 using Unity.Burst;
 using Unity.Entities;
+using Unity.Transforms;
 
 namespace DOTS.System
 {
@@ -37,7 +38,8 @@ namespace DOTS.System
                 return;
             }
 
-            foreach (var (health, enemy, entity) in SystemAPI.Query<RefRO<Health>, RefRO<Enemy>>().WithEntityAccess())
+            foreach (var (health, enemy, localTransform, entity) 
+                     in SystemAPI.Query<RefRO<Health>, RefRO<Enemy>, RefRO<LocalTransform>>().WithEntityAccess())
             {
                 if (!health.ValueRO.onHealthChanged) continue;
 
@@ -51,6 +53,10 @@ namespace DOTS.System
                     var onEnemiesLeftCountChanged = SystemAPI.GetComponentRW<OnEnemiesLeftCountChanged>(eventsHandlerEntity);
                     onEnemiesLeftCountChanged.ValueRW.enemiesLeftCount = config.ValueRO.enemiesCountLeft;
                     SystemAPI.SetComponentEnabled<OnEnemiesLeftCountChanged>(eventsHandlerEntity, true);
+
+                    var trySpawnPickup = SystemAPI.GetComponentRW<TrySpawnPickup>(eventsHandlerEntity);
+                    trySpawnPickup.ValueRW.position = localTransform.ValueRO.Position;
+                    SystemAPI.SetComponentEnabled<TrySpawnPickup>(eventsHandlerEntity, true);
                 }
             }
             
