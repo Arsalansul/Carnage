@@ -1,6 +1,7 @@
 using DOTS.Authoring;
 using Unity.Burst;
 using Unity.Entities;
+using UnityEngine;
 
 namespace DOTS.System
 {
@@ -20,8 +21,10 @@ namespace DOTS.System
                         Heal(playerHealth);
                         break;
                     case PickupType.bomb:
+                        Debug.Log("Boom");
+                        break;
                     case PickupType.chainLightning:
-                    default:
+                        Debug.Log("ChainLightning");
                         break;
                 }
 

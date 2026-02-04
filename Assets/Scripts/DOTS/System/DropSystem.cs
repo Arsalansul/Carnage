@@ -23,6 +23,8 @@ namespace DOTS.System
         {
             var config = SystemAPI.GetSingleton<GameConfigComponent>();
             var dropSettings = config.dropSettings;
+            ref var pickupSettings = ref config.pickupSettings.Value.Array;
+            
             var entitiesReferences = SystemAPI.GetSingleton<EntitiesReferences>();
 
             foreach (var (tryDrop, enabledTryDrop) in SystemAPI.Query<RefRO<TryDropItem>, EnabledRefRW<TryDropItem>>())
@@ -31,44 +33,34 @@ namespace DOTS.System
                 if (random.NextFloat() > dropSettings.chance) continue;
                 
                 var pickupEntity = state.EntityManager.Instantiate(entitiesReferences.pickupPrefab);
+                var pickup = SystemAPI.GetComponentRW<Pickup>(pickupEntity);
+                
+                pickup.ValueRW.type = GetNextPickupType(ref pickupSettings);
+                
                 SystemAPI.SetComponent(pickupEntity, LocalTransform.FromPosition(tryDrop.ValueRO.position));
             }
         }
         
-        // [BurstCompile]
-        // private Entity GetNextPickupEntity(ref SystemState state)
-        // {
-        //     var entitiesReferencesEntity = SystemAPI.GetSingletonEntity<EntitiesReferences>();
-        //
-        //     // var index = random.NextInt(0, waveBlob.Array.Length - 1);
-        //     //
-        //     // for (int i = 0; i < waveBlob.Array.Length; i++)
-        //     // {
-        //     //     if (waveBlob.Array[index].count > 0)
-        //     //         break;
-        //     //     index = (index + 1) % waveBlob.Array.Length;
-        //     // }
-        //     //
-        //     // enemyInWaveConf = waveBlob.Array[index];
-        //     //
-        //     // if (waveBlob.Array[index].count <= 0)
-        //     // {
-        //     //     return Entity.Null;
-        //     // }
-        //     //
-        //     // waveBlob.Array[index].count--;
-        //     //
-        //     // var enemiesMap = state.EntityManager.GetBuffer<EnemiesEntityMap>(entitiesReferencesEntity);
-        //     //
-        //     // for (int i = 0; i < enemiesMap.Length; i++)
-        //     // {
-        //     //     if (enemiesMap[i].type == waveBlob.Array[index].type)
-        //     //     {
-        //     //         return enemiesMap[i].entity;
-        //     //     }
-        //     // }
-        //     //
-        //     // throw new Exception("enemy not found in map");
-        // }
+        [BurstCompile]
+        private PickupType GetNextPickupType(ref BlobArray<PickupSettings> pickupSettings)
+        {
+            var sumWeight = 0;
+            for (int i = 0; i < pickupSettings.Length; i++)
+            {
+                sumWeight += pickupSettings[i].weight;
+            }
+
+            var randomValue = random.NextFloat() * sumWeight;
+
+            var currentWeight = 0f;
+            for (int i = 0; i < pickupSettings.Length; i++)
+            {
+                currentWeight += pickupSettings[i].weight;
+                
+                if (randomValue <= currentWeight) return pickupSettings[i].type;
+            }
+            
+            return pickupSettings[0].type;
+        }
     }
 }
