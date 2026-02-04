@@ -3,6 +3,7 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Physics;
+using Unity.Transforms;
 
 namespace DOTS.System
 {
@@ -53,11 +54,15 @@ namespace DOTS.System
         public EntityCommandBuffer.ParallelWriter ecb;
         public Entity eventsHandlerEntity;
         
-        public void Execute(ref Pickup pickup, [ChunkIndexInQuery] int chunkIndex, Entity entity)
+        public void Execute(ref Pickup pickup, in LocalTransform localTransform, [ChunkIndexInQuery] int chunkIndex, Entity entity)
         {
             if (!pickup.triggered) return;
             
-            ecb.SetComponent(chunkIndex, eventsHandlerEntity, new OnPickup{pickupType = pickup.type});
+            ecb.SetComponent(chunkIndex, eventsHandlerEntity, new OnPickup
+            {
+                pickupType = pickup.type,
+                position = localTransform.Position
+            });
             ecb.SetComponentEnabled<OnPickup>(chunkIndex, eventsHandlerEntity, true);
             ecb.DestroyEntity(chunkIndex, entity);
         }

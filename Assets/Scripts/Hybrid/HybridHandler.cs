@@ -27,6 +27,7 @@ public class HybridHandler : MonoBehaviour
     [Inject] private IInventory inventory;
     [Inject] private List<PickupSettings> pickupSettingsList;
     [Inject] private DropSettings dropSettings;
+    [Inject] private BombConsumableSettings bombSettings;
     
     private HybridUtils _hybridUtils = new ();
     
@@ -195,6 +196,7 @@ public class HybridHandler : MonoBehaviour
         SetCameraSettings();
         SetPickupSettings();
         SetDropSettings();
+        SetConsumableSettings();
     }
 
     public void SetWaveSettings(int waveIndex)
@@ -352,5 +354,13 @@ public class HybridHandler : MonoBehaviour
         }
 
         return builder.CreateBlobAssetReference<PickupSettingsBlob>(Allocator.Persistent);
+    }
+
+    private void SetConsumableSettings()
+    {
+        _hybridUtils.GetComponentAndEntityWithAll<GameConfigComponent>(out var component, out var entity, out var entityManager);
+        component.bombSettings = bombSettings;
+        
+        entityManager.SetComponentData(entity, component);
     }
 }

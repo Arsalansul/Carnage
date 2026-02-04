@@ -27,6 +27,7 @@ namespace DOTS.Authoring
         public PlayerSettings playerSettings;
         public BlobAssetReference<PickupSettingsBlob> pickupSettings;
         public DropSettings dropSettings;
+        public BombConsumableSettings bombSettings;
     }
 
     public struct WaveBlob
@@ -114,5 +115,12 @@ namespace DOTS.Authoring
     {
         [Range(0, 1)]
         public float chance;
+    }
+
+    [Serializable]
+    public struct BombConsumableSettings
+    {
+        public int damage;
+        public float explosionRange;
     }
 }

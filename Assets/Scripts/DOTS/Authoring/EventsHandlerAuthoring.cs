@@ -53,6 +53,7 @@ namespace DOTS.Authoring
     public struct OnPickup : IComponentData, IEnableableComponent
     {
         public PickupType pickupType;
+        public float3 position;
     }
 
     public struct TryDropItem : IComponentData, IEnableableComponent

@@ -195,10 +195,10 @@ MonoBehaviour:
     itemType: 5
   PickupSettings:
   - type: 0
-    weight: 1
+    weight: 0
   - type: 1
     weight: 1
   - type: 2
-    weight: 1
+    weight: 0
   DropSettings:
     chance: 0.301
