@@ -8,10 +8,11 @@ public class PoolManager : MonoBehaviour
     
     [SerializeField] private List<UnitPoolConfig> unitPoolConfigs;
     [SerializeField] private List<BulletConfig> bulletsConfigs;
+    [SerializeField] private List<ConsumableConfig> consumableConfigs;
     [SerializeField] private AudioSourcePoolConfig audioSourceConfig;
 
     private Dictionary<string, ObjectPool<UnitView>> unitPools;
-    private Dictionary<string, ObjectPool<Transform>> bulletsPools;
+    private Dictionary<string, ObjectPool<Transform>> cleanObjectPools;
     private ObjectPool<AudioSource> audioSources;
 
     public void InitializePools()
@@ -24,11 +25,16 @@ public class PoolManager : MonoBehaviour
             unitPools[config.prefab.name] = InitializePool(config.prefab, config.initialSize);
         }
 
-        bulletsPools = new Dictionary<string, ObjectPool<Transform>>();
+        cleanObjectPools = new Dictionary<string, ObjectPool<Transform>>();
 
         foreach (var config in bulletsConfigs)
         {
-            bulletsPools[config.prefab.name] = InitializePool(config.prefab.transform, config.initialSize);
+            cleanObjectPools[config.poolName.ToString()] = InitializePool(config.prefab.transform, config.initialSize);
+        }
+        
+        foreach (var config in consumableConfigs)
+        {
+            cleanObjectPools[config.poolName.ToString()] = InitializePool(config.prefab.transform, config.initialSize);
         }
         audioSources = InitializePool(audioSourceConfig.audioSource, audioSourceConfig.initialSize);
     }
@@ -63,14 +69,14 @@ public class PoolManager : MonoBehaviour
         StartCoroutine(ReturnToPoolCoroutine(audioSources, audioSource, delayTime));
     }
 
-    public Transform GetBulletFromPool(string poolName)
+    public Transform GetCleanObjectFromPool(string poolName)
     {
-        return bulletsPools.TryGetValue(poolName, out var pool) ? pool.Get() : null;
+        return cleanObjectPools.TryGetValue(poolName, out var pool) ? pool.Get() : null;
     }
 
-    public void ReturnBulletToPool(string poolName, Transform bullet)
+    public void ReturnCleanObjectToPool(string poolName, Transform objTransform)
     {
-        if (bulletsPools.ContainsKey(poolName)) bulletsPools[poolName].Return(bullet);
+        if (cleanObjectPools.ContainsKey(poolName)) cleanObjectPools[poolName].Return(objTransform);
     }
 
     private ObjectPool<T> InitializePool<T>(T prefab, int initialSize) where T : Component

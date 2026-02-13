@@ -87,7 +87,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e04a8972f1e459cb607f1b8e2b2769f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BulletPrefab: {fileID: 6723769671836293756, guid: b4f5c2c8d3ebba746bf1da8078a5fbf0, type: 3}
+  poolName: 2
 --- !u!114 &6568188658849222093
 MonoBehaviour:
   m_ObjectHideFlags: 0

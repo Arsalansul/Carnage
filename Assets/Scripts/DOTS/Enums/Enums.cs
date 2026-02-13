@@ -37,3 +37,19 @@ public enum WeaponType
     //enemy range weapons
     Arachnid,
 }
+
+public enum PickupType
+{
+    heal,
+    bomb,
+    chainLightning,
+}
+
+public enum PoolName
+{
+    smallBullet,
+    explosionBullet,
+    enemyBullet,
+    firstAid,
+    bomb
+}

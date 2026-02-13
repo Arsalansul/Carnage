@@ -25,6 +25,9 @@ namespace DOTS.Authoring
         public UnitsSettings unitsSettings;
         public int enemiesCountLeft;
         public PlayerSettings playerSettings;
+        public BlobAssetReference<PickupSettingsBlob> pickupSettings;
+        public DropSettings dropSettings;
+        public BombConsumableSettings bombSettings;
     }
 
     public struct WaveBlob
@@ -93,5 +96,31 @@ namespace DOTS.Authoring
     {
         public float moveSpeed;
         public float rotationSpeed;
+    }
+
+    [Serializable]
+    public struct PickupSettings
+    {
+        public PickupType type;
+        public int weight;
+    }
+
+    public struct PickupSettingsBlob
+    {
+        public BlobArray<PickupSettings> Array;
+    }
+
+    [Serializable]
+    public struct DropSettings
+    {
+        [Range(0, 1)]
+        public float chance;
+    }
+
+    [Serializable]
+    public struct BombConsumableSettings
+    {
+        public int damage;
+        public float explosionRange;
     }
 }

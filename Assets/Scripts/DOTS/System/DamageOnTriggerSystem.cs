@@ -22,7 +22,7 @@ namespace DOTS.System
                 damages = SystemAPI.GetComponentLookup<DamageOnTrigger>(),
             }.Schedule(simulation, state.Dependency);
         
-            var cleanupJob = new CleanupEntitiesJob()
+            var cleanupJob = new CleanupDamageInTriggerEntitiesJob()
             {
                 ecb = SystemAPI.GetSingleton<EndFixedStepSimulationEntityCommandBufferSystem.Singleton>()
                     .CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter(),
@@ -62,7 +62,7 @@ namespace DOTS.System
     }
 
     [BurstCompile]
-    public partial struct CleanupEntitiesJob : IJobEntity
+    public partial struct CleanupDamageInTriggerEntitiesJob : IJobEntity
     {
         public EntityCommandBuffer.ParallelWriter ecb;
         [ReadOnly] public ComponentLookup<SphereDamage> sphereDamageLookup;

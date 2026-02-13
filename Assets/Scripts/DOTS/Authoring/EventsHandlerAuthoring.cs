@@ -1,4 +1,5 @@
 using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace DOTS.Authoring
@@ -19,6 +20,10 @@ namespace DOTS.Authoring
                 SetComponentEnabled<OnEnemiesLeftCountChanged>(entity, true);
                 AddComponent<OnSwitchWeaponAnim>(entity);
                 SetComponentEnabled<OnSwitchWeaponAnim>(entity, false);
+                AddComponent<OnPickup>(entity);
+                SetComponentEnabled<OnPickup>(entity, false);
+                AddComponent<TryDropItem>(entity);
+                SetComponentEnabled<TryDropItem>(entity, false);
             }
         }
     }
@@ -43,5 +48,14 @@ namespace DOTS.Authoring
     public struct OnSwitchWeaponAnim : IComponentData, IEnableableComponent
     {
         public WeaponType weaponType;
+    }
+
+    public struct OnPickup : IComponentData, IEnableableComponent
+    {
+    }
+
+    public struct TryDropItem : IComponentData, IEnableableComponent
+    {
+        public float3 position;
     }
 }

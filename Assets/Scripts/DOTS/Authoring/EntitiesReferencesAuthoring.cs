@@ -11,6 +11,7 @@ namespace DOTS.Authoring
         public GameObject playerPrefab;
         public List<BulletsPrefabsMap> bulletsMaps;
         public GameObject shootLightPrefab;
+        public List<ConsumablesMap> consumablesMap;
 
         public class Baker : Baker<EntitiesReferencesAuthoring>
         {
@@ -20,7 +21,7 @@ namespace DOTS.Authoring
                 AddComponent(entity, new EntitiesReferences
                 {
                     playerPrefab = GetEntity(authoring.playerPrefab, TransformUsageFlags.Dynamic),
-                    shootLightPrefabEntity = GetEntity(authoring.shootLightPrefab, TransformUsageFlags.Dynamic)
+                    shootLightPrefabEntity = GetEntity(authoring.shootLightPrefab, TransformUsageFlags.Dynamic),
                 });
             
                 var enemyBuffer = AddBuffer<EnemiesEntityMap>(entity);
@@ -40,6 +41,16 @@ namespace DOTS.Authoring
                     {
                         type = authoring.bulletsMaps[i].type,
                         entity = GetEntity(authoring.bulletsMaps[i].prefab, TransformUsageFlags.Dynamic)
+                    });
+                }
+                
+                var consumablesBuffer = AddBuffer<ConsumablesEntityMap>(entity);
+                for (int i = 0; i < authoring.consumablesMap.Count; i++)
+                {
+                    consumablesBuffer.Add(new ConsumablesEntityMap()
+                    {
+                        type = authoring.consumablesMap[i].type,
+                        entity = GetEntity(authoring.consumablesMap[i].prefab, TransformUsageFlags.Dynamic)
                     });
                 }
             }
@@ -75,6 +86,19 @@ namespace DOTS.Authoring
     public struct EnemiesEntityMap : IBufferElementData
     {
         public EnemyType type;
+        public Entity entity;
+    }
+
+    [Serializable]
+    public struct ConsumablesMap
+    {
+        public PickupType type;
+        public GameObject prefab;
+    }
+
+    public struct ConsumablesEntityMap : IBufferElementData
+    {
+        public PickupType type;
         public Entity entity;
     }
 }
