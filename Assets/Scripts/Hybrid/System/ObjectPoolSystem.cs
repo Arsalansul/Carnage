@@ -4,14 +4,14 @@ using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
 
+//todo remove
 public partial class ObjectPoolSystem : SystemBase
 {
     protected override void OnUpdate()
     {
         var entityCommandBuffer = new EntityCommandBuffer(Allocator.Temp);
         foreach (var (localTransform, unitGameObjectPrefab, entity) in
-                 SystemAPI.Query<RefRO<LocalTransform>, UnitGameObjectPrefab>()
-                     .WithDisabled<VisualInitialized>().WithEntityAccess())
+                 SystemAPI.Query<RefRO<LocalTransform>, UnitGameObjectPrefab>().WithDisabled<VisualInitialized>().WithEntityAccess())
         {
             var unitView = PoolManager.Instance.GetUnitFromPool(unitGameObjectPrefab.value.name, localTransform.ValueRO.Position);
             var newAnimatorReference = new UnitGameObjectReference
@@ -23,37 +23,28 @@ public partial class ObjectPoolSystem : SystemBase
             entityCommandBuffer.AddComponent(entity, newAnimatorReference);
         }
 
-        foreach (var (animatorReference, entity) in
-                 SystemAPI.Query<UnitGameObjectReference>()
-                     .WithNone<UnitGameObjectPrefab, LocalTransform>()
-                     .WithEntityAccess())
+        foreach (var (animatorReference, entity) in SystemAPI.Query<UnitGameObjectReference>().WithNone<UnitGameObjectPrefab, LocalTransform>().WithEntityAccess())
         {
             animatorReference.unitView.Dead(true);
             entityCommandBuffer.RemoveComponent<UnitGameObjectReference>(entity);
         }
 
-        foreach (var (bullet, bulletGameObject, entity) in 
-                 SystemAPI.Query<RefRO<Bullet>, BulletGameObject>()
-                     .WithDisabled<VisualInitialized>()
-                     .WithEntityAccess())
+        foreach (var (poolableGameObject, entity) in SystemAPI.Query<PoolableGameObject>().WithDisabled<VisualInitialized>().WithEntityAccess())
         {
-            var poolName = bulletGameObject.gameObject.name;
-            var bulletView = PoolManager.Instance.GetBulletFromPool(poolName);
-            entityCommandBuffer.AddComponent(entity, new BulletCleanup()
+            var poolName = poolableGameObject.poolName;
+            var view = PoolManager.Instance.GetCleanObjectFromPool(poolName.ToString());
+            entityCommandBuffer.AddComponent(entity, new GameObjectCleanup()
             {
-                transform = bulletView.transform,
+                transform = view.transform,
                 poolname = poolName
             });
             entityCommandBuffer.SetComponentEnabled<VisualInitialized>(entity,true);
         }
 
-        foreach (var (bulletCleanup, entity) in
-                 SystemAPI.Query<BulletCleanup>()
-                     .WithNone<BulletGameObject, LocalTransform>()
-                     .WithEntityAccess())
+        foreach (var (cleanup, entity) in SystemAPI.Query<GameObjectCleanup>().WithNone<PoolableGameObject, LocalTransform>().WithEntityAccess())
         {
-            PoolManager.Instance.ReturnBulletToPool(bulletCleanup.poolname, bulletCleanup.transform);
-            entityCommandBuffer.RemoveComponent<BulletCleanup>(entity);
+            PoolManager.Instance.ReturnCleanObjectToPool(cleanup.poolname.ToString(), cleanup.transform);
+            entityCommandBuffer.RemoveComponent<GameObjectCleanup>(entity);
         }
 
         entityCommandBuffer.Playback(EntityManager);

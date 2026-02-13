@@ -25,17 +25,26 @@ namespace DOTS.System
             var dropSettings = config.dropSettings;
             ref var pickupSettings = ref config.pickupSettings.Value.Array;
             
-            var entitiesReferences = SystemAPI.GetSingleton<EntitiesReferences>();
+            var entitiesReferencesEntity = SystemAPI.GetSingletonEntity<EntitiesReferences>();
 
             foreach (var (tryDrop, enabledTryDrop) in SystemAPI.Query<RefRO<TryDropItem>, EnabledRefRW<TryDropItem>>())
             {
                 enabledTryDrop.ValueRW = false;
                 if (random.NextFloat() > dropSettings.chance) continue;
                 
-                var pickupEntity = state.EntityManager.Instantiate(entitiesReferences.pickupPrefab);
+                var nextType = GetNextPickupType(ref pickupSettings);
+
+                var bufferConsumables = SystemAPI.GetBuffer<ConsumablesEntityMap>(entitiesReferencesEntity);
+                
+                var pickupEntity = state.EntityManager.Instantiate(GetNextPickupEntity(bufferConsumables, nextType));
                 var pickup = SystemAPI.GetComponentRW<Pickup>(pickupEntity);
                 
-                pickup.ValueRW.type = GetNextPickupType(ref pickupSettings);
+                pickup.ValueRW.type = nextType;
+
+                if (nextType == PickupType.bomb)
+                {
+                    SystemAPI.SetComponentEnabled<SphereDamage>(pickupEntity, false);
+                }
                 
                 SystemAPI.SetComponent(pickupEntity, LocalTransform.FromPosition(tryDrop.ValueRO.position));
             }
@@ -61,6 +70,20 @@ namespace DOTS.System
             }
             
             return pickupSettings[0].type;
+        }
+
+        [BurstCompile]
+        private Entity GetNextPickupEntity(DynamicBuffer<ConsumablesEntityMap> consumables, PickupType pickupType)
+        {
+            foreach (var item in consumables)
+            {
+                if (item.type == pickupType)
+                {
+                    return item.entity;
+                }
+            }
+            
+            return Entity.Null;
         }
     }
 }

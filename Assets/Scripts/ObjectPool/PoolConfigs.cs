@@ -19,5 +19,14 @@ public class AudioSourcePoolConfig
 public class BulletConfig
 {
     public GameObject prefab;
+    public PoolName poolName;
+    public int initialSize = 10;
+}
+
+[Serializable]
+public class ConsumableConfig
+{
+    public GameObject prefab;
+    public PoolName poolName;
     public int initialSize = 10;
 }

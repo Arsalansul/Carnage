@@ -11,7 +11,6 @@ namespace DOTS.Authoring
         public GameObject playerPrefab;
         public List<BulletsPrefabsMap> bulletsMaps;
         public GameObject shootLightPrefab;
-        public PickupAuthoring pickupPrefab;
         public List<ConsumablesMap> consumablesMap;
 
         public class Baker : Baker<EntitiesReferencesAuthoring>
@@ -23,7 +22,6 @@ namespace DOTS.Authoring
                 {
                     playerPrefab = GetEntity(authoring.playerPrefab, TransformUsageFlags.Dynamic),
                     shootLightPrefabEntity = GetEntity(authoring.shootLightPrefab, TransformUsageFlags.Dynamic),
-                    pickupPrefab = GetEntity(authoring.pickupPrefab, TransformUsageFlags.Dynamic)
                 });
             
                 var enemyBuffer = AddBuffer<EnemiesEntityMap>(entity);
@@ -63,7 +61,6 @@ namespace DOTS.Authoring
     {
         public Entity playerPrefab;
         public Entity shootLightPrefabEntity;
-        public Entity pickupPrefab;
     }
 
     [Serializable]

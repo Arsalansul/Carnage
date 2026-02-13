@@ -44,3 +44,12 @@ public enum PickupType
     bomb,
     chainLightning,
 }
+
+public enum PoolName
+{
+    smallBullet,
+    explosionBullet,
+    enemyBullet,
+    firstAid,
+    bomb
+}

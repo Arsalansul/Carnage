@@ -1855,11 +1855,21 @@ MonoBehaviour:
     initialSize: 10
   bulletsConfigs:
   - prefab: {fileID: 6723769671836293756, guid: 41a836b9bad839644b041515d566327b, type: 3}
+    poolName: 0
     initialSize: 50
   - prefab: {fileID: 6723769671836293756, guid: e8476680e98ba08419988b1ba61ed6c8, type: 3}
+    poolName: 1
     initialSize: 50
   - prefab: {fileID: 6723769671836293756, guid: b4f5c2c8d3ebba746bf1da8078a5fbf0, type: 3}
+    poolName: 2
     initialSize: 50
+  consumableConfigs:
+  - prefab: {fileID: 7355713013926475229, guid: 82a76256a42024049964a0c8b9bb380f, type: 3}
+    poolName: 3
+    initialSize: 10
+  - prefab: {fileID: 6896597939343215794, guid: 2e664cff58592ef46ae18f05c38f52e5, type: 3}
+    poolName: 4
+    initialSize: 10
   audioSourceConfig:
     audioSource: {fileID: 2679629191477484416, guid: a2df1636fdc944c4ebde04bc26b17a88, type: 3}
     initialSize: 50

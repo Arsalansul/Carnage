@@ -63,8 +63,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50f3ce34151b4e41b753023cd4a10f02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 3
-  maxDistance: 5
 --- !u!114 &-1292204288811739241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77,8 +75,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19bcce9e81944e5d89f282394c5b214e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  explosionRadius: 5
-  damage: 35
 --- !u!114 &-6808690528672271479
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -116,7 +112,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e04a8972f1e459cb607f1b8e2b2769f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BulletPrefab: {fileID: 6723769671836293756, guid: e8476680e98ba08419988b1ba61ed6c8, type: 3}
+  poolName: 1
 --- !u!114 &-6459115861228335835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,7 +125,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64e69d2fa06045e586fddf8259ac33af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 0
 --- !u!135 &-7431112788068026100
 SphereCollider:
   m_ObjectHideFlags: 0

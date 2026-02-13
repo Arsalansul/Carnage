@@ -62,8 +62,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50f3ce34151b4e41b753023cd4a10f02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 30
-  maxDistance: 10
 --- !u!114 &2355578967714886629
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89,7 +87,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e04a8972f1e459cb607f1b8e2b2769f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BulletPrefab: {fileID: 6723769671836293756, guid: 41a836b9bad839644b041515d566327b, type: 3}
+  prefab: {fileID: 6723769671836293756, guid: 41a836b9bad839644b041515d566327b, type: 3}
 --- !u!114 &6568188658849222093
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,7 +112,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64e69d2fa06045e586fddf8259ac33af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 10
 --- !u!135 &1856891261408061738
 SphereCollider:
   m_ObjectHideFlags: 0

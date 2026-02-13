@@ -328,10 +328,11 @@ MonoBehaviour:
   - type: 2
     prefab: {fileID: 6723769671836293756, guid: 2820d9fc047602043b6654c9e19f768e, type: 3}
   shootLightPrefab: {fileID: 4313532480974411597, guid: b8d084e612a0fb145b4d0998d676eb1a, type: 3}
-  pickupPrefab: {fileID: 6238443647449833938, guid: 65c7b342fbd5a06459784a2295787616, type: 3}
   consumablesMap:
+  - type: 0
+    prefab: {fileID: 8052955979664734814, guid: 65c7b342fbd5a06459784a2295787616, type: 3}
   - type: 1
-    prefab: {fileID: 8417614739362253391, guid: 1781392bdc7447c4c9aabccc82454629, type: 3}
+    prefab: {fileID: 8052955979664734814, guid: e747f3302d701644a8d1bc4bcaea1d67, type: 3}
 --- !u!4 &679963101
 Transform:
   m_ObjectHideFlags: 0

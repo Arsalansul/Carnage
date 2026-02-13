@@ -12,8 +12,7 @@ namespace DOTS.Authoring
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
                 AddComponent(entity, new Pickup()
                 {
-                    triggered = false,
-                    type = PickupType.heal
+                    triggered = false
                 });
             }
         }
@@ -23,5 +22,6 @@ namespace DOTS.Authoring
     {
         public bool triggered;
         public PickupType type;
+        public Entity activator;
     }
 }
