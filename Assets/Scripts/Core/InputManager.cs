@@ -1,12 +1,13 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Zenject;
 
 public class InputManager : MonoBehaviour
 {
-    [Inject] private NewInputActions inputActions;
+    [Inject] private InputSystem_Actions inputActions;
     [Inject] private HybridHandler hybridHandler;
-    
+
     private void Update()
     {
         hybridHandler.SetInputDataField(InputDataActionType.Move);
@@ -14,30 +15,30 @@ public class InputManager : MonoBehaviour
     
     private void OnEnable()
     {
-        inputActions.GameMap.MousePosition.performed += OnMousePositionPerformed;
-        inputActions.GameMap.MouseLeftButtonClick.performed += OnMouseLeftButtonClickPerformed;
-        inputActions.GameMap.MouseLeftButtonClick.canceled += OnMouseLeftButtonClickCanceled;
-        inputActions.GameMap.MouseRightButtonClick.performed += OnMouseRightButtonClickPerformed;
+        inputActions.Player.Look.performed += OnMousePositionPerformed;
+        inputActions.Player.Attack.performed += OnMouseLeftButtonClickPerformed;
+        inputActions.Player.Attack.canceled += OnMouseLeftButtonClickCanceled;
+        // inputActions.GameMap.MouseRightButtonClick.performed += OnMouseRightButtonClickPerformed;
         
-        inputActions.GameMap.One.performed += OnOneButtonPerformed;
-        inputActions.GameMap.Two.performed += OnTwoButtonPerformed;
-        inputActions.GameMap.Three.performed += OnThreeButtonPerformed;
-        inputActions.GameMap.Four.performed += OnFourButtonPerformed;
-        inputActions.GameMap.Five.performed += OnFiveButtonPerformed;
+        // ..digit1Key.isPressed += OnOneButtonPerformed;
+        // inputActions.GameMap.Two.performed += OnTwoButtonPerformed;
+        // inputActions.GameMap.Three.performed += OnThreeButtonPerformed;
+        // inputActions.GameMap.Four.performed += OnFourButtonPerformed;
+        // inputActions.GameMap.Five.performed += OnFiveButtonPerformed;
     }
     
     private void OnDisable()
     {
-        inputActions.GameMap.MousePosition.performed -= OnMousePositionPerformed;
-        inputActions.GameMap.MouseLeftButtonClick.performed -= OnMouseLeftButtonClickPerformed;
-        inputActions.GameMap.MouseLeftButtonClick.canceled -= OnMouseLeftButtonClickCanceled;
-        inputActions.GameMap.MouseRightButtonClick.performed -= OnMouseRightButtonClickPerformed;
-        
-        inputActions.GameMap.One.performed -= OnOneButtonPerformed;
-        inputActions.GameMap.Two.performed -= OnTwoButtonPerformed;
-        inputActions.GameMap.Three.performed -= OnThreeButtonPerformed;
-        inputActions.GameMap.Four.performed -= OnFourButtonPerformed;
-        inputActions.GameMap.Five.performed -= OnFiveButtonPerformed;
+        inputActions.Player.Look.performed -= OnMousePositionPerformed;
+        inputActions.Player.Attack.performed -= OnMouseLeftButtonClickPerformed;
+        inputActions.Player.Attack.canceled -= OnMouseLeftButtonClickCanceled;
+        // inputActions.GameMap.MouseRightButtonClick.performed -= OnMouseRightButtonClickPerformed;
+        //
+        // inputActions.GameMap.One.performed -= OnOneButtonPerformed;
+        // inputActions.GameMap.Two.performed -= OnTwoButtonPerformed;
+        // inputActions.GameMap.Three.performed -= OnThreeButtonPerformed;
+        // inputActions.GameMap.Four.performed -= OnFourButtonPerformed;
+        // inputActions.GameMap.Five.performed -= OnFiveButtonPerformed;
     }
     
     private void OnMouseRightButtonClickPerformed(InputAction.CallbackContext context) => hybridHandler.SetInputDataField(InputDataActionType.MouseRightButton);

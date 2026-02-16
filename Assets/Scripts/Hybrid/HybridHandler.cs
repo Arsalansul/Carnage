@@ -15,7 +15,7 @@ using Zenject;
 
 public class HybridHandler : MonoBehaviour
 {
-    [Inject] private NewInputActions inputActions;
+    [Inject] private InputSystem_Actions inputActions;
     [Inject] private List<WaveSettings> waveSettingsList;
     [Inject] private List<WeaponSettings> weaponSettingsList;
     [Inject] private List<BulletSettings> bulletSettingsList;
@@ -38,7 +38,7 @@ public class HybridHandler : MonoBehaviour
         switch (inputAction)
         {
             case InputDataActionType.Move:
-                component.Movement = inputActions.GameMap.Move.ReadValue<Vector2>();
+                component.Movement = inputActions.Player.Move.ReadValue<Vector2>();
                 break;
             case InputDataActionType.MousePos:
                 var inputMousePosition = context.ReadValue<Vector2>();

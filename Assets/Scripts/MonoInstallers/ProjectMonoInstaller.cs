@@ -4,9 +4,9 @@ public class ProjectMonoInstaller : MonoInstaller
 {
     public override void InstallBindings()
     {
-        var gameInput = new NewInputActions();
+        var gameInput = new InputSystem_Actions();
         gameInput.Enable();
 
-        Container.Bind<NewInputActions>().FromInstance(gameInput).AsSingle();
+        Container.Bind<InputSystem_Actions>().FromInstance(gameInput).AsSingle();
     }
 }
