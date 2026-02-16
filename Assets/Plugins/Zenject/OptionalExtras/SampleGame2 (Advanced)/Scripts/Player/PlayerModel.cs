@@ -34,7 +34,7 @@ namespace Zenject.SpaceFighter
             set => _rigidBody.position = value;
         }
 
-        public Vector3 Velocity => _rigidBody.velocity;
+        public Vector3 Velocity => _rigidBody.linearVelocity;
 
         public void TakeDamage(float healthLoss)
         {

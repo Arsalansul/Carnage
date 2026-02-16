@@ -36,7 +36,7 @@ namespace Zenject.SpaceFighter
             set => _rigidBody.rotation = value;
         }
 
-        public Vector3 Velocity => _rigidBody.velocity;
+        public Vector3 Velocity => _rigidBody.linearVelocity;
 
         public Vector3 AngularVelocity
         {
