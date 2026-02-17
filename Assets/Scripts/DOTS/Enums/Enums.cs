@@ -33,16 +33,13 @@ public enum WeaponType
     Benelli,
     M110,
     M249,
-    
-    //enemy range weapons
-    Arachnid,
 }
 
 public enum PickupType
 {
     heal,
     bomb,
-    chainLightning,
+    weapon
 }
 
 public enum PoolName

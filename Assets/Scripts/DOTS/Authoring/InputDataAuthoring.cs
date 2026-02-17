@@ -20,8 +20,6 @@ namespace DOTS.Authoring
     {
         public float2 Movement;
         public bool Fire;
-        public bool SwitchWeapon;
         public float3 MousePos;
-        public WeaponType WeaponType;
     }
 }

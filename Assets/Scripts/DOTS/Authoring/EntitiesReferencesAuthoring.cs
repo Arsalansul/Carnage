@@ -12,6 +12,7 @@ namespace DOTS.Authoring
         public List<BulletsPrefabsMap> bulletsMaps;
         public GameObject shootLightPrefab;
         public List<ConsumablesMap> consumablesMap;
+        public List<WeaponsMap> weaponsMaps;
 
         public class Baker : Baker<EntitiesReferencesAuthoring>
         {
@@ -51,6 +52,16 @@ namespace DOTS.Authoring
                     {
                         type = authoring.consumablesMap[i].type,
                         entity = GetEntity(authoring.consumablesMap[i].prefab, TransformUsageFlags.Dynamic)
+                    });
+                }
+                
+                var weaponsBuffer = AddBuffer<WeaponsEntityMap>(entity);
+                for (int i = 0; i < authoring.weaponsMaps.Count; i++)
+                {
+                    weaponsBuffer.Add(new WeaponsEntityMap()
+                    {
+                        type = authoring.weaponsMaps[i].type,
+                        entity = GetEntity(authoring.weaponsMaps[i].prefab, TransformUsageFlags.Dynamic)
                     });
                 }
             }
@@ -99,6 +110,19 @@ namespace DOTS.Authoring
     public struct ConsumablesEntityMap : IBufferElementData
     {
         public PickupType type;
+        public Entity entity;
+    }
+
+    [Serializable]
+    public struct WeaponsMap
+    {
+        public WeaponType type;
+        public GameObject prefab;
+    }
+
+    public struct WeaponsEntityMap : IBufferElementData
+    {
+        public WeaponType type;
         public Entity entity;
     }
 }

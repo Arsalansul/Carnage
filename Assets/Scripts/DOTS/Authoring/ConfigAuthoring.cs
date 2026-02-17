@@ -61,11 +61,13 @@ namespace DOTS.Authoring
         public BlobArray<WeaponBlob> Array;
     }
 
-    public struct WeaponBlob
+    public struct WeaponBlob : IDropWeight
     {
         public WeaponType type;
         public float TimeMax;
         public BulletsType bulletType;
+        public int dropWeight;
+        public int Weight => dropWeight;
     }
 
     [Serializable]
@@ -99,10 +101,11 @@ namespace DOTS.Authoring
     }
 
     [Serializable]
-    public struct PickupSettings
+    public struct PickupSettings : IDropWeight
     {
         public PickupType type;
-        public int weight;
+        public int dropWeight;
+        public int Weight => dropWeight;
     }
 
     public struct PickupSettingsBlob
@@ -122,5 +125,10 @@ namespace DOTS.Authoring
     {
         public int damage;
         public float explosionRange;
+    }
+
+    public interface IDropWeight
+    {
+        public int Weight { get; }
     }
 }

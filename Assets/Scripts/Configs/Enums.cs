@@ -5,10 +5,4 @@ public enum InputDataActionType
     MouseLeftButton,
     MouseRightButton,
     MouseLeftButtonCancel,
-    
-    One,
-    Two,
-    Three,
-    Four,
-    Five
 }

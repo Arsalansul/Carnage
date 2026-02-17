@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Ui.Models;
 using Ui.View;
@@ -32,6 +31,7 @@ namespace Ui.Controllers
 
         public void Remove(ItemType itemType)
         {
+            inventorySlotPool.Despawn(items[itemType]);
             items.Remove(itemType);
         }
 

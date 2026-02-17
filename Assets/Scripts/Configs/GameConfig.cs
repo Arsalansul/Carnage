@@ -45,6 +45,7 @@ public struct WeaponSettings
     public float fireRate;
     public BulletsType bulletType;
     public Sprite sprite;
+    public int dropWeight;
 }
 
 [Serializable]

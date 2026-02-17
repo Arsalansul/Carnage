@@ -1,10 +1,7 @@
 using System.Collections.Generic;
 using Core;
-using DOTS;
 using DOTS.Authoring;
 using Hybrid;
-using Ui.Controllers;
-using Ui.Models;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -23,11 +20,11 @@ public class HybridHandler : MonoBehaviour
     [Inject] private CameraSettings cameraSettings;
     [Inject] private List<EnemySettings> enemySettingsList;
     [Inject] private PlayerSettings playerSettings;
-    [Inject] private List<WeaponTypeToItemType> weaponTypeToItemTypeMap;
-    [Inject] private IInventory inventory;
     [Inject] private List<PickupSettings> pickupSettingsList;
     [Inject] private DropSettings dropSettings;
     [Inject] private BombConsumableSettings bombSettings;
+    [Inject] private IInventory inventory;
+    [Inject] private List<WeaponTypeToItemType> weaponTypeToItemTypeMap;
     
     private HybridUtils _hybridUtils = new ();
     
@@ -47,31 +44,8 @@ public class HybridHandler : MonoBehaviour
             case InputDataActionType.MouseLeftButton:
                 component.Fire = true;
                 break;
-            case InputDataActionType.MouseRightButton:
-                // component = SwitchWeapon();
-                break;
             case InputDataActionType.MouseLeftButtonCancel:
                 component.Fire = false;
-                break;
-            case InputDataActionType.One:
-                component = SwitchWeaponInputData(WeaponType.Mp5, component);
-                InventorySelectWeapon(component.WeaponType);
-                break;
-            case InputDataActionType.Two:
-                component = SwitchWeaponInputData(WeaponType.RocketGun, component);
-                InventorySelectWeapon(component.WeaponType);
-                break;
-            case InputDataActionType.Three:
-                component = SwitchWeaponInputData(WeaponType.M4, component);
-                InventorySelectWeapon(component.WeaponType);
-                break;
-            case InputDataActionType.Four:
-                component = SwitchWeaponInputData(WeaponType.Benelli, component);
-                InventorySelectWeapon(component.WeaponType);
-                break;
-            case InputDataActionType.Five:
-                component = SwitchWeaponInputData(WeaponType.M249, component);
-                InventorySelectWeapon(component.WeaponType);
                 break;
         }
 
@@ -97,8 +71,6 @@ public class HybridHandler : MonoBehaviour
         component.ShouldInitialize = true;
 
         entityManager.SetComponentData(entity, component);
-
-        SetInputDataField(InputDataActionType.One);
     }
 
     public bool IsGameOver()
@@ -219,6 +191,34 @@ public class HybridHandler : MonoBehaviour
         InvokeEnemiesLeftCountChanged(countLeft);
     }
 
+    public bool IsOnSwitchWeapon(out WeaponType weaponType)
+    {
+        weaponType = default;
+        if (!_hybridUtils.TryGetComponentAndEntityWithAll<OnSwitchWeapon>(out var component, out var entity, out var entityManager)) return false;
+        if (!entityManager.IsComponentEnabled<OnSwitchWeaponSystem>(entity) || !entityManager.IsComponentEnabled<OnSwitchWeaponAnim>(entity)) return false;
+
+        weaponType = component.weaponType;
+        return true;
+    }
+
+    public void SwitchWeaponInInventory(WeaponType weaponType)
+    {
+        var itemType = weaponTypeToItemTypeMap.Find(x => x.weaponType == weaponType).itemType;
+        inventory.RemoveSelectedItem();
+        inventory.AddItem(itemType);
+        inventory.SelectItem(itemType);
+        _hybridUtils.GetComponentAndEntityWithPresent<OnSwitchWeaponUi>(out var component, out var entity, out var entityManager);
+        entityManager.SetComponentEnabled<OnSwitchWeaponUi>(entity, true);
+    }
+
+    public void SwitchWeapon(WeaponType weaponType)
+    {
+        _hybridUtils.GetComponentAndEntityWithPresent<OnSwitchWeapon>(out var component, out var entity, out var entityManager);
+        component.weaponType = weaponType;
+        entityManager.SetComponentData<OnSwitchWeapon>(entity, component);
+        entityManager.SetComponentEnabled<OnSwitchWeapon>(entity, true);
+    }
+
     private void InvokeEnemiesLeftCountChanged(int countLeft)
     {
         _hybridUtils.GetComponentAndEntityWithPresent<OnEnemiesLeftCountChanged>(out var component, out var entity, out var entityManager);
@@ -267,6 +267,7 @@ public class HybridHandler : MonoBehaviour
             arrayBuilder[i].type = settings.type;
             arrayBuilder[i].bulletType = settings.bulletType;
             arrayBuilder[i].TimeMax = 60 / settings.fireRate;
+            arrayBuilder[i].dropWeight = settings.dropWeight;
         }
 
         return builder.CreateBlobAssetReference<WeaponsBlob>(Allocator.Persistent);
@@ -308,20 +309,6 @@ public class HybridHandler : MonoBehaviour
 
         return builder.CreateBlobAssetReference<EnemySettingsBlob>(Allocator.Persistent);
     }
-    
-    private InputData SwitchWeaponInputData(WeaponType weaponType, InputData inputData)
-    {
-        var newInputData = inputData;
-        newInputData.SwitchWeapon = true;
-        newInputData.WeaponType = weaponType;
-        return newInputData;
-    }
-
-    private void InventorySelectWeapon(WeaponType weaponType)
-    {
-        var itemType = weaponTypeToItemTypeMap.Find(x => x.weaponType == weaponType).itemType;
-        inventory.SelectItem(itemType);
-    }
 
     private void SetDropSettings()
     {
@@ -350,7 +337,7 @@ public class HybridHandler : MonoBehaviour
         for (var i = 0; i < settingsList.Count; i++)
         {
             arrayBuilder[i].type = settingsList[i].type;
-            arrayBuilder[i].weight = settingsList[i].weight;
+            arrayBuilder[i].dropWeight = settingsList[i].Weight;
         }
 
         return builder.CreateBlobAssetReference<PickupSettingsBlob>(Allocator.Persistent);

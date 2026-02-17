@@ -15,7 +15,11 @@ namespace DOTS.System
             foreach (var (enemyShootAttack, shootAttack, enemy, localTransform, target, unitMover) in 
                      SystemAPI.Query<RefRO<EnemyShootAttack>, RefRW<ShootAttack>, RefRO<Enemy>, RefRO<LocalTransform>, RefRO<Target>, RefRW<UnitMover> >())
             {
-                if (target.ValueRO.targetEntity == Entity.Null) continue;
+                if (target.ValueRO.targetEntity == Entity.Null)
+                {
+                    shootAttack.ValueRW.canShoot = false;
+                    continue;
+                }
                 
                 var targetTransform = SystemAPI.GetComponentRO<LocalTransform>(target.ValueRO.targetEntity);
                 var spawnWorldPosition = localTransform.ValueRO.TransformPoint(shootAttack.ValueRO.bulletSpawnPosition);

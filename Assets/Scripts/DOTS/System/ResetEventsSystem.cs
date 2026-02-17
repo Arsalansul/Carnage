@@ -30,6 +30,15 @@ namespace DOTS.System
             {
                 shootAttack.ValueRW.onShoot.isTrigger = false;
             }
+
+            foreach (var (onSwitchWeaponEnable, enablesSystem, enabledAnim, enabledUi) 
+                     in SystemAPI.Query<EnabledRefRW<OnSwitchWeapon>, EnabledRefRW<OnSwitchWeaponSystem>, EnabledRefRW<OnSwitchWeaponAnim>, EnabledRefRW<OnSwitchWeaponUi>>())
+            {
+                onSwitchWeaponEnable.ValueRW = false;
+                enablesSystem.ValueRW = false;
+                enabledAnim.ValueRW = false;
+                enabledUi.ValueRW = false;
+            }
         }
     }
 }

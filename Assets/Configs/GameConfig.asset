@@ -109,26 +109,27 @@ MonoBehaviour:
     fireRate: 300
     bulletType: 0
     sprite: {fileID: -981311414, guid: cecbc1e21bfd4654cace7246a1733982, type: 3}
+    dropWeight: 1
   - type: 1
     fireRate: 60
     bulletType: 1
     sprite: {fileID: -1562211268, guid: cecbc1e21bfd4654cace7246a1733982, type: 3}
+    dropWeight: 1
   - type: 2
     fireRate: 500
     bulletType: 0
     sprite: {fileID: 1138565974, guid: cecbc1e21bfd4654cace7246a1733982, type: 3}
+    dropWeight: 1
   - type: 3
     fireRate: 120
     bulletType: 1
     sprite: {fileID: 330935418, guid: cecbc1e21bfd4654cace7246a1733982, type: 3}
+    dropWeight: 1
   - type: 5
     fireRate: 1000
     bulletType: 0
     sprite: {fileID: -1115473031, guid: cecbc1e21bfd4654cace7246a1733982, type: 3}
-  - type: 6
-    fireRate: 60
-    bulletType: 2
-    sprite: {fileID: -1115473031, guid: cecbc1e21bfd4654cace7246a1733982, type: 3}
+    dropWeight: 1
   BulletSettingsList:
   - type: 0
     speed: 20
@@ -193,12 +194,3 @@ MonoBehaviour:
     itemType: 4
   - weaponType: 5
     itemType: 5
-  PickupSettings:
-  - type: 0
-    weight: 0
-  - type: 1
-    weight: 1
-  - type: 2
-    weight: 0
-  DropSettings:
-    chance: 0.301

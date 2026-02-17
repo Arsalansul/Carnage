@@ -41,15 +41,15 @@ public class InputManager : MonoBehaviour
         // inputActions.GameMap.Five.performed -= OnFiveButtonPerformed;
     }
     
-    private void OnMouseRightButtonClickPerformed(InputAction.CallbackContext context) => hybridHandler.SetInputDataField(InputDataActionType.MouseRightButton);
+    // private void OnMouseRightButtonClickPerformed(InputAction.CallbackContext context) => hybridHandler.SetInputDataField(InputDataActionType.MouseRightButton);
     private void OnMouseLeftButtonClickPerformed(InputAction.CallbackContext context) => hybridHandler.SetInputDataField(InputDataActionType.MouseLeftButton);
     
     private void OnMousePositionPerformed(InputAction.CallbackContext context) => hybridHandler.SetInputDataField(InputDataActionType.MousePos, context);
     private void OnMouseLeftButtonClickCanceled(InputAction.CallbackContext context) => hybridHandler.SetInputDataField(InputDataActionType.MouseLeftButtonCancel);
     
-    private void OnOneButtonPerformed(InputAction.CallbackContext context) => hybridHandler.SetInputDataField(InputDataActionType.One);
-    private void OnTwoButtonPerformed(InputAction.CallbackContext context) => hybridHandler.SetInputDataField(InputDataActionType.Two);
-    private void OnThreeButtonPerformed(InputAction.CallbackContext context) => hybridHandler.SetInputDataField(InputDataActionType.Three);
-    private void OnFourButtonPerformed(InputAction.CallbackContext context) => hybridHandler.SetInputDataField(InputDataActionType.Four);
-    private void OnFiveButtonPerformed(InputAction.CallbackContext context) => hybridHandler.SetInputDataField(InputDataActionType.Five);
+    // private void OnOneButtonPerformed(InputAction.CallbackContext context) => hybridHandler.SetInputDataField(InputDataActionType.One);
+    // private void OnTwoButtonPerformed(InputAction.CallbackContext context) => hybridHandler.SetInputDataField(InputDataActionType.Two);
+    // private void OnThreeButtonPerformed(InputAction.CallbackContext context) => hybridHandler.SetInputDataField(InputDataActionType.Three);
+    // private void OnFourButtonPerformed(InputAction.CallbackContext context) => hybridHandler.SetInputDataField(InputDataActionType.Four);
+    // private void OnFiveButtonPerformed(InputAction.CallbackContext context) => hybridHandler.SetInputDataField(InputDataActionType.Five);
 }

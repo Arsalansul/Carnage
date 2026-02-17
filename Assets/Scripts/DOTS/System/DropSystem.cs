@@ -23,7 +23,7 @@ namespace DOTS.System
         {
             var config = SystemAPI.GetSingleton<GameConfigComponent>();
             var dropSettings = config.dropSettings;
-            ref var pickupSettings = ref config.pickupSettings.Value.Array;
+            ref var pickupSettingsArray = ref config.pickupSettings.Value.Array;
             
             var entitiesReferencesEntity = SystemAPI.GetSingletonEntity<EntitiesReferences>();
 
@@ -32,16 +32,29 @@ namespace DOTS.System
                 enabledTryDrop.ValueRW = false;
                 if (random.NextFloat() > dropSettings.chance) continue;
                 
-                var nextType = GetNextPickupType(ref pickupSettings);
+                var nextType = GetNextDrop<PickupSettings>(ref pickupSettingsArray);
 
-                var bufferConsumables = SystemAPI.GetBuffer<ConsumablesEntityMap>(entitiesReferencesEntity);
+                var nextEntity = Entity.Null;
                 
-                var pickupEntity = state.EntityManager.Instantiate(GetNextPickupEntity(bufferConsumables, nextType));
+                if (nextType.type == PickupType.weapon)
+                {
+                    var bufferWeapons = SystemAPI.GetBuffer<WeaponsEntityMap>(entitiesReferencesEntity);
+                    ref var weaponBlob = ref config.Weapons.Value;
+                    
+                    nextEntity = GetNextWeaponEntity(bufferWeapons, ref weaponBlob);
+                }
+                else
+                {
+                    var bufferConsumables = SystemAPI.GetBuffer<ConsumablesEntityMap>(entitiesReferencesEntity);
+                    nextEntity = GetNextConsumablesEntity(bufferConsumables, nextType.type);
+                }
+                
+                var pickupEntity = state.EntityManager.Instantiate(nextEntity);
                 var pickup = SystemAPI.GetComponentRW<Pickup>(pickupEntity);
                 
-                pickup.ValueRW.type = nextType;
+                pickup.ValueRW.type = nextType.type;
 
-                if (nextType == PickupType.bomb)
+                if (nextType.type == PickupType.bomb)
                 {
                     SystemAPI.SetComponentEnabled<SphereDamage>(pickupEntity, false);
                 }
@@ -51,31 +64,47 @@ namespace DOTS.System
         }
         
         [BurstCompile]
-        private PickupType GetNextPickupType(ref BlobArray<PickupSettings> pickupSettings)
+        private T GetNextDrop<T>(ref BlobArray<T> array) where T : unmanaged, IDropWeight
         {
             var sumWeight = 0;
-            for (int i = 0; i < pickupSettings.Length; i++)
+            for (int i = 0; i < array.Length; i++)
             {
-                sumWeight += pickupSettings[i].weight;
+                sumWeight += array[i].Weight;
             }
 
             var randomValue = random.NextFloat() * sumWeight;
 
             var currentWeight = 0f;
-            for (int i = 0; i < pickupSettings.Length; i++)
+            for (int i = 0; i < array.Length; i++)
             {
-                currentWeight += pickupSettings[i].weight;
+                currentWeight += array[i].Weight;
                 
-                if (randomValue <= currentWeight) return pickupSettings[i].type;
+                if (randomValue <= currentWeight) return array[i];
             }
             
-            return pickupSettings[0].type;
+            return array[0];
         }
 
         [BurstCompile]
-        private Entity GetNextPickupEntity(DynamicBuffer<ConsumablesEntityMap> consumables, PickupType pickupType)
+        private Entity GetNextWeaponEntity(DynamicBuffer<WeaponsEntityMap> weaponsBuffer, ref WeaponsBlob weaponsBlob)
         {
-            foreach (var item in consumables)
+            var settings = GetNextDrop<WeaponBlob>(ref weaponsBlob.Array);
+
+            foreach (var item in weaponsBuffer)
+            {
+                if (item.type == settings.type)
+                {
+                    return item.entity;
+                }
+            }
+            
+            return Entity.Null;
+        }
+        
+        [BurstCompile]
+        private Entity GetNextConsumablesEntity(DynamicBuffer<ConsumablesEntityMap> consumablesBuffer, PickupType pickupType)
+        {
+            foreach (var item in consumablesBuffer)
             {
                 if (item.type == pickupType)
                 {

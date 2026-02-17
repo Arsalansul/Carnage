@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PickupSettings:
   - type: 0
-    weight: 1
+    dropWeight: 0
   - type: 1
-    weight: 1
+    dropWeight: 0
   - type: 2
-    weight: 0
+    dropWeight: 1
   DropSettings:
-    chance: 0.334
+    chance: 1
   BombSettings:
     damage: 50
     explosionRange: 10

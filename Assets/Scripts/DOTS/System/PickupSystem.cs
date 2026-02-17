@@ -4,7 +4,6 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Physics;
 using Unity.Transforms;
-using UnityEngine;
 
 namespace DOTS.System
 {
@@ -20,15 +19,16 @@ namespace DOTS.System
                 pickupLookup = SystemAPI.GetComponentLookup<Pickup>()
             }.Schedule(simulation, state.Dependency);
             
-            var cleanupJob = new CleanupPickupEntitiesJob()
+            var pickupJob = new PickupEntitiesJob()
             {
                 ecb = SystemAPI.GetSingleton<EndFixedStepSimulationEntityCommandBufferSystem.Singleton>()
                     .CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter(),
                 eventsHandlerEntity = SystemAPI.GetSingletonEntity<EventsHandler>(),
                 healthLookup = SystemAPI.GetComponentLookup<Health>(true),
+                pickupWeaponLookup = SystemAPI.GetComponentLookup<PickupWeapon>(true),
                 config = SystemAPI.GetSingleton<GameConfigComponent>()
             };
-            cleanupJob.ScheduleParallel();
+            pickupJob.ScheduleParallel();
         }
     }
     
@@ -54,11 +54,12 @@ namespace DOTS.System
     }
 
     [BurstCompile]
-    public partial struct CleanupPickupEntitiesJob : IJobEntity
+    public partial struct PickupEntitiesJob : IJobEntity
     {
         public EntityCommandBuffer.ParallelWriter ecb;
         public Entity eventsHandlerEntity;
         [ReadOnly] public ComponentLookup<Health> healthLookup;
+        [ReadOnly] public ComponentLookup<PickupWeapon> pickupWeaponLookup;
         [ReadOnly] public GameConfigComponent config;
         
         public void Execute(ref Pickup pickup, in LocalTransform localTransform, [ChunkIndexInQuery] int chunkIndex, Entity entity)
@@ -75,14 +76,16 @@ namespace DOTS.System
                 case PickupType.bomb:
                     ActivateBomb(chunkIndex, entity, config.bombSettings);
                     break;
-                case PickupType.chainLightning:
-                    ActivateChainLightning();
+                case PickupType.weapon:
+                    GiveWeapon(out var weaponType, entity);
+                    ecb.SetComponent(chunkIndex, eventsHandlerEntity, new OnSwitchWeapon(){weaponType = weaponType});
+                    ecb.SetComponentEnabled<OnSwitchWeapon>(chunkIndex, eventsHandlerEntity, true);
+                    ecb.SetComponentEnabled<OnSwitchWeaponSystem>(chunkIndex, eventsHandlerEntity, false);
+                    ecb.SetComponentEnabled<OnSwitchWeaponAnim>(chunkIndex, eventsHandlerEntity, false);
+                    ecb.SetComponentEnabled<OnSwitchWeaponUi>(chunkIndex, eventsHandlerEntity, false);
                     ecb.DestroyEntity(chunkIndex, entity);
                     break;
             }
-
-            ecb.SetComponent(chunkIndex, eventsHandlerEntity, new OnPickup());
-            ecb.SetComponentEnabled<OnPickup>(chunkIndex, eventsHandlerEntity, true);
         }
         
         [BurstCompile]
@@ -106,9 +109,10 @@ namespace DOTS.System
         }
 
         [BurstCompile]
-        private void ActivateChainLightning()
+        private void GiveWeapon(out WeaponType weaponType, Entity entity)
         {
-            Debug.Log("chain lightning activated");
+            pickupWeaponLookup.TryGetRefRO(entity, out var pickupWeapon);
+            weaponType = pickupWeapon.ValueRO.weaponType;
         }
     }
 }

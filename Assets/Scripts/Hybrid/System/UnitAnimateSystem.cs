@@ -32,12 +32,13 @@ namespace System
                 if (inputData.Fire) animatorReference.unitView.Attack();
 
                 var eventsHandlerEntity = SystemAPI.GetSingletonEntity<EventsHandler>();
-                if (SystemAPI.IsComponentEnabled<OnSwitchWeaponAnim>(eventsHandlerEntity))
+                if (SystemAPI.IsComponentEnabled<OnSwitchWeapon>(eventsHandlerEntity) && !SystemAPI.IsComponentEnabled<OnSwitchWeaponAnim>(eventsHandlerEntity))
                 {
-                    var onSwitchWeapon = SystemAPI.GetComponentRO<OnSwitchWeaponAnim>(eventsHandlerEntity);
+                    var onSwitchWeapon = SystemAPI.GetComponentRO<OnSwitchWeapon>(eventsHandlerEntity);
                     var playerView = (PlayerView)animatorReference.unitView;
                     playerView.ShowWeapon(onSwitchWeapon.ValueRO.weaponType);
-                    SystemAPI.SetComponentEnabled<OnSwitchWeaponAnim>(eventsHandlerEntity, false);
+                    
+                    SystemAPI.SetComponentEnabled<OnSwitchWeaponAnim>(eventsHandlerEntity, true);
                 }
 
                 if (speed < 0.1f) continue;

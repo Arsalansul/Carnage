@@ -8,6 +8,7 @@ namespace Core
     {
         void AddItem(ItemType type);
         void RemoveItem(ItemType type);
+        void RemoveSelectedItem();
         void SelectItem(ItemType type);
     }
     
@@ -56,6 +57,14 @@ namespace Core
                 inventoryItems.Remove(itemType);
                 inventoryController.Remove(itemType);
             }
+        }
+
+        public void RemoveSelectedItem()
+        {
+            if (selectedItem == ItemType.None) return;
+
+            RemoveItem(selectedItem);
+            selectedItem = ItemType.None;
         }
 
         public void SelectItem(ItemType itemType)

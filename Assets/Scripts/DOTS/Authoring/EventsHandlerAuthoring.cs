@@ -18,10 +18,14 @@ namespace DOTS.Authoring
                 SetComponentEnabled<OnWaveChanged>(entity, true);
                 AddComponent<OnEnemiesLeftCountChanged>(entity);
                 SetComponentEnabled<OnEnemiesLeftCountChanged>(entity, true);
+                AddComponent<OnSwitchWeapon>(entity);
+                SetComponentEnabled<OnSwitchWeapon>(entity, false);
+                AddComponent<OnSwitchWeaponSystem>(entity);
+                SetComponentEnabled<OnSwitchWeaponSystem>(entity, false);
                 AddComponent<OnSwitchWeaponAnim>(entity);
                 SetComponentEnabled<OnSwitchWeaponAnim>(entity, false);
-                AddComponent<OnPickup>(entity);
-                SetComponentEnabled<OnPickup>(entity, false);
+                AddComponent<OnSwitchWeaponUi>(entity);
+                SetComponentEnabled<OnSwitchWeaponUi>(entity, false);
                 AddComponent<TryDropItem>(entity);
                 SetComponentEnabled<TryDropItem>(entity, false);
             }
@@ -45,14 +49,14 @@ namespace DOTS.Authoring
         public int enemiesLeftCount;
     }
 
-    public struct OnSwitchWeaponAnim : IComponentData, IEnableableComponent
+    public struct OnSwitchWeapon : IComponentData, IEnableableComponent
     {
         public WeaponType weaponType;
     }
 
-    public struct OnPickup : IComponentData, IEnableableComponent
-    {
-    }
+    public struct OnSwitchWeaponSystem : IComponentData, IEnableableComponent{}
+    public struct OnSwitchWeaponAnim : IComponentData, IEnableableComponent{}
+    public struct OnSwitchWeaponUi : IComponentData, IEnableableComponent{}
 
     public struct TryDropItem : IComponentData, IEnableableComponent
     {

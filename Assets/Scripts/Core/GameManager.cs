@@ -1,7 +1,5 @@
-using Core;
 using Ui;
 using Ui.Controllers;
-using Ui.Models;
 using UnityEngine;
 using Zenject;
 
@@ -9,20 +7,14 @@ public class GameManager : MonoBehaviour
 {
     [Inject] private UiManager uiManager;
     [Inject] private HybridHandler hybridHandler;
-    [Inject] private IInventory inventory;
 
     private void Start()
     {
         uiManager.invokeEndGameUiAction(EndGameAction.hide);
         
-        inventory.AddItem(ItemType.Mp5); //todo
-        inventory.AddItem(ItemType.RocketGun);
-        inventory.AddItem(ItemType.M4);
-        inventory.AddItem(ItemType.Benelli);
-        inventory.AddItem(ItemType.M249);
-        
         hybridHandler.SetGameConfig();
         hybridHandler.InitializeEcs();
+        hybridHandler.SwitchWeapon(WeaponType.Mp5);
     }
 
     private void Update()
@@ -40,6 +32,11 @@ public class GameManager : MonoBehaviour
             hybridHandler.SetWaveSettings(wave);
         }
         if (hybridHandler.IsEnemiesLeftChanged(out var enemiesLeftCount)) uiManager.setInGameEnemiesLeft(enemiesLeftCount);
+
+        if (hybridHandler.IsOnSwitchWeapon(out var weaponType))
+        {
+            hybridHandler.SwitchWeaponInInventory(weaponType);
+        }
     }
 
     private void OnEnable()
@@ -55,6 +52,7 @@ public class GameManager : MonoBehaviour
     private void RestartGame()
     {
         hybridHandler.RestartEcsGame();
+        hybridHandler.SwitchWeapon(WeaponType.Mp5);
         uiManager.invokeEndGameUiAction(EndGameAction.hide);
     }
 }
