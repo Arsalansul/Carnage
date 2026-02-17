@@ -1,0 +1,16 @@
+{
+    "name": "DoTweenAnimationsAssembly",
+    "rootNamespace": "",
+    "references": [
+        "GUID:88a32fad45f216d488498510afbcc726"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

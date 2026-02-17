@@ -1870,12 +1870,12 @@ MonoBehaviour:
     poolName: 2
     initialSize: 50
   consumableConfigs:
-  - prefab: {fileID: 7355713013926475229, guid: 82a76256a42024049964a0c8b9bb380f, type: 3}
+  - prefab: {fileID: 3622129657378331416, guid: d50447f83c18fb04ba165ecd4fdd7820, type: 3}
     poolName: 3
-    initialSize: 10
-  - prefab: {fileID: 6896597939343215794, guid: 2e664cff58592ef46ae18f05c38f52e5, type: 3}
+    initialSize: 5
+  - prefab: {fileID: 3177985809171266537, guid: 0d33a5311ef0e394283b5e87b684574a, type: 3}
     poolName: 4
-    initialSize: 10
+    initialSize: 5
   audioSourceConfig:
     audioSource: {fileID: 2679629191477484416, guid: a2df1636fdc944c4ebde04bc26b17a88, type: 3}
     initialSize: 50
