@@ -1,19 +1,22 @@
 using Unity.Entities;
 using UnityEngine;
 
-public class VisualInitializedAuthoring : MonoBehaviour
+namespace Hybrid.Authoring
 {
-    private class Baker : Baker<VisualInitializedAuthoring>
+    public class VisualInitializedAuthoring : MonoBehaviour
     {
-        public override void Bake(VisualInitializedAuthoring authoring)
+        private class Baker : Baker<VisualInitializedAuthoring>
         {
-            var entity = GetEntity(TransformUsageFlags.Dynamic);
-            AddComponent(entity, new VisualInitialized());
-            SetComponentEnabled<VisualInitialized>(entity, false);
+            public override void Bake(VisualInitializedAuthoring authoring)
+            {
+                var entity = GetEntity(TransformUsageFlags.Dynamic);
+                AddComponent(entity, new VisualInitialized());
+                SetComponentEnabled<VisualInitialized>(entity, false);
+            }
         }
     }
-}
 
-public struct VisualInitialized : IComponentData, IEnableableComponent
-{
+    public struct VisualInitialized : IComponentData, IEnableableComponent
+    {
+    }
 }

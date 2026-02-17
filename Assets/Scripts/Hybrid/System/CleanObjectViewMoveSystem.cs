@@ -1,15 +1,18 @@
-using Unity.Burst;
+using Hybrid.Authoring;
 using Unity.Entities;
 using Unity.Transforms;
 
-[UpdateInGroup(typeof(LateSimulationSystemGroup))]
-public partial struct CleanObjectViewMoveSystem : ISystem
+namespace Hybrid.System
 {
-    public void OnUpdate(ref SystemState state)
+    [UpdateInGroup(typeof(LateSimulationSystemGroup))]
+    public partial struct CleanObjectViewMoveSystem : ISystem
     {
-        foreach (var (localTransform, cleanup) in SystemAPI.Query<RefRW<LocalTransform>, GameObjectCleanup>())
+        public void OnUpdate(ref SystemState state)
         {
-            cleanup.transform.position = localTransform.ValueRO.Position;
+            foreach (var (localTransform, cleanup) in SystemAPI.Query<RefRW<LocalTransform>, GameObjectCleanup>())
+            {
+                cleanup.transform.position = localTransform.ValueRO.Position;
+            }
         }
     }
 }

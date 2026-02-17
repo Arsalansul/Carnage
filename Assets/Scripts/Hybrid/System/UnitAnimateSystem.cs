@@ -1,10 +1,11 @@
 using DOTS.Authoring;
+using Hybrid.Authoring;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 
-namespace System
+namespace Hybrid.System
 {
     [UpdateInGroup(typeof(LateSimulationSystemGroup))]
     public partial struct UnitAnimateSystem : ISystem
