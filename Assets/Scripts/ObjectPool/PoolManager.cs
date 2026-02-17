@@ -10,6 +10,7 @@ public class PoolManager : MonoBehaviour
     [SerializeField] private List<UnitPoolConfig> unitPoolConfigs;
     [SerializeField] private List<BulletConfig> bulletsConfigs;
     [SerializeField] private List<ConsumableConfig> consumableConfigs;
+    [SerializeField] private List<WeaponsPickupConfig> weaponsPickupConfigs;
     [SerializeField] private AudioSourcePoolConfig audioSourceConfig;
 
     private Dictionary<string, ObjectPool<UnitView>> unitPools;
@@ -37,6 +38,12 @@ public class PoolManager : MonoBehaviour
         {
             cleanObjectPools[config.poolName.ToString()] = InitializePool(config.prefab.transform, config.initialSize);
         }
+        
+        foreach (var config in weaponsPickupConfigs)
+        {
+            cleanObjectPools[config.poolName.ToString()] = InitializePool(config.prefab.transform, config.initialSize);
+        }
+        
         audioSources = InitializePool(audioSourceConfig.audioSource, audioSourceConfig.initialSize);
     }
 

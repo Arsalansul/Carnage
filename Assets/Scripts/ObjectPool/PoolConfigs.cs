@@ -31,3 +31,11 @@ public class ConsumableConfig
     public PoolName poolName;
     public int initialSize = 10;
 }
+
+[Serializable]
+public class WeaponsPickupConfig
+{
+    public GameObject prefab;
+    public PoolName poolName;
+    public int initialSize = 10;
+}

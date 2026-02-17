@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &8207492273270669938
+--- !u!1001 &1354693329443340950
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -48,13 +48,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4020477759845689399, guid: 65c7b342fbd5a06459784a2295787616, type: 3}
-      propertyPath: poolName
-      value: 4
-      objectReference: {fileID: 0}
     - target: {fileID: 8052955979664734814, guid: 65c7b342fbd5a06459784a2295787616, type: 3}
       propertyPath: m_Name
-      value: Bomb 1
+      value: PickupWeaponBase
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -62,22 +58,23 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 8052955979664734814, guid: 65c7b342fbd5a06459784a2295787616, type: 3}
       insertIndex: -1
-      addedObject: {fileID: -5720820249073648265}
+      addedObject: {fileID: -365243115131486248}
   m_SourcePrefab: {fileID: 100100000, guid: 65c7b342fbd5a06459784a2295787616, type: 3}
---- !u!1 &2172712426737891372 stripped
+--- !u!1 &9010874560643987656 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8052955979664734814, guid: 65c7b342fbd5a06459784a2295787616, type: 3}
-  m_PrefabInstance: {fileID: 8207492273270669938}
+  m_PrefabInstance: {fileID: 1354693329443340950}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &-5720820249073648265
+--- !u!114 &-365243115131486248
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2172712426737891372}
+  m_GameObject: {fileID: 9010874560643987656}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 19bcce9e81944e5d89f282394c5b214e, type: 3}
+  m_Script: {fileID: 11500000, guid: 78a72642b473495a9507054963596fcc, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: DotsAssembly::DOTS.Authoring.PickupWeaponAuthoring
+  weaponType: 0

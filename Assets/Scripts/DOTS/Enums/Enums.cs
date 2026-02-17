@@ -48,5 +48,10 @@ public enum PoolName
     explosionBullet,
     enemyBullet,
     firstAid,
-    bomb
+    bomb,
+    mp5,
+    benelliM4,
+    m4,
+    m249,
+    smaw
 }

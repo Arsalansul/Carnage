@@ -1876,6 +1876,22 @@ MonoBehaviour:
   - prefab: {fileID: 3177985809171266537, guid: 0d33a5311ef0e394283b5e87b684574a, type: 3}
     poolName: 4
     initialSize: 5
+  weaponsPickupConfigs:
+  - prefab: {fileID: 3024558659811336072, guid: 65e442c7afddcfb46b9bfbd36f167b4d, type: 3}
+    poolName: 5
+    initialSize: 5
+  - prefab: {fileID: 3024558659811336072, guid: 7aa3fab529760434bb0999f862aee7aa, type: 3}
+    poolName: 6
+    initialSize: 5
+  - prefab: {fileID: 3024558659811336072, guid: 06c9b4b1f50f93947850221a96d246d1, type: 3}
+    poolName: 7
+    initialSize: 5
+  - prefab: {fileID: 3024558659811336072, guid: c9f00f7d1eeca3e4590687896b1fedd4, type: 3}
+    poolName: 8
+    initialSize: 5
+  - prefab: {fileID: 3024558659811336072, guid: e0a0ba3ef19e4ce4aa0ce0d65225ea44, type: 3}
+    poolName: 9
+    initialSize: 5
   audioSourceConfig:
     audioSource: {fileID: 2679629191477484416, guid: a2df1636fdc944c4ebde04bc26b17a88, type: 3}
     initialSize: 50
