@@ -93,7 +93,7 @@ internal partial struct EnemySpawnerSystem : ISystem
 
             if (SystemAPI.HasComponent<ShootAttack>(enemyEntity))
             {
-                ref var weaponsReference = ref config.Weapons;
+                ref var weaponsReference = ref config.EnemyWeapons;
                 ref var weaponsArray = ref weaponsReference.Value;
 
                 var enemyShootAttack = SystemAPI.GetComponentRO<EnemyShootAttack>(enemyEntity);

@@ -20,6 +20,7 @@ namespace DOTS.Authoring
     {
         public BlobAssetReference<WaveBlob> Wave;
         public BlobAssetReference<WeaponsBlob> Weapons;
+        public BlobAssetReference<EnemyWeaponsBlob> EnemyWeapons;
         public BlobAssetReference<EnemySettingsBlob> EnemySettings;
         public BlobAssetReference<BulletsSettingsBlob> Bullets;
         public UnitsSettings unitsSettings;
@@ -57,6 +58,11 @@ namespace DOTS.Authoring
     }
 
     public struct WeaponsBlob
+    {
+        public BlobArray<WeaponBlob> Array;
+    }
+
+    public struct EnemyWeaponsBlob
     {
         public BlobArray<WeaponBlob> Array;
     }

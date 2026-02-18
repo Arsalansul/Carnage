@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using DOTS;
 using DOTS.Authoring;
 using Ui.Models;
 using Unity.Mathematics;
@@ -12,6 +11,7 @@ public class GameConfig : ScriptableObjectInstaller<GameConfig>
 {
     public List<WaveSettings> WaveSettingsList;
     public List<WeaponSettings> WeaponSettings;
+    public List<EnemyWeaponSettings> EnemyWeaponSettings;
     public List<BulletSettings> BulletSettingsList;
     public UnitsSettings UnitsSettings;
     public CameraSettings CameraSettings;
@@ -23,6 +23,7 @@ public class GameConfig : ScriptableObjectInstaller<GameConfig>
     {
         Container.BindInstance(WaveSettingsList);
         Container.BindInstance(WeaponSettings);
+        Container.BindInstance(EnemyWeaponSettings);
         Container.BindInstance(BulletSettingsList);
         Container.BindInstance(UnitsSettings);
         Container.BindInstance(CameraSettings);
@@ -46,6 +47,14 @@ public struct WeaponSettings
     public BulletsType bulletType;
     public Sprite sprite;
     public int dropWeight;
+}
+
+[Serializable]
+public struct EnemyWeaponSettings
+{
+    public WeaponType type;
+    public float fireRate;
+    public BulletsType bulletType;
 }
 
 [Serializable]

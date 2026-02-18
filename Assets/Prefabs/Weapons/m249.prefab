@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -365243115131486248, guid: ce40e960c339fb8438a0cc3e6dd14111, type: 3}
       propertyPath: weaponType
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2668186375865117345, guid: ce40e960c339fb8438a0cc3e6dd14111, type: 3}
       propertyPath: poolName

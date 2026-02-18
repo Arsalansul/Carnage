@@ -16,6 +16,7 @@ namespace Hybrid
         [Inject] private InputSystem_Actions inputActions;
         [Inject] private List<WaveSettings> waveSettingsList;
         [Inject] private List<WeaponSettings> weaponSettingsList;
+        [Inject] private List<EnemyWeaponSettings> enemyWeaponSettingsList;
         [Inject] private List<BulletSettings> bulletSettingsList;
         [Inject] private UnitsSettings unitsSettings;
         [Inject] private CameraSettings cameraSettings;
@@ -151,6 +152,7 @@ namespace Hybrid
         {
             _hybridUtils.GetComponentAndEntityWithAll<GameConfigComponent>(out var component, out var entity, out var entityManager);
             component.Weapons = CreateWeaponsBlobAsset(weaponSettingsList);
+            component.EnemyWeapons = CreateEnemyWeaponsBlobAsset(enemyWeaponSettingsList);
             component.unitsSettings = new UnitsSettings()
             {
                 Layer = unitsSettings.Layer,
@@ -272,6 +274,24 @@ namespace Hybrid
             }
 
             return builder.CreateBlobAssetReference<WeaponsBlob>(Allocator.Persistent);
+        }
+        
+        private BlobAssetReference<EnemyWeaponsBlob> CreateEnemyWeaponsBlobAsset(IReadOnlyList<EnemyWeaponSettings> enemyWeaponsSettings)
+        {
+            using var builder = new BlobBuilder(Allocator.Temp);
+            ref var weaponBlob = ref builder.ConstructRoot<EnemyWeaponsBlob>();
+
+            var arrayBuilder = builder.Allocate(ref weaponBlob.Array, enemyWeaponsSettings.Count);
+
+            for (var i = 0; i < enemyWeaponsSettings.Count; i++)
+            {
+                var settings = enemyWeaponsSettings[i];
+                arrayBuilder[i].type = settings.type;
+                arrayBuilder[i].bulletType = settings.bulletType;
+                arrayBuilder[i].TimeMax = 60 / settings.fireRate;
+            }
+
+            return builder.CreateBlobAssetReference<EnemyWeaponsBlob>(Allocator.Persistent);
         }
 
         private BlobAssetReference<BulletsSettingsBlob> CreateBulletsBlobAsset(IReadOnlyList<BulletSettings> settings)

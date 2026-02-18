@@ -105,45 +105,49 @@ MonoBehaviour:
       points: 3
       type: 7
   WeaponSettings:
-  - type: 0
+  - type: 1
     fireRate: 300
-    bulletType: 0
+    bulletType: 1
     sprite: {fileID: -981311414, guid: cecbc1e21bfd4654cace7246a1733982, type: 3}
     dropWeight: 1
-  - type: 1
+  - type: 2
     fireRate: 60
-    bulletType: 1
+    bulletType: 2
     sprite: {fileID: -1562211268, guid: cecbc1e21bfd4654cace7246a1733982, type: 3}
     dropWeight: 1
-  - type: 2
+  - type: 3
     fireRate: 500
-    bulletType: 0
+    bulletType: 1
     sprite: {fileID: 1138565974, guid: cecbc1e21bfd4654cace7246a1733982, type: 3}
     dropWeight: 1
-  - type: 3
+  - type: 4
     fireRate: 120
-    bulletType: 1
+    bulletType: 2
     sprite: {fileID: 330935418, guid: cecbc1e21bfd4654cace7246a1733982, type: 3}
     dropWeight: 1
-  - type: 5
+  - type: 6
     fireRate: 1000
-    bulletType: 0
+    bulletType: 1
     sprite: {fileID: -1115473031, guid: cecbc1e21bfd4654cace7246a1733982, type: 3}
     dropWeight: 1
+  EnemyWeaponSettings:
+  - type: 11
+    fireRate: 30
+    bulletType: 11
   BulletSettingsList:
-  - type: 0
+  - type: 1
     speed: 20
     maxDistance: 10
     damageOnTrigger: 10
     explosionRadius: 0
     explosionDamage: 0
-  - type: 1
+  - type: 2
     speed: 5
     maxDistance: 10
     damageOnTrigger: 0
     explosionRadius: 5
     explosionDamage: 35
-  - type: 2
+  - type: 11
     speed: 10
     maxDistance: 20
     damageOnTrigger: 10
@@ -184,13 +188,13 @@ MonoBehaviour:
     moveSpeed: 11
     rotationSpeed: 10
   WeaponTypeToItemTypeMap:
-  - weaponType: 0
-    itemType: 1
   - weaponType: 1
-    itemType: 2
+    itemType: 1
   - weaponType: 2
-    itemType: 3
+    itemType: 2
   - weaponType: 3
+    itemType: 3
+  - weaponType: 4
     itemType: 4
-  - weaponType: 5
+  - weaponType: 6
     itemType: 5

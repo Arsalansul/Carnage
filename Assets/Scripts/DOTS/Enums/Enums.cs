@@ -18,21 +18,27 @@ public enum EnemyType
 
 public enum BulletsType
 {
-    small,
-    explosion,
+    none = 0,
+    small = 1,
+    explosion = 2,
+    spread = 3,
     
     //enemy projectiles
-    enemySmall
+    enemySmall = 11
 }
 
 public enum WeaponType
 {
-    Mp5,
-    RocketGun,
-    M4,
-    Benelli,
-    M110,
-    M249,
+    none = 0,
+    Mp5 = 1,
+    RocketGun = 2,
+    M4 = 3,
+    Benelli= 4,
+    M110 = 5,
+    M249 = 6,
+    
+    //enemy range weapons
+    Arachnid = 11,
 }
 
 public enum PickupType

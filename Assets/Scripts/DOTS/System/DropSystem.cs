@@ -97,7 +97,6 @@ namespace DOTS.System
                     return item.entity;
                 }
             }
-            
             return Entity.Null;
         }
         
